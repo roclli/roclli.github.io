@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>(原创)Pipeline3-Branches-and-Pull-Requests | 测试人员修炼</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="笔者是独立翻译实验，不允许转载 分支和拉取请求Branches and Pull Requests在上一节中，实现了Jenkinsfile，这个文件能被迁入到源代码版本控制中。这部分涵盖了 Multibranch Pipeline的概念, 建立在Jenkinsfile基础上, 提供更多的动态和自动功能。 Creating a Multibranch PipelineMultibranch Pipe">
+<meta name="keywords" content="Jenkins; Pipeline">
+<meta property="og:type" content="article">
+<meta property="og:title" content="(原创)Pipeline3-Branches-and-Pull-Requests">
+<meta property="og:url" content="https://roclli.github.io/2017/12/12/Pipeline3-Branches-and-Pull-Requests/index.html">
+<meta property="og:site_name" content="测试人员修炼">
+<meta property="og:description" content="笔者是独立翻译实验，不允许转载 分支和拉取请求Branches and Pull Requests在上一节中，实现了Jenkinsfile，这个文件能被迁入到源代码版本控制中。这部分涵盖了 Multibranch Pipeline的概念, 建立在Jenkinsfile基础上, 提供更多的动态和自动功能。 Creating a Multibranch PipelineMultibranch Pipe">
+<meta property="og:image" content="http://oow5aq3zy.bkt.clouddn.com/image/pp3/1.jpg">
+<meta property="og:image" content="http://oow5aq3zy.bkt.clouddn.com/image/pp3/2.jpg">
+<meta property="og:image" content="http://oow5aq3zy.bkt.clouddn.com/image/pp3/3.jpg">
+<meta property="og:image" content="http://oow5aq3zy.bkt.clouddn.com/image/pp3/4.jpg">
+<meta property="og:updated_time" content="2017-12-12T09:23:51.320Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="(原创)Pipeline3-Branches-and-Pull-Requests">
+<meta name="twitter:description" content="笔者是独立翻译实验，不允许转载 分支和拉取请求Branches and Pull Requests在上一节中，实现了Jenkinsfile，这个文件能被迁入到源代码版本控制中。这部分涵盖了 Multibranch Pipeline的概念, 建立在Jenkinsfile基础上, 提供更多的动态和自动功能。 Creating a Multibranch PipelineMultibranch Pipe">
+<meta name="twitter:image" content="http://oow5aq3zy.bkt.clouddn.com/image/pp3/1.jpg">
+  
+    <link rel="alternate" href="/atom.xml" title="测试人员修炼" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">测试人员修炼</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">测试人员的技术博客;交流请加QQ群:549576208</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Suche"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://roclli.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Pipeline3-Branches-and-Pull-Requests" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/12/12/Pipeline3-Branches-and-Pull-Requests/" class="article-date">
+  <time datetime="2017-12-12T09:14:44.000Z" itemprop="datePublished">2017-12-12</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      (原创)Pipeline3-Branches-and-Pull-Requests
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><b>笔者是独立翻译实验，不允许转载<b></b></b></p>
+<h1 id="分支和拉取请求"><a href="#分支和拉取请求" class="headerlink" title="分支和拉取请求"></a>分支和拉取请求</h1><h2 id="Branches-and-Pull-Requests"><a href="#Branches-and-Pull-Requests" class="headerlink" title="Branches and Pull Requests"></a>Branches and Pull Requests</h2><p>在上一节中，实现了Jenkinsfile，这个文件能被迁入到源代码版本控制中。这部分涵盖了 Multibranch Pipeline的概念, 建立在Jenkinsfile基础上, 提供更多的动态和自动功能。</p>
+<h2 id="Creating-a-Multibranch-Pipeline"><a href="#Creating-a-Multibranch-Pipeline" class="headerlink" title="Creating a Multibranch Pipeline"></a>Creating a Multibranch Pipeline</h2><p>Multibranch Pipeline项目使得在同一个项目中不同的分支需要实现不同的Jenkinsfile。在一个Multibranch Pipeline项目中，Jenkins将为不同分支的Pipelines自动发现/管理/执行，不同的分支都包含一个Jenkinsfile文件。</p>
+<p>这将减少人工Pipeline的创建和管理。</p>
+<p>创建一个Multibranch Pipeline：</p>
+<p>•在Jenkins home页上点击”new Item”。</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp3/1.jpg"></p>
+<p>•为你的Pipeline输入名字，选择Multibranch Pipeline，然后点击OK。</p>
+<p>注意：Jenkins用Pipeline的名字在磁盘上创建目录。包含空格的Pipeline名字可能有未查到的bug，脚本不期望路径包含空格。</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp3/2.jpg"></p>
+<p>•添加一个Branch Source(例如Git)，输入源代码库的地址。</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp3/3.jpg"></p>
+<p>•保存多分支Pipeline项目。</p>
+<p>一旦保存，Jenkins将自动扫描代码库，为库中包含Jenkinsfile的每一个分支创建合适的项。</p>
+<p>默认情况下，Jenkins不会自动索引用于分支添加或删除的存储库 (除非使用组织文件夹), 因此将 Multibranch Pipeline配置为定期索引在配置中通常很有用:</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp3/4.jpg"></p>
+<h2 id="附加的环境变量-Additional-Environment-Variables"><a href="#附加的环境变量-Additional-Environment-Variables" class="headerlink" title="附加的环境变量(Additional Environment Variables)"></a>附加的环境变量(Additional Environment Variables)</h2><p>Multibranch Pipeline暴露了关于分支的附加信息，分支可以通过全局变量env创建，例如：<br>BRANCH_NAME<br>    这个Pipeline将要被执行的分支，例如master分支。<br>CHANGE_ID<br>    各种改变请求的标识符，例如a pull request号码/数字。</p>
+<h2 id="支持Pull-Requests-Supporting-Pull-Requests"><a href="#支持Pull-Requests-Supporting-Pull-Requests" class="headerlink" title="支持Pull Requests(Supporting Pull Requests)"></a>支持Pull Requests(Supporting Pull Requests)</h2><p>GitHub或者Bitbucket分支源，Multibranch Pipeline能被用来验证pull/change请求。这个功能被插件github-branch-source和插件cloudbees-bitbucket-branch-source提供。请查阅相关文档得到如何使用的进一步信息。</p>
+<h2 id="使用组织目录-Using-Organization-Folders"><a href="#使用组织目录-Using-Organization-Folders" class="headerlink" title="使用组织目录(Using Organization Folders)"></a>使用组织目录(Using Organization Folders)</h2><p>Organization Folder使Jenkins能监控整个GitHub组织或者Bitbucket Team/Project，自动为代码库创建新的Multibranch Pipeline项目，代码库包含分支和包含Jenkinsfile的pull request。<br>现在，这个功能仅仅存在于GitHub和bitbucket，功能分别被插件github-branch-source和插件cloudbees-bitbucket-branch-source提供。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://roclli.github.io/2017/12/12/Pipeline3-Branches-and-Pull-Requests/" data-id="cjb3f6xj30004ik7s8achwqek" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Jenkins-Pipeline/">Jenkins; Pipeline</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2017/12/12/Pipeline2-Using-a-Jenkinsfile/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Älter</strong>
+      <div class="article-nav-title">(原创)Pipeline2-Using-a-Jenkinsfile</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-OOM-Java内存溢出-OutOfMemoryError/">Java; OOM; Java内存溢出; OutOfMemoryError</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jenkins-Pipeline/">Jenkins; Pipeline</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Pipeline-Jenkins/">Pipeline; Jenkins</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grep-linux-shell-log-file-check/">grep; linux shell; log file check</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Java-OOM-Java内存溢出-OutOfMemoryError/" style="font-size: 10px;">Java; OOM; Java内存溢出; OutOfMemoryError</a> <a href="/tags/Jenkins-Pipeline/" style="font-size: 10px;">Jenkins; Pipeline</a> <a href="/tags/Pipeline-Jenkins/" style="font-size: 20px;">Pipeline; Jenkins</a> <a href="/tags/grep-linux-shell-log-file-check/" style="font-size: 10px;">grep; linux shell; log file check</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archiv</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">letzter Beitrag</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/12/12/Pipeline3-Branches-and-Pull-Requests/">(原创)Pipeline3-Branches-and-Pull-Requests</a>
+          </li>
+        
+          <li>
+            <a href="/2017/12/12/Pipeline2-Using-a-Jenkinsfile/">(原创)Pipeline2-Using-a-Jenkinsfile</a>
+          </li>
+        
+          <li>
+            <a href="/2017/12/12/Pipeline1-Getting-Started-With-Pipeline/">(原创)Pipeline1-Getting-Started-With-Pipeline</a>
+          </li>
+        
+          <li>
+            <a href="/2017/12/11/Java-OOM-ERROR/">Java OOM ERROR</a>
+          </li>
+        
+          <li>
+            <a href="/2017/12/11/log-check/">(原创)查询log中每小时或者指定小时，错误类型的数量</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 roclli<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>
