@@ -57,7 +57,7 @@
         
           <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
         
-        <a id="nav-search-btn" class="nav-icon" title="Suche"></a>
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
       </nav>
       <div id="search-form-wrap">
         <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://roclli.github.io"></form>
@@ -67,6 +67,108 @@
 </header>
       <div class="outer">
         <section id="main">
+  
+    <article id="post-Pipeline4-Using-Docker-with-Pipeline" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/12/12/Pipeline4-Using-Docker-with-Pipeline/" class="article-date">
+  <time datetime="2017-12-12T09:25:36.000Z" itemprop="datePublished">2017-12-12</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/12/12/Pipeline4-Using-Docker-with-Pipeline/">(原创)Pipeline4-Using-Docker-with-Pipeline</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><b>笔者是独立翻译实验，不允许转载<b></b></b></p>
+<h1 id="Using-Docker-with-Pipeline"><a href="#Using-Docker-with-Pipeline" class="headerlink" title="Using Docker with Pipeline"></a>Using Docker with Pipeline</h1><p>许多组织都是用Docker来统一编译和测试环境，提供一个发布应用的有效机制。从Pipeline 2.5版本或者更高，Pipeline内嵌支持同Jenkinsfile内Docker交互。<br>本章覆盖了使用Jenkinsfile内Docker基本使用，并不包括Docker的使用。关于Docker使用，请参考<a href="https://docs.docker.com/get-started/。" target="_blank" rel="noopener">https://docs.docker.com/get-started/。</a></p>
+<h2 id="Customizing-the-execution-environment"><a href="#Customizing-the-execution-environment" class="headerlink" title="Customizing the execution environment"></a>Customizing the execution environment</h2><p>Pipeline较早被设计使用Docker images作为执行环境，执行一个单独的stage或者整个Pipeline，意味着用户可以定义他们的Pipeline需要使用的工具，不必手动配置代理。实践上，任何工具都能被打包到Docker container中，能被一个Jenkinsfile容易使用。</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp4/1.jpg"></p>
+<p>当Pipeline执行的时候，Jenkins自动开启特定的container，执行里面定义的steps。</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp4/2.jpg"></p>
+<h4 id="Caching-data-for-containers"><a href="#Caching-data-for-containers" class="headerlink" title="Caching data for containers"></a>Caching data for containers</h4><p>许多编译工具会下载外部依赖，并把它们缓存在本地。因为containers初始化的时候是干净的文件系统，这能导致较小的Pipelines，因此他们并不能充分利用硬盘缓存的优势。<br>Pipeline支持添加定制化参数，参数能被传入到Docker中，允许用户指定特定的Docker Volumes去挂载，Volumes能被用来缓存代理上的数据。下面的例子将在Pipeline运行的时候，缓存~/.m2，可以避免重复下载依赖。</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp4/3.jpg"></p>
+<p><b>注意：实测表明<b></b></b></p>
+<p>使用本地机器的maven repo，不用再单独下载的技巧，要点在于</p>
+<p>(1).启动docker的时候就要传入repo</p>
+<p>(2).启动编译命令的时候，要再传一次repo，否则mvn会单独下载依赖的包</p>
+<h4 id="Using-multiple-containers"><a href="#Using-multiple-containers" class="headerlink" title="Using multiple containers"></a>Using multiple containers</h4><p>现在非常普遍，代码依赖多个，不同的技术。例如一个库既有Java-based的后端API实现，也有JavaScript基础的前端实现。组合Docker和Pipeline，允许Jenkinsfile通过agent{}在不同阶段使用多种技术。</p>
+<p>  <img src="http://oow5aq3zy.bkt.clouddn.com/image/pp4/4.jpg"></p>
+<h4 id="Using-a-Dockerfile"><a href="#Using-a-Dockerfile" class="headerlink" title="Using a Dockerfile"></a>Using a Dockerfile</h4><p>对于那些需要特定执行环境的项目，Pipeline同样支持在Dockerfile中创建和运行容器(container)。同前面使用”off-the-shell”容器相反，使用代理{dockerfile true}语法将创建新的image，而不是从Docker Hub拉取。</p>
+<p>重新使用前面的例子，用一个定制化的Dockerfile。</p>
+<p>Dockerfile</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp4/5.jpg"></p>
+<p>把这个提交到源代码库的根目录，Jenkinsfile被改变去构建一个基于这个Dockerfile的容器，用这个容器运行定义好的steps。</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp4/6.png"></p>
+<p><font color="red">agent { dockerfile true}</font>语法支持许多其他选项，关于这些选项详见<a href="https://jenkins.io/doc/book/pipeline/syntax#agent" target="_blank" rel="noopener">Pipeline Syntax</a>部分。</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp4/7.jpg"></p>
+<p>Using a Dockerfile with Jenkins Pipeline</p>
+<p><b>注意：笔者添加。<b></b></b></p>
+<p>其他一些使用说明，请参见：<a href="https://github.com/jenkinsci/pipeline-model-definition-plugin/wiki/Syntax-Reference" target="_blank" rel="noopener">https://github.com/jenkinsci/pipeline-model-definition-plugin/wiki/Syntax-Reference</a><br>其实本例的目的：仅仅只是制作了一个新的docker image，完全可以自己手动做，也可以使用linux shell脚本和docker配合使用做出来，不一定非要通过Jenkins的插件做。此方法的一个不好的地方就是：自己设置生成的image的名字以后，通过参数加进去，最终会出来两个一样的docker image，因为再生成的时候，必须要设置一个名字，哪怕是随机的名字。<br>参数如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">agent &#123; dockerfile true &#125;</span><br><span class="line">agent &#123;</span><br><span class="line">	dockerfile &#123;</span><br><span class="line">		additionalBuildArgs &apos;-t node-svn:7-alpine&apos;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="Specifying-a-Docker-label"><a href="#Specifying-a-Docker-label" class="headerlink" title="Specifying a Docker label"></a>Specifying a Docker label</h4><p>默认情况下，Pipeline假设任何配置的代理都能运行基于Docker的Pipeline。对于Jenkins环境，有macOS，Windows或者其他不能运行Docker代理，默认设置可能有问题。Pipeline在Manage Jenkins页面(manage Jenkins–&gt;Configuration)上提供一个全局选项。</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp4/8.jpg"></p>
+<p><b>注意：测试表明<b></b></b></p>
+<p>此label只是为了区分在哪个node上运行，本例运行的node label为:linux，其实换成master应该也可以，如果不设置，就会寻找一个默认的本地的符合条件的node执行。</p>
+<h2 id="Advanced-Usage-with-Scripted-Pipeline"><a href="#Advanced-Usage-with-Scripted-Pipeline" class="headerlink" title="Advanced Usage with Scripted Pipeline"></a>Advanced Usage with Scripted Pipeline</h2><h4 id="Running-“sidecar”-containers"><a href="#Running-“sidecar”-containers" class="headerlink" title="Running “sidecar” containers"></a>Running “sidecar” containers</h4><p>在Pipeline中使用Docker是运行服务/一套测试的一个有效方式，类似于sidecar模式，Docker Pipeline能在后台运行容器。使用sidecar方法，对于每一次Pipeline运行，Pipeline能有一个干净的容器。</p>
+<p>考虑一个依赖于本地MySQL数据库的集成测试套件。使用插件<a href="https://plugins.jenkins.io/docker-workflow" target="_blank" rel="noopener">docker-workflow</a>插件实现的withRun方法，一个能运行MySQL作为sidecar的Jenkinsfile文件：</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp4/9.jpg"></p>
+<p><b>注意：本例笔者运行失败。<b></b></b></p>
+<p>(1).本地必需安装有mysqladmin工具，否则执行失败。<br>(2).docker run -d -e MYSQL_ROOT_PASSWORD=my-secret-pw -p 3306:3306 mysql:5这样启动以后，确实发现container里面的mysql启动成功，但是如果使用docker run -d -e MYSQL_ROOT_PASSWORD=my-secret-pw -p 3306:3306 mysql:5 /bin/sh进去以后，发现mysql没有启动，或者说启动失败。</p>
+<p>示例可以更进一步，同时使用两个容器。一个”sidecar”运行MySQL，另一个用Docker container links提供执行环境。</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp4/10.jpg"></p>
+<p>上面的示例使用withRun暴露的对象，withRun有运行的容器ID。用容器ID，Pipeline能创建一个链接，通过传递客制化的Docker参数到inside()方法。</p>
+<p>Id属性对于查看正在运行容器的log同样有用：</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp4/011.jpg"></p>
+<p><b>注意：笔者实测，<b></b></b></p>
+<p>执行的sh命令都是在container里面执行的。所以起了两个container。</p>
+<h4 id="Building-containers"><a href="#Building-containers" class="headerlink" title="Building containers"></a>Building containers</h4><p>创建一个Docker image，插件docker-workflow同样提供一个<font color="red">build()</font>方法创建新的image，在Pipeline运行的时候，从代码库中的Dockerfile文件也能创建image。</p>
+<p>使用<font color="red">docker.build(“my-image-name”))</font>语法的一个主要好处：脚本是的Pipeline能使用返回值用于后面的Docker Pipeline调用，例如：</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp4/11.jpg"></p>
+<p>返回值能被用来保存Docker image到Docker Hub或者私有的Registry，通过<font color="red">push()</font>方法，例如：</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp4/12.jpg"></p>
+<p>Image的tag属性常用方法是<font color="red">latest</font>标记。<font color="red">push()</font>方法接受一个可选的<font color="red">tag</font>参数，允许Pipeline用不同的标记存储<font color="red">customImage</font>，例如：</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp4/13.jpg"></p>
+<p><b>笔者注：<b></b></b></p>
+<p>此类制作image，完全可以shell和docker独立做，如有必要，可以来此参照执行。</p>
+<h4 id="Using-a-remote-Docker-server"><a href="#Using-a-remote-Docker-server" class="headerlink" title="Using a remote Docker server"></a>Using a remote Docker server</h4><p>默认情况下，插件docker-workflow会和本地的Docker交互，典型的是通过<font color="red">/var/run/docker.sock</font>。</p>
+<p>选择一个不是非默认Docker server，例如Docker Swarm，<font color="red">withServer()</font>方法可以使用。</p>
+<p>通过传递一个URI，可选的Docker Server Certificate Authentication认证信息，方法如下：</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp4/14.jpg"></p>
+<p>注意：<font color="red">inside()</font>和<font color="red">build()</font>将不能同Docker Swarm server正常工作。</p>
+<p>对于函数<font color="red">inside()</font>正常执行，Docker server和Jenkins代理必须使用同样的文件系统，以便工作空间能被挂载。</p>
+<p>现在Jenkins插件和Docker CLI都不能自动检测远端server运行的case；一个典型的现象就是嵌套<font color="red">sh</font>命令出现错误，例如</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp4/15.jpg"></p>
+<p>当Jenkins检测到代理运行在Docker容器中的时候，它将自动传递<font color="red">–volumes-from</font>参数到<font color="red">inside</font>容器，确保它能同代理共享工作空间。<br>另外，一些Docker Swarm版本并不支持定制化的Registry。</p>
+<h4 id="Using-a-custom-registry"><a href="#Using-a-custom-registry" class="headerlink" title="Using a custom registry"></a>Using a custom registry</h4><p>默认情况下，docker-workflow插件使用默认的Docker Registry—Docker Hub。<br>为了使用定制化的Docker Registry，脚本是的Pipeline用户可以用withRegistry方法去包含steps，传递定制化的Registry URL，例如：</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp4/16.jpg"></p>
+<p>对于需要认证的Docker Registry，从Jenkins主页上添加用户名/密码项，并使用认证ID作为<font color="red">withRegistry()</font>的第二个参数。</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp4/17.jpg"></p>
+<p>注意：此类是制作docker image然后保存到私有的registry，可以shell和docker实现，如有必要，来此参照制作。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://roclli.github.io/2017/12/12/Pipeline4-Using-Docker-with-Pipeline/" data-id="cjb3mzrzp0005l57s08z590yw" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Jenkins-Pipeline/">Jenkins; Pipeline</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
   
     <article id="post-Pipeline3-Branches-and-Pull-Requests" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
@@ -113,7 +215,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://roclli.github.io/2017/12/12/Pipeline3-Branches-and-Pull-Requests/" data-id="cjb3f6xj30004ik7s8achwqek" class="article-share-link">Teilen</a>
+      <a data-url="https://roclli.github.io/2017/12/12/Pipeline3-Branches-and-Pull-Requests/" data-id="cjb3mzrzk0003l57sx2sdemc0" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Jenkins-Pipeline/">Jenkins; Pipeline</a></li></ul>
@@ -264,7 +366,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://roclli.github.io/2017/12/12/Pipeline2-Using-a-Jenkinsfile/" data-id="cjb3f6xj20003ik7s2pa7vfjk" class="article-share-link">Teilen</a>
+      <a data-url="https://roclli.github.io/2017/12/12/Pipeline2-Using-a-Jenkinsfile/" data-id="cjb3mzrzh0001l57s51e7agyj" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Pipeline-Jenkins/">Pipeline; Jenkins</a></li></ul>
@@ -429,7 +531,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://roclli.github.io/2017/12/12/Pipeline1-Getting-Started-With-Pipeline/" data-id="cjb3f6xiv0001ik7srcozz9mm" class="article-share-link">Teilen</a>
+      <a data-url="https://roclli.github.io/2017/12/12/Pipeline1-Getting-Started-With-Pipeline/" data-id="cjb3mzrzb0000l57sd4ceahvl" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Pipeline-Jenkins/">Pipeline; Jenkins</a></li></ul>
@@ -635,7 +737,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://roclli.github.io/2017/12/11/Java-OOM-ERROR/" data-id="cjb3f6xir0000ik7s9vfqbvxa" class="article-share-link">Teilen</a>
+      <a data-url="https://roclli.github.io/2017/12/11/Java-OOM-ERROR/" data-id="cjb3mzrzl0004l57s7z08e9tr" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java-OOM-Java内存溢出-OutOfMemoryError/">Java; OOM; Java内存溢出; OutOfMemoryError</a></li></ul>
@@ -677,7 +779,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://roclli.github.io/2017/12/11/log-check/" data-id="cjb3f6xj60008ik7sp6pej6xn" class="article-share-link">Teilen</a>
+      <a data-url="https://roclli.github.io/2017/12/11/log-check/" data-id="cjb3mzrzs0009l57ssvxlx4su" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/grep-linux-shell-log-file-check/">grep; linux shell; log file check</a></li></ul>
@@ -724,7 +826,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://roclli.github.io/2017/12/11/hello-world/" data-id="cjb3f6xj40005ik7sjvpydfjn" class="article-share-link">Teilen</a>
+      <a data-url="https://roclli.github.io/2017/12/11/hello-world/" data-id="cjb3mzrzr0008l57s84mw8vqe" class="article-share-link">Share</a>
       
       
     </footer>
@@ -757,14 +859,14 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/Java-OOM-Java内存溢出-OutOfMemoryError/" style="font-size: 10px;">Java; OOM; Java内存溢出; OutOfMemoryError</a> <a href="/tags/Jenkins-Pipeline/" style="font-size: 10px;">Jenkins; Pipeline</a> <a href="/tags/Pipeline-Jenkins/" style="font-size: 20px;">Pipeline; Jenkins</a> <a href="/tags/grep-linux-shell-log-file-check/" style="font-size: 10px;">grep; linux shell; log file check</a>
+      <a href="/tags/Java-OOM-Java内存溢出-OutOfMemoryError/" style="font-size: 10px;">Java; OOM; Java内存溢出; OutOfMemoryError</a> <a href="/tags/Jenkins-Pipeline/" style="font-size: 20px;">Jenkins; Pipeline</a> <a href="/tags/Pipeline-Jenkins/" style="font-size: 20px;">Pipeline; Jenkins</a> <a href="/tags/grep-linux-shell-log-file-check/" style="font-size: 10px;">grep; linux shell; log file check</a>
     </div>
   </div>
 
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Archiv</h3>
+    <h3 class="widget-title">Archives</h3>
     <div class="widget">
       <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li></ul>
     </div>
@@ -774,9 +876,13 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">letzter Beitrag</h3>
+    <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2017/12/12/Pipeline4-Using-Docker-with-Pipeline/">(原创)Pipeline4-Using-Docker-with-Pipeline</a>
+          </li>
         
           <li>
             <a href="/2017/12/12/Pipeline3-Branches-and-Pull-Requests/">(原创)Pipeline3-Branches-and-Pull-Requests</a>
@@ -792,10 +898,6 @@
         
           <li>
             <a href="/2017/12/11/Java-OOM-ERROR/">Java OOM ERROR</a>
-          </li>
-        
-          <li>
-            <a href="/2017/12/11/log-check/">(原创)查询log中每小时或者指定小时，错误类型的数量</a>
           </li>
         
       </ul>
