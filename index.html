@@ -68,6 +68,157 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-Pipeline2-Using-a-Jenkinsfile" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/12/12/Pipeline2-Using-a-Jenkinsfile/" class="article-date">
+  <time datetime="2017-12-12T07:54:10.000Z" itemprop="datePublished">2017-12-12</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/12/12/Pipeline2-Using-a-Jenkinsfile/">(原创)Pipeline2-Using-a-Jenkinsfile</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><b>笔者是独立翻译实验，不允许转载<b></b></b></p>
+<h2 id="Using-a-Jenkinsfile"><a href="#Using-a-Jenkinsfile" class="headerlink" title="Using a Jenkinsfile"></a>Using a Jenkinsfile</h2><p>这部分基于前面<a href="https://jenkins.io/doc/book/pipeline/getting-started/" target="_blank" rel="noopener">Getting Started</a>所讲过的信息，介绍更有用的步骤(steps)，一般模式，一些非试用的<font color="red">Jenkinsfile</font>例子。</p>
+<p>创建一个<font color="red">Jenkinsfile</font>，然后把这个文件保存到源代码版本控制中(例如svn，git等)，会带来许多好处：</p>
+<ul>
+<li>对Pipeline中进行代码审查和迭代(review/iteration)</li>
+<li>Pipeline的审核和跟踪</li>
+<li>Pipeline唯一的真相来源，可以由项目的多个成员查看和编辑。</li>
+</ul>
+<p>Pipeline支持<a href="https://jenkins.io/doc/book/pipeline/syntax/" target="_blank" rel="noopener">两种语法</a>: 声明式 (在Pipeline2.5 中引入) 和脚本Pipeline。两者都支持构建持续集成的Pipeline。都可以被用来定义一个Pipeline，不管是在web UI上还是在<font color="red">Jenkinsfile</font>文件中，一般认为最好的实践是创建一个<font color="red">Jenkinsfile</font>文件，并放到源代码管理库中。</p>
+<h2 id="Creating-a-Jenkinsfile"><a href="#Creating-a-Jenkinsfile" class="headerlink" title="Creating a Jenkinsfile"></a>Creating a Jenkinsfile</h2><p>像前面<a href="https://jenkins.io/doc/book/pipeline/getting-started/#defining-a-pipeline-in-scm" target="_blank" rel="noopener">Getting Started</a>章节讨论的一样，<font color="red">Jenkinsfile</font>文件是一个文本文件，包含一个Jenkins Pipeline定义。考虑如下部分，实现了一个三阶段的持续集成pipeline。</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp2/1.jpg"></p>
+<p>并不是所有的Pipelines都有同样的三个阶段，但是对于大多数项目来说，这是一个很好的开始。下面的部分将说明一个简单的Pipeline的创建和执行。</p>
+<p>注意：假设已经为项目创建好了源代码版本库，并且一个Pipeline已经按照前面Getting Started步骤定义好了。</p>
+<p>用一个支持Groovy语法高亮的文本编辑器，创建一个新的Jenkinsfile文件，放到项目的根目录下。</p>
+<p>上面声明式的Pipeline例子包含实现一个持续集成pipeline最小的必须的结构。Agent指示符是必须的，告诉Jenkins为这个pipeline分配一个执行器和工作空间。没有agent指示符，不仅申明式的Pipeline不是合法的，而且它也不能做任何工作！默认情况下，agent指示符确保源代码库代码被签出，并且是有效的可以被后面阶段的步骤(steps)使用。</p>
+<p>对于一个有效的申明式的Pipeline，stage指示符和steps指示符同样是必须的，因为它们告诉Jenkins执行什么，哪个阶段做什么事情。</p>
+<p>对于脚本式Pipeline的更高级用法，上面例子中的node是至关重要的第一步，因为它为Pipeline申请了执行器和工作空间。确切的说，没有node，一个Pipeline不能做任何工作！在node里面，业务的第一个命令将是迁出源代码。因为Jenkinsfile文件是直接从源代码库中迁出，所以Pipeline提供了一个快速和容易的方式存取正确的源代码版本。</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp2/02.jpg"></p>
+<p>①    <font color="red">checkout</font>步骤将从源代码库中迁出代码；scm是一个特殊的变量，它将告诉checkout克隆特定的版本，然后触发Pipeline运行。</p>
+<p><b>注意，笔者实测如下：<b></b></b></p>
+<ul>
+<li><p>在脚本式Pipeline中<br>checkout([$class: ‘GitSCM’, branches: [[name: ‘*/master’]], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: ‘<a href="https://gitee.com/roclli/simple-maven-project-with-tests.git&#39;]]])。" target="_blank" rel="noopener">https://gitee.com/roclli/simple-maven-project-with-tests.git&#39;]]])。</a></p>
+</li>
+<li><p>申明式Pipeline(Jenkinsfile中)，采用checkout scm，会导致checkout两次，根据说明Specify where to obtain a source code repository containing your Groovy script. It will be checked out somewhere on the Jenkins master and used to load your Pipeline script. (If you wish to use other files from the same repository during your Pipeline, you will need to check them out separately on some slave; this checkout cannot be reused.)。</p>
+</li>
+</ul>
+<h2 id="Build"><a href="#Build" class="headerlink" title="Build"></a>Build</h2><p>许多使用Pipeline的项目开始工作第一步都是”编译(Build)”阶段。通常情况下, Pipeline的此阶段将是源代码的组装、编译或打包。Jenkinsfile文件并不是替代现有的编译工具例如GNU/Make，Maven，Gradle等等，但可以看作是一个粘合层, 以粘合绑定(bind)项目开发的多个阶段生命周期 (构建、测试、部署等) 一起。</p>
+<p>Jenkins有许多插件，可以调用几乎所有的构建工具，但是这个例子将简单的使用shell步骤(sh)调用make命令。sh假设系统是Unix/Linux，如果是Windows系统，将会使用bat。</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp2/2.jpg"></p>
+<p>①    <font color="red">sh</font>调用<font color="red">make</font>命令，将一直运行，如果命令返回0。任何非0的返回值都将使Pipeline失败。</p>
+<p>②    <font color="red">archiveArtifacts</font>捕获模式匹配(<font color="red">**/target/*.jar</font>)文件，并且把他们保存到Jenkins的master中。</p>
+<p>提示：存档文件不是使用外部文件资料库 (如 Artifactory 或Nexus) 的替代品, 应该只考虑基本的报告和档案存档。</p>
+<h2 id="Test"><a href="#Test" class="headerlink" title="Test"></a>Test</h2><p>运行自动测试是任何成功持续集成的关键组件。因此Jenkins有许多测试记录，报告，可视化插件。一般来说, 当有测试失败, 它是有用的，Jenkins会记录web UI中的报告和可视化失败。下面的示例使用junit步骤, 由<a href="https://plugins.jenkins.io/junit" target="_blank" rel="noopener">junit插件</a>提供。</p>
+<p>下面的例子，如果运行失败，Pipeline被标记不稳定”unstable”，在网页上用一个黄色的球标记。基于记录的测试报告，Jenkins同样提供历史趋势分析和可视化报告。</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp2/3.jpg"></p>
+<p>①    使用内置的shell条件(<font color="red">sh ‘make || true’</font>)确保<font color="red">sh</font>总是有一个0的返回值，这样使得<font color="red">junit</font>机会去捕获和处理测试报告。或者使用下面的处理失败[handing-failures]部分。<br>②    Junit捕获并关联Junit XML文件，模式匹配(<font color="red">**/target/*.xml</font>)</p>
+<p><b>注意：此处笔者测试下来是有出入的，区别在于脚本式Pipeline<b></b></b></p>
+<ul>
+<li>示例的stage必须放到stages里面，是和stage(‘Build’)并行的兄弟节点。</li>
+<li>stage里的内容(sh和junit必须放到steps里面)，否则会报错。</li>
+</ul>
+<h2 id="Deploy"><a href="#Deploy" class="headerlink" title="Deploy"></a>Deploy</h2><p>部署可能意味着各种步骤, 具体取决于项目或组织的要求，可能是从将生成的文件发布到 Artifactory 服务器的任何东西, 或者将代码推送到生产系统。</p>
+<p>在示例Pipeline的这个阶段，”Build”和”Test”阶段都已成功执行。因此发布阶段假设前面的阶段已经成功执行，否则Pipeline将退出。</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp2/4.jpg"></p>
+<p><font color="red">①</font>    读取currentBuild.result变量允许Pipeline判断是否有失败。这种情况之下，值是UNSTABLE。</p>
+<p>假设示例的Jenkins Pipeline都被成功执行，每一个成功的Pipeline部分都将会关联到存档文件，测试结果报告和控制台输出。</p>
+<p>脚本式的Pipeline能包含条件测试(像上面所示)，循环(loop)，try/catch/finally块，甚至函数。接下来的部分将详细讲解脚本式Pipeline语法的高级用法。</p>
+<p><b>注意：笔者测试下来<b></b></b></p>
+<p>(1).期间发现过无法读取currentBuild.result变量，此时提示” Cannot get property ‘currentBuild’ on null object”，故忽略此处的Deploy。env变量也是如此提示：Cannot get property ‘env’ on null object。最后实测发现：<br>脚本式Pipeline(web UI上面输入)，可以正确输出变量值，如下方式${env.BUILD_NUMBER}<br>申明式Pipeline(Jenkinsfile)，可以正确输出变量值，如下方式${env.BUILD_NUMBER}<br>可以正确用echo输出值，也可以用if判断值。代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">echo &quot;---$&#123;env.BUILD_NUMBER&#125;---&quot;</span><br><span class="line">echo &quot;---$&#123;currentBuild.result&#125;---&quot;</span><br><span class="line">if(currentBuild.result == null || currentBuild.result == &apos;SUCCESS&apos;) &#123;</span><br><span class="line">    echo &quot;---currentBuild.result is:$&#123;currentBuild.result&#125;------&quot;</span><br><span class="line">&#125;</span><br><span class="line">else &#123;</span><br><span class="line">    echo &quot;---currentBuild.result is:$&#123;currentBuild.result&#125;,so, will make publish&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>得到的结果如下几种情况：</p>
+<table><br>    <thead><br>        <tr><br>            <th>Cases结果</th><br>            <th>全局变量</th><br>            <th>备注</th><br>        </tr><br>    </thead><br>    <tbody><br>        <tr><br>            <td>1个skip，其他全对</td><br>            <td>61/null</td><br>            <td></td><br>        </tr><br>        <tr><br>            <td>1个error,其他全对</td><br>            <td>60/UNSTABLE</td><br>            <td>根据前面说明，只要有失败，就是UNSTABLE</td><br>        </tr><br>        <tr><br>            <td>全部正确</td><br>            <td>59/null</td><br>            <td></td><br>        </tr><br>    </tbody><br></table>
+
+
+<p>(2).申明式Jenkins Pipeline(Jenkinsfile)中，使用steps有报错提示：<br>WorkflowScript: 31: Expected a step @ line 31, column 17.。解决办法：添加script符号<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">stage(&apos;Deploy&apos;)&#123;</span><br><span class="line">    steps &#123;</span><br><span class="line">        script&#123;</span><br><span class="line">            echo &quot;---$&#123;env.BUILD_NUMBER&#125;---&quot;</span><br><span class="line">            echo &quot;---$&#123;currentBuild.result&#125;---&quot;</span><br><span class="line">            if(currentBuild.result == null || currentBuild.result == &quot;SUCCESS&quot;) &#123;</span><br><span class="line">                echo &quot;---currentBuild.result is:$&#123;currentBuild.result&#125;------&quot;</span><br><span class="line">            &#125;</span><br><span class="line">            else &#123;</span><br><span class="line">                echo &quot;---currentBuild.result is:$&#123;currentBuild.result&#125;,so, will make publish&quot;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="Pipeline高级语法-Advanced-Syntax-for-Pipeline"><a href="#Pipeline高级语法-Advanced-Syntax-for-Pipeline" class="headerlink" title="Pipeline高级语法(Advanced Syntax for Pipeline)"></a>Pipeline高级语法(Advanced Syntax for Pipeline)</h2><h4 id="字符串插值-String-Interpolation"><a href="#字符串插值-String-Interpolation" class="headerlink" title="字符串插值(String Interpolation)"></a>字符串插值(String Interpolation)</h4><p>Jenkins Pipeline使用与 Groovy 相同的规则来进行字符串插值。Groovy的字符串插值规则可能会让这个语言的初学者感到混乱。因为Groovy支持申明一个字符串使用单引号或者双引号，例如：</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp2/5.jpg"></p>
+<p>只有后一个字符串将支持基于美元符号 ($) 的字符串插值, 例如:</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp2/6.jpg"></p>
+<p>运行结果是：</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp2/7.jpg"></p>
+<p><b>笔者加：测试运行结果如下：<b><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Hello Mr. $&#123;username&#125;</span><br><span class="line">I said, Hello Mr. Jenkins</span><br></pre></td></tr></table></figure></b></b></p>
+<p>对于Pipeline的高级特性，理解怎样使用字符串插值是很重要。</p>
+<h2 id="环境变量-Working-with-the-Environment"><a href="#环境变量-Working-with-the-Environment" class="headerlink" title="环境变量(Working with the Environment)"></a>环境变量(Working with the Environment)</h2><p>Jenkins Pipeline通过全局变量env暴露了许多环境变量，env可以在Jenkindfile中任何地方使用。Jenkins中完整的环境变量列表请参见：localhost:8080/pipeline-syntax/globals#env(假设Jenkins运行在本地的8080端口)，环境变量包括：</p>
+<h6 id="BUILD-ID"><a href="#BUILD-ID" class="headerlink" title="BUILD_ID"></a>BUILD_ID</h6><p>当前的build ID，同BUILD_NUMBER一致。</p>
+<h6 id="JOB-NAME"><a href="#JOB-NAME" class="headerlink" title="JOB_NAME"></a>JOB_NAME</h6><p>被执行的项目的名字，例如foo或者foo/bar。</p>
+<h6 id="JENKINS-URL"><a href="#JENKINS-URL" class="headerlink" title="JENKINS_URL"></a>JENKINS_URL</h6><p>Jenkins的全URL，例如example.com:port/Jenkins/（注意：只有”System COnfiguration”中设置Jenkins URL以后才有效）</p>
+<p>引用或使用这些环境变量可以实现, 如访问Groovy 映射, 例如:</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp2/8.jpg"></p>
+<h4 id="设置环境变量-Setting-environment-variables"><a href="#设置环境变量-Setting-environment-variables" class="headerlink" title="设置环境变量(Setting environment variables)"></a>设置环境变量(Setting environment variables)</h4><p>在申明式Pipeline或者脚本式Pipeline中设置环境变量是不同的。<br>申明式Pipeline支持环境申明，而脚本式Pipeline必须使用withEnv。</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp2/9.jpg"></p>
+<p>①    一个<font color="red">environment</font>申明使用在pipeline块中，将对<font color="red">pipeline</font>中的所有step有效。<br>②    在<font color="red">stage</font>中的<font color="red">environment</font>申明将只对stage内的step有效。</p>
+<h2 id="参数-Parameters"><a href="#参数-Parameters" class="headerlink" title="参数(Parameters)"></a>参数(Parameters)</h2><p>声明式Pipeline支持现成的参数, 允许Pipeline接受用户通过<a href="https://jenkins.io/doc/book/pipeline/syntax/#parameters" target="_blank" rel="noopener">参数指令</a>在运行时指定参数。在脚本式Pipeline中配置参数，可以通过<font color="red">properties</font>实现，关于properties我们可以在Snippet Generator中找到。</p>
+<p>如果想要配置你的Pipeline接受Build With parameters的参数，那些参数是可以通过<font color="red">params</font>变量读取。</p>
+<p>假设一个名叫Greeting的字符串变量被配置在<font color="red">Jenkinsfile</font>中，那么可以通过<font color="red">${params.Greeting}</font>读取。</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp2/10.jpg"></p>
+<p><b>注意：笔者测试如下：本例如果是script(web UI上直接输入脚本方式)执行，会出现参数输入<b></b></b></p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp2/11.jpg"></p>
+<p>如果是Jenkisnfile(声明式执行)，会直接使用默认值Hello。</p>
+<h2 id="处理失败-Handling-Failures"><a href="#处理失败-Handling-Failures" class="headerlink" title="处理失败(Handling Failures)"></a>处理失败(Handling Failures)</h2><p>申明式Pipeline支持健壮的错误处理，默认通过它的post section处理，post section允许申明许多不同的”post conditions”，例如<font color="red">always</font>，<font color="red">unstable</font>，<font color="red">success</font>，<font color="red">failure</font>，和<font color="red">changed</font>。Pipeline<br>语法(<a href="https://jenkins.io/doc/book/pipeline/jenkinsfile/#syntax" target="_blank" rel="noopener">Pipeline Syntax</a>)部分提供更多的细节，怎样使用不同的post情况。</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp2/12.jpg"></p>
+<p>脚本式Pipeline依赖于Groovy内嵌的try/catch/finally语法处理Pipeline执行期间出现的错误。</p>
+<p>在上面的测试例子中，sh被修改永远不返回非0值(sh ‘make check || true’)。这个方法意味着接下来的阶段需要检查currentBuild.result去判断是否存在错误发生。</p>
+<p>另一种处理此问题的方法是使用一系列try/finally 块, 它可以保留Pipeline中故障的早期退出行为, 同时仍使 junit 有机会捕获测试报告：</p>
+<p><b>注意：笔者实测，申明式添加了post；其次mail的各参数，必须用单引号括起来。<b></b></b></p>
+<p>申明式(Jenkinsfile)邮件发送失败，以下两种方式都失败(脚本式Pipeline无邮件部分)：</p>
+<ul>
+<li>mail to: ‘a@b.com’, subject: ‘The Pipeline(handing failure) failed :(‘, body: ‘this is body’</li>
+<li>emailext body: ‘this is body’, subject: ‘title’, to: ‘ a@b.com ‘</li>
+</ul>
+<p>如果前面执行成功，那么就不会执行post里面的failure部分。</p>
+<h2 id="使用多个代理-Using-multiple-agents"><a href="#使用多个代理-Using-multiple-agents" class="headerlink" title="使用多个代理(Using multiple agents)"></a>使用多个代理(Using multiple agents)</h2><p>在所有前面的例子中，只使用一个代理。这意味着Jenkins分配的所有执行器，只有一个是有效的，无论它是如何被标记和配置。Pipeline允许在一个Jenkinsfile中使用多个代理，这对于高级的用户案例是很帮助的，例如在多个平台上执行builds/tests。</p>
+<p>在下面的例子中，Build阶段在一个代理上执行，build的结果将被两个子代理重用，在test阶段，标记linux和windows的两个代理是相互独立的。</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp2/13.jpg"></p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp2/14.jpg"></p>
+<p>①    stash允许捕获模式匹配的文件(<em>/target/</em>.jar)，只在同一个Pipeline其他地方重用。一旦Pipeline完成了执行，stash捕获的文件将被Jenkins master删除。</p>
+<p>②    在agent/node中的参数允许任何有效的Jenkins标签表达式。查阅”Pipeline Syntax” 部分可以更详细的信息。</p>
+<p>③    unstash 将从Jenkins主机中检索stash到Pipeline的当前工作区中。</p>
+<p>④    bat脚本允许在windows平台上执行脚本。</p>
+<p><b>注意：笔者实测<b></b></b></p>
+<p>(1).首先需要配置windows slave node，关于windows slave，需要配置master上已有的需要用到的环境变量：</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp2/15.jpg"></p>
+<p>(2).首先分别修改两个node的label为linux(master)和windows(slave)。</p>
+<h2 id="可选的step参数-Optional-step-arguments"><a href="#可选的step参数-Optional-step-arguments" class="headerlink" title="可选的step参数(Optional step arguments)"></a>可选的step参数(Optional step arguments)</h2><p>Pipeline遵循Groovy语言约定, 允许在方法参数周围省略括号。</p>
+<p>许多Pipeline steps还使用命名参数语法作为在Groovy中创建映射的简写形式, 它使用语法 [key1: value1、key2: value2]。使语句像以下功能等效：</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp2/16.jpg"></p>
+<p>方便起见，当参数只有一个参数的时候，参数名可以省略，例如：</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp2/17.jpg"></p>
+<h2 id="高级脚本Pipeline"><a href="#高级脚本Pipeline" class="headerlink" title="高级脚本Pipeline"></a>高级脚本Pipeline</h2><p>脚本Pipeline是一个domain-specific语言，基于Groovy，大多数的Groovy语法都能不用修改被用在脚本Pipeline中。</p>
+<h4 id="并行执行-Executing-in-parallel"><a href="#并行执行-Executing-in-parallel" class="headerlink" title="并行执行(Executing in parallel)"></a>并行执行(Executing in parallel)</h4><p>上面部分中的示例在一个线性序列中跨两个不同的平台运行测试。实践中，如果make check需要花30分钟执行完，”Test”阶段将花费60分钟完成。</p>
+<p>幸运的是，Pipeline具有内置的功能, 用于并行执行Pipeline脚本部分, 并在恰当命名的并行(parallel)步骤中实现。</p>
+<p>重构上面的示例以使用并行(parallel)步骤:</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp2/18.jpg"></p>
+<p>不像原先的在linux和windows上线性执行，他们现在可以并行执行。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://roclli.github.io/2017/12/12/Pipeline2-Using-a-Jenkinsfile/" data-id="cjb3ej6d700012x7sngope9zh" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Pipeline-Jenkins/">Pipeline; Jenkins</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-Pipeline1-Getting-Started-With-Pipeline" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2017/12/12/Pipeline1-Getting-Started-With-Pipeline/" class="article-date">
@@ -92,7 +243,7 @@
       
         <p><b>前言(笔者自己添加部分)<b></b></b></p>
 <p>最好的资料莫过于<a href="https://github.com/jenkinsci/pipeline-plugin/blob/master/TUTORIAL.md" target="_blank" rel="noopener">官方文档</a>，<a href="https://jenkins.io/doc/book/pipeline/" target="_blank" rel="noopener">旧文档不再维护</a>。<br>所以本文其实是翻译并实践学习pipeline，对应的pdf文档，<a href="http://download.csdn.net/download/0211997/10138881" target="_blank" rel="noopener">已上传到csdn</a></p>
-<p>笔者是独立翻译实验，不允许转载</p>
+<p><b>笔者是独立翻译实验，不允许转载<b></b></b></p>
 <p>本文直接从Pipeline开始，如果对Jenkins不熟悉，请参见Jenkins官方文档或者本系列的第一章Installing Jenkins。</p>
 <h1 id="Pipeline"><a href="#Pipeline" class="headerlink" title="Pipeline"></a>Pipeline</h1><p>本章将会学习Jenkins Pipeline的所有特性，从运行Pipeline到写Pipeline代码，甚至扩展到Pipeline本身。</p>
 <p>本章可以被Jenkins各个水平的用户使用，但是初学者可能要参考下本书”Using Jenkins”的章节去理解本章的一些专有名词。</p>
@@ -221,10 +372,10 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://roclli.github.io/2017/12/12/Pipeline1-Getting-Started-With-Pipeline/" data-id="cjb3bwf0j0000m87syii64zaa" class="article-share-link">Teilen</a>
+      <a data-url="https://roclli.github.io/2017/12/12/Pipeline1-Getting-Started-With-Pipeline/" data-id="cjb3ej6d300002x7s3q0ukqnu" class="article-share-link">Teilen</a>
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Pipeline/">Pipeline</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Pipeline-Jenkins/">Pipeline; Jenkins</a></li></ul>
 
     </footer>
   </div>
@@ -427,7 +578,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://roclli.github.io/2017/12/11/Java-OOM-ERROR/" data-id="cjb3bwf0n0001m87so19296ye" class="article-share-link">Teilen</a>
+      <a data-url="https://roclli.github.io/2017/12/11/Java-OOM-ERROR/" data-id="cjb3ej6df00042x7s4fkw9c76" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java-OOM-Java内存溢出-OutOfMemoryError/">Java; OOM; Java内存溢出; OutOfMemoryError</a></li></ul>
@@ -469,7 +620,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://roclli.github.io/2017/12/11/log-check/" data-id="cjb3bwf0q0003m87sma3n2a60" class="article-share-link">Teilen</a>
+      <a data-url="https://roclli.github.io/2017/12/11/log-check/" data-id="cjb3ej6dg00052x7sedoqd3ri" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/grep-linux-shell-log-file-check/">grep; linux shell; log file check</a></li></ul>
@@ -516,7 +667,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://roclli.github.io/2017/12/11/hello-world/" data-id="cjb3bwf0v0004m87s3m4z0jkg" class="article-share-link">Teilen</a>
+      <a data-url="https://roclli.github.io/2017/12/11/hello-world/" data-id="cjb3ej6dd00032x7s1ozanhxx" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -539,7 +690,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-OOM-Java内存溢出-OutOfMemoryError/">Java; OOM; Java内存溢出; OutOfMemoryError</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Pipeline/">Pipeline</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grep-linux-shell-log-file-check/">grep; linux shell; log file check</a></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-OOM-Java内存溢出-OutOfMemoryError/">Java; OOM; Java内存溢出; OutOfMemoryError</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Pipeline-Jenkins/">Pipeline; Jenkins</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grep-linux-shell-log-file-check/">grep; linux shell; log file check</a></li></ul>
     </div>
   </div>
 
@@ -549,7 +700,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/Java-OOM-Java内存溢出-OutOfMemoryError/" style="font-size: 10px;">Java; OOM; Java内存溢出; OutOfMemoryError</a> <a href="/tags/Pipeline/" style="font-size: 10px;">Pipeline</a> <a href="/tags/grep-linux-shell-log-file-check/" style="font-size: 10px;">grep; linux shell; log file check</a>
+      <a href="/tags/Java-OOM-Java内存溢出-OutOfMemoryError/" style="font-size: 10px;">Java; OOM; Java内存溢出; OutOfMemoryError</a> <a href="/tags/Pipeline-Jenkins/" style="font-size: 20px;">Pipeline; Jenkins</a> <a href="/tags/grep-linux-shell-log-file-check/" style="font-size: 10px;">grep; linux shell; log file check</a>
     </div>
   </div>
 
@@ -569,6 +720,10 @@
     <h3 class="widget-title">letzter Beitrag</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2017/12/12/Pipeline2-Using-a-Jenkinsfile/">(原创)Pipeline2-Using-a-Jenkinsfile</a>
+          </li>
         
           <li>
             <a href="/2017/12/12/Pipeline1-Getting-Started-With-Pipeline/">(原创)Pipeline1-Getting-Started-With-Pipeline</a>
