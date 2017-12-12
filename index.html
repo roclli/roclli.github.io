@@ -40,7 +40,7 @@
       </h1>
       
         <h2 id="subtitle-wrap">
-          <a href="/" id="subtitle">测试人员的技术博客;交流请加QQ群549576208</a>
+          <a href="/" id="subtitle">测试人员的技术博客;交流请加QQ群:549576208</a>
         </h2>
       
     </div>
@@ -67,6 +67,170 @@
 </header>
       <div class="outer">
         <section id="main">
+  
+    <article id="post-Pipeline1-Getting-Started-With-Pipeline" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/12/12/Pipeline1-Getting-Started-With-Pipeline/" class="article-date">
+  <time datetime="2017-12-12T07:12:55.000Z" itemprop="datePublished">2017-12-12</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/12/12/Pipeline1-Getting-Started-With-Pipeline/">Pipeline1-Getting-Started-With-Pipeline</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><b>前言(笔者自己添加部分)<b></b></b></p>
+<p>最好的资料莫过于<a href="https://github.com/jenkinsci/pipeline-plugin/blob/master/TUTORIAL.md" target="_blank" rel="noopener">官方文档</a>，<a href="https://jenkins.io/doc/book/pipeline/" target="_blank" rel="noopener">旧文档不再维护</a>。<br>所以本文其实是翻译并实践学习pipeline，对应的pdf文档，<a href="http://download.csdn.net/download/0211997/10138881" target="_blank" rel="noopener">已上传到csdn</a></p>
+<p>本文直接从Pipeline开始，如果对Jenkins不熟悉，请参见Jenkins官方文档或者本系列的第一章Installing Jenkins。</p>
+<h1 id="Pipeline"><a href="#Pipeline" class="headerlink" title="Pipeline"></a>Pipeline</h1><p>本章将会学习Jenkins Pipeline的所有特性，从运行Pipeline到写Pipeline代码，甚至扩展到Pipeline本身。</p>
+<p>本章可以被Jenkins各个水平的用户使用，但是初学者可能要参考下本书”Using Jenkins”的章节去理解本章的一些专有名词。</p>
+<p>如果还没有熟悉最基本的Jenkins技术和特点，请从”Getting Started with Jenkins”开始。</p>
+<h2 id="What-is-Jenkins-Pipeline"><a href="#What-is-Jenkins-Pipeline" class="headerlink" title="What is Jenkins Pipeline?"></a>What is Jenkins Pipeline?</h2><p>Jenkins Pipeline(或者简单用一个大写字母P代替”Pipeline”)是一套插件，这套插件支持实现和整合持续集成pipelines(continuous delivery pipelines)到Jenkins中。</p>
+<p>持续集成Pipeline (continuous delivery pipelines)是一个程序自动进行的过程, 用您的用户和客户的版本控制权获取软件。对软件的每次更改(在源代码管理中提交)经过一个复杂的过程, 用它的方式发布软件(release)。这个过程包括以一个可靠地可重复的方式去构建软件，就像通过测试和发布(deployment)的多个步骤去构建(build)软件过程一样。</p>
+<p>Pipeline提供一套可扩展的工具集，用代码去模型化简单到复杂的(simple-to-complex)发布pipelines，代码使用Pipeline Domain Specific Language(DSL)语法。</p>
+<p>通常, Jenkins Pipeline的定义被写入文本文件 (称为 Jenkinsfile)，文件被放到项目的源代码管理存储库中[3: Source Control Management]。这是Pipeline代码(Pipeline-as-Code)的基础；把持续集成作为应用的一部分用版本控制，并且像其他代码一样可以review。创建Jenkinsfile有很多好处：</p>
+<ul>
+<li>自动为所有的分支和pull requests创建Pipelines</li>
+<li>在Pipeline中进行代码审查和迭代(review/iteration)</li>
+<li>Pipeline的审核和跟踪</li>
+<li>Pipeline唯一的真相源 [4: en.wikipediaorg/wiki/Single_Source_of_Truth]，可以由项目的多个成员查看和编辑。<br>定义Pipeline的语句，要么在web UI中，要么在一个Jenkinsfile文件中，一般认为最好的体验是，定义Pipeline在Jenkinsfile文件中，并且放到源代码版本控制中(例如git，svn等)。<br>这是一个Jenkinsfile文件例子：</li>
+</ul>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp1/pp1-1.jpg"></p>
+<p><font color="red">①</font> agent表明Jenkins要为Pipeline的这部分分配一个执行器和工作空间。</p>
+<p><font color="red">②</font> stage表明是这个Pipeline的一个stage。</p>
+<p><font color="red">③</font> steps这个stage将要运行的一个步骤。</p>
+<p><font color="red">④</font> sh执行给与的shell语句。</p>
+<p><font color="red">⑤</font> junit是一个Pipeline步骤，Junit插件提供用来搜集测试报告。</p>
+<h2 id="Why-Pipeline"><a href="#Why-Pipeline" class="headerlink" title="Why Pipeline?"></a>Why Pipeline?</h2><p>Jenkins基本上是一个自动化引擎, 它支持许多自动化模式。Pipeline添加了一套强有力的自动化工具集到Jenkins，支持从简单持续集成到综合持续集成的用例，到Pipeline。通过将一系列相关任务模型化，用户能充分利用Pipeline许多特性的优势。</p>
+<ul>
+<li>Code：Pipeline是用代码实现，能做版本控制，可以给团队编辑/检查/迭代Pipeline的能力。</li>
+<li>Durable：Pipeline可以在计划的和未计划的Jenkins主机重启中不受影响。</li>
+<li>Pausable：Pipeline在继续运行之前，可以选择停止/等待输入或者批准。</li>
+<li>Versatile：Pipeline能满足现实世界复杂的持续集成需求，包括并行执行fork/join/loop。</li>
+<li>Extensible：Pipeline插件支持定制化的扩展到它自己的DSL[2: Domain-Specific Language]。</li>
+</ul>
+<p>虽然Jenkins一直允许基本形式的链接自由式Jobs[5: Additional plugins have been used to implement complex behaviors utilizing Freestyle Jobs such as the Copy Artifact, Parameterized Trigger, and Promoted Builds plugins]，一起执行顺序任务, Pipeline使这个概念成为Jenkins的一流插件。<br>基于Jenkins可扩展的核心价值，Pipeline同样是可扩展的。<br>下图是一个持续集成的例子，可以很容易被模型化。</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp1/pp1-2.jpg"></p>
+<h2 id="Pipeline-关键字"><a href="#Pipeline-关键字" class="headerlink" title="Pipeline 关键字"></a>Pipeline 关键字</h2><p><b>Step<b></b></b></p>
+<p>一个独立的任务；一般来说steps告诉Jenkins做什么。例如执行shell命令，用sh执<br>行make：sh ‘make’。当插件扩展Pipeline DSL，这意味着插件能执行一个新的step。</p>
+<p><b>Node<b></b></b></p>
+<p>Pipeline执行的大多数工作是在一个或多个声明的Node的上下文中完成的。限制Node</p>
+<p>步骤内的工作有两点：</p>
+<p>(1).将块中包含的steps，通过向Jenkins添加项来运行队列.一旦一个执行器在一个节点上是空闲的, 这些steps就会运行。</p>
+<p>(2).创建工作区 (特定于该特定Pipeline的目录)，在工作区里，工作能被完成。</p>
+<p>注意：</p>
+<p>取决于你的Jenkins配置，经过一段时间的不活动时期之后，一些工作区不能被自<br>动清除。可以查看JENKINS-2111得到更多的信息。</p>
+<p><b>Stage<b></b></b></p>
+<p>Stage是定义整个Pipeline概念上子集的一个步骤，例如”Build”，”Test”，和”Deploy”，这被许多插件使用来可视化或者表现pipeline状态/进度。[5: Blue Ocean, Pipeline Stage View plugin]</p>
+<h1 id="开始Pipeline-Getting-Started-with-Pipeline"><a href="#开始Pipeline-Getting-Started-with-Pipeline" class="headerlink" title="开始Pipeline(Getting Started with Pipeline)"></a>开始Pipeline(Getting Started with Pipeline)</h1><p>Jenkins Pipeline是一套支持持续集成的插件。Pipeline提供扩展的工具，通过Pipeline DSL去模型化简单到复杂的代码发布Pipeline。</p>
+<p>本部分介绍一些Jenkins Pipeline的基本概念，例如基本的定义，用Pipeline执行任务。</p>
+<h2 id="前提条件"><a href="#前提条件" class="headerlink" title="前提条件"></a>前提条件</h2><p>使用Jenkins Pipeline，你会需要：</p>
+<ul>
+<li>Jenkins 2.x或者更高版本(更老版本1.642.3可能可以，但是不推荐)</li>
+<li>Pipeline插件[6: Pipeline plugin]</li>
+</ul>
+<p>想知道怎样安装和管理，请参见 Managing Plugins。</p>
+<h2 id="定义Pipeline"><a href="#定义Pipeline" class="headerlink" title="定义Pipeline"></a>定义Pipeline</h2><p>Pipeline脚本是用Groovy语言撰写。于是本文会介绍一些相关的Groovy语法，理解Groovy是有帮助的，但并不是必需的。</p>
+<p>一个基本的Pipeline能按照以下两种方式创建：</p>
+<ul>
+<li>Jenkins web UI上直接输入脚本</li>
+<li>创建一个Jenkinsfile文件，这个能被放到代码版本控制软件中。</li>
+</ul>
+<p>用任意方法定义Pipeline的语法是相同的, 但Jenkins支持将Pipeline直接输入到 web UI 中, 通常认为最好的做法是定义在Jenkinsfile的Pipeline, Jenkins将直接从源代码管理加载。</p>
+<h2 id="在web-UI中定义一个Pipeline"><a href="#在web-UI中定义一个Pipeline" class="headerlink" title="在web UI中定义一个Pipeline"></a>在web UI中定义一个Pipeline</h2><p>在web UI中创建一个基本的Pipeline。跟随以下步骤：</p>
+<ul>
+<li>点击Jenkins首页上的”New Item”。</li>
+</ul>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp1/pp1-3.jpg"></p>
+<ul>
+<li>为Pipeline输入一个名字，选择Pipeline，然后点击OK。</li>
+</ul>
+<p>注意：Jenkins用Pipeline的名字在硬盘上创建目录。包含空格的Pipeline名字可能会有bugs，脚本并不支持包含空格的路径。</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp1/pp1-4.jpg"></p>
+<ul>
+<li>在Script区域，输入一个Pipeline，然后点击Save。</li>
+</ul>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp1/pp1-5.jpg"></p>
+<ul>
+<li>点击”Build Now”去运行Pipeline。</li>
+</ul>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp1/pp1-6.jpg"></p>
+<ul>
+<li>点击”build History”下的#1，然后点击Console Output去查看Pipeline完整的输出。</li>
+</ul>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp1/pp1-7.jpg"></p>
+<p>上面的例子展示了一个成功的Pipeline运行情况，用了两步。</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp1/pp1-8.jpg"></p>
+<p><font color="red">① node</font>分配一个执行器和工作空间。</p>
+<p><font color="red">② echo</font>在Console Output输出字符串。</p>
+<h2 id="在SCM中定义一个Pipeline"><a href="#在SCM中定义一个Pipeline" class="headerlink" title="在SCM中定义一个Pipeline"></a>在SCM中定义一个Pipeline</h2><p>复杂的Pipeline很难在Pipeline配置区域去写和维护。为了让这个更容易一些，Pipeline同样可以用文本编辑器写并放到版本控制中，通过Pipeline Script from SCM选项，Jenkins可以装载Jenkinsfile文件。</p>
+<p>要做到这一点，当定义一个Pipeline时，选择”Pipeline Script from SCM”选项。</p>
+<p>随着”Pipeline Script from SCM”选项被选择，在Jenkins界面上，你不能直接输入任何Groovy代码；你只能输入一个源代码路径，从这个路径可以找到pipeline文件。当更新代码库的时候，一个新的编译被触发，只要Pipeline被配置使用SCM polling触发。</p>
+<p>提示：</p>
+<p>Jenkinsfile的第一行应该是#!/usr/bing/env groovy，这样文本编辑器，IDEs，GitHub等可以按照Groovy代码来语法高亮Jenkinsfile文件。</p>
+<h2 id="内建文档-Built-in-Documentation"><a href="#内建文档-Built-in-Documentation" class="headerlink" title="内建文档(Built-in Documentation)"></a>内建文档(Built-in Documentation)</h2><p>随着Pipeline一起发布的内建的文档，使得创建复杂的Pipelines更加容易。内建的文档可以根据安装在Jenkins实例中的插件，被自动生成和更新。</p>
+<p>内建的文档可以通过链接被找到: localhost:8080/pipeline-syntax/。假设你已经有了一个正运行在本地8080端口上的实例。同样的文档可以连接到这里，通过任何项目的左边菜单”Pipeline Syntax”。</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp1/pp1-9.jpg"></p>
+<h2 id="代码段生成器-Snippet-Generator"><a href="#代码段生成器-Snippet-Generator" class="headerlink" title="代码段生成器(Snippet Generator)"></a>代码段生成器(Snippet Generator)</h2><p>内建的代码段生成器(Snippet Generator)功能对于以下功能很有帮助，创建独立步骤地代码，发现插件提供的新步骤，对于一个特定的步骤实验不同的参数。</p>
+<p>代码段生成器是动态填充的, 其中列出了可供Jenkins使用的步骤。可用的步骤数取决于安装的插件, 它显式地公开了Pipeline可使用的步骤。</p>
+<p>使用代码生成器，生成步骤</p>
+<p>(1).导航到Pipeline Syntax链接。</p>
+<p>(2).在Sample Step下达菜单中，选择需要的步骤。</p>
+<p>(3).使用Sample Step下拉菜单下面的动态区域去配置选定的步骤。</p>
+<p>(4).点击Gemerate Pipeline Script生成一个代码段，拷贝到Pipeline中。</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp1/pp1-10.jpg"></p>
+<p>存取选定步骤的附加信息，点击Help按钮()上图红色箭头所指部分。</p>
+<h2 id="Global-Variable-Reference"><a href="#Global-Variable-Reference" class="headerlink" title="Global Variable Reference"></a>Global Variable Reference</h2><p>除了代码段生成器(Snippet Generator)只能生成步骤之外，Pipeline同样提供了一个内建的”Global Variable Reference”。像代码段生成器(Snippet Generator)一样，它也是被插件动态生成的。不像代码段生成器(Snippet Generator)的是，Global Variable Reference仅仅包含Pipeline或者插件提供的变量文档，只对Pipeline有效。</p>
+<p>Pipeline默认提供的变量有：</p>
+<p><b>env<b></b></b></p>
+<p>环境变量可以被Pipeline脚本，例如env.PATH或者env.BUILD_ID。可以到Global Variable Reference寻找，到目前为止，完整的，最新的，Pipeline中可以使用的变量列表。</p>
+<p><b>params<b></b></b></p>
+<p>将为Pipeline定义的所有参数公开为只读映射, 例如:params.MY_PARAM_NAME</p>
+<p><b>currentBuild<b></b></b></p>
+<p>可以被用来发现当前正在执行的Pipeline的相关信息，例如currentBuild.result，currentBuild.displayName等等。可以到Global Variable Reference寻找，到目前为止，完整的，最新的，可以用的currentBuild列表。</p>
+<h2 id="Further-Reading"><a href="#Further-Reading" class="headerlink" title="Further Reading"></a>Further Reading</h2><p>本章节仅仅只说出了Jenkins Pipeline能做的一小部分，但已经为你提供了足够多的基础，去开始实验Jenkins实例。</p>
+<p>下一节Jenkinsfile，更多的Pipeline步骤将被讨论。</p>
+<p>Additional Resources</p>
+<ul>
+<li>Pipeline Steps Reference, 包含发布插件提供的所有步骤</li>
+<li>Pipeline Examples，可拷贝社区版的Pipeline例子集合。</li>
+</ul>
+<p>参考资料：</p>
+<ol>
+<li><a href="https://jenkins.io/doc/book/pipeline/" target="_blank" rel="noopener">https://jenkins.io/doc/book/pipeline/</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Domain-specific_language" target="_blank" rel="noopener">https://en.wikipedia.org/wiki/Domain-specific_language</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Version_control" target="_blank" rel="noopener">https://en.wikipedia.org/wiki/Version_control</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Single_source_of_truth" target="_blank" rel="noopener">https://en.wikipedia.org/wiki/Single_source_of_truth</a></li>
+<li><a href="https://wiki.jenkins-ci.org/display/JENKINS/Pipeline+Stage+View+Plugin" target="_blank" rel="noopener">https://wiki.jenkins-ci.org/display/JENKINS/Pipeline+Stage+View+Plugin</a></li>
+<li><a href="https://plugins.jenkins.io/workflow-aggregator" target="_blank" rel="noopener">https://plugins.jenkins.io/workflow-aggregator</a></li>
+<li>../managing/plugins.pdf</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://roclli.github.io/2017/12/12/Pipeline1-Getting-Started-With-Pipeline/" data-id="cjb3bkgg60001987socf0mi22" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Pipeline/">Pipeline</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
   
     <article id="post-Java-OOM-ERROR" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
@@ -262,7 +426,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://roclli.github.io/2017/12/11/Java-OOM-ERROR/" data-id="cjb39qz4q0002p97s5qus7c0j" class="article-share-link">Teilen</a>
+      <a data-url="https://roclli.github.io/2017/12/11/Java-OOM-ERROR/" data-id="cjb3bkgg20000987s05glcmxr" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java-OOM-Java内存溢出-OutOfMemoryError/">Java; OOM; Java内存溢出; OutOfMemoryError</a></li></ul>
@@ -304,7 +468,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://roclli.github.io/2017/12/11/log-check/" data-id="cjb39qz4o0001p97sthel75fh" class="article-share-link">Teilen</a>
+      <a data-url="https://roclli.github.io/2017/12/11/log-check/" data-id="cjb3bkgge0004987sv5f9iddo" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/grep-linux-shell-log-file-check/">grep; linux shell; log file check</a></li></ul>
@@ -351,7 +515,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://roclli.github.io/2017/12/11/hello-world/" data-id="cjb39qz4k0000p97szrxr3gfo" class="article-share-link">Teilen</a>
+      <a data-url="https://roclli.github.io/2017/12/11/hello-world/" data-id="cjb3bkggd0003987sbyrqlmeg" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -374,7 +538,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-OOM-Java内存溢出-OutOfMemoryError/">Java; OOM; Java内存溢出; OutOfMemoryError</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grep-linux-shell-log-file-check/">grep; linux shell; log file check</a></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-OOM-Java内存溢出-OutOfMemoryError/">Java; OOM; Java内存溢出; OutOfMemoryError</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Pipeline/">Pipeline</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grep-linux-shell-log-file-check/">grep; linux shell; log file check</a></li></ul>
     </div>
   </div>
 
@@ -384,7 +548,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/Java-OOM-Java内存溢出-OutOfMemoryError/" style="font-size: 10px;">Java; OOM; Java内存溢出; OutOfMemoryError</a> <a href="/tags/grep-linux-shell-log-file-check/" style="font-size: 10px;">grep; linux shell; log file check</a>
+      <a href="/tags/Java-OOM-Java内存溢出-OutOfMemoryError/" style="font-size: 10px;">Java; OOM; Java内存溢出; OutOfMemoryError</a> <a href="/tags/Pipeline/" style="font-size: 10px;">Pipeline</a> <a href="/tags/grep-linux-shell-log-file-check/" style="font-size: 10px;">grep; linux shell; log file check</a>
     </div>
   </div>
 
@@ -404,6 +568,10 @@
     <h3 class="widget-title">letzter Beitrag</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2017/12/12/Pipeline1-Getting-Started-With-Pipeline/">Pipeline1-Getting-Started-With-Pipeline</a>
+          </li>
         
           <li>
             <a href="/2017/12/11/Java-OOM-ERROR/">Java OOM ERROR</a>
