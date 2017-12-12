@@ -5,15 +5,15 @@
   
 
   
-  <title>Pipeline1-Getting-Started-With-Pipeline | 测试人员修炼</title>
+  <title>(原创)Pipeline1-Getting-Started-With-Pipeline | 测试人员修炼</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="前言(笔者自己添加部分) 最好的资料莫过于官方文档，旧文档不再维护。所以本文其实是翻译并实践学习pipeline，对应的pdf文档，已上传到csdn 本文直接从Pipeline开始，如果对Jenkins不熟悉，请参见Jenkins官方文档或者本系列的第一章Installing Jenkins。 Pipeline本章将会学习Jenkins Pipeline的所有特性，从运行Pipeline到写Pip">
+  <meta name="description" content="前言(笔者自己添加部分) 最好的资料莫过于官方文档，旧文档不再维护。所以本文其实是翻译并实践学习pipeline，对应的pdf文档，已上传到csdn 笔者是独立翻译实验，不允许转载 本文直接从Pipeline开始，如果对Jenkins不熟悉，请参见Jenkins官方文档或者本系列的第一章Installing Jenkins。 Pipeline本章将会学习Jenkins Pipeline的所有特性，">
 <meta name="keywords" content="Pipeline">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Pipeline1-Getting-Started-With-Pipeline">
+<meta property="og:title" content="(原创)Pipeline1-Getting-Started-With-Pipeline">
 <meta property="og:url" content="https://roclli.github.io/2017/12/12/Pipeline1-Getting-Started-With-Pipeline/index.html">
 <meta property="og:site_name" content="测试人员修炼">
-<meta property="og:description" content="前言(笔者自己添加部分) 最好的资料莫过于官方文档，旧文档不再维护。所以本文其实是翻译并实践学习pipeline，对应的pdf文档，已上传到csdn 本文直接从Pipeline开始，如果对Jenkins不熟悉，请参见Jenkins官方文档或者本系列的第一章Installing Jenkins。 Pipeline本章将会学习Jenkins Pipeline的所有特性，从运行Pipeline到写Pip">
+<meta property="og:description" content="前言(笔者自己添加部分) 最好的资料莫过于官方文档，旧文档不再维护。所以本文其实是翻译并实践学习pipeline，对应的pdf文档，已上传到csdn 笔者是独立翻译实验，不允许转载 本文直接从Pipeline开始，如果对Jenkins不熟悉，请参见Jenkins官方文档或者本系列的第一章Installing Jenkins。 Pipeline本章将会学习Jenkins Pipeline的所有特性，">
 <meta property="og:image" content="http://oow5aq3zy.bkt.clouddn.com/image/pp1/pp1-1.jpg">
 <meta property="og:image" content="http://oow5aq3zy.bkt.clouddn.com/image/pp1/pp1-2.jpg">
 <meta property="og:image" content="http://oow5aq3zy.bkt.clouddn.com/image/pp1/pp1-3.jpg">
@@ -24,10 +24,10 @@
 <meta property="og:image" content="http://oow5aq3zy.bkt.clouddn.com/image/pp1/pp1-8.jpg">
 <meta property="og:image" content="http://oow5aq3zy.bkt.clouddn.com/image/pp1/pp1-9.jpg">
 <meta property="og:image" content="http://oow5aq3zy.bkt.clouddn.com/image/pp1/pp1-10.jpg">
-<meta property="og:updated_time" content="2017-12-12T07:48:29.656Z">
+<meta property="og:updated_time" content="2017-12-12T07:51:44.437Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Pipeline1-Getting-Started-With-Pipeline">
-<meta name="twitter:description" content="前言(笔者自己添加部分) 最好的资料莫过于官方文档，旧文档不再维护。所以本文其实是翻译并实践学习pipeline，对应的pdf文档，已上传到csdn 本文直接从Pipeline开始，如果对Jenkins不熟悉，请参见Jenkins官方文档或者本系列的第一章Installing Jenkins。 Pipeline本章将会学习Jenkins Pipeline的所有特性，从运行Pipeline到写Pip">
+<meta name="twitter:title" content="(原创)Pipeline1-Getting-Started-With-Pipeline">
+<meta name="twitter:description" content="前言(笔者自己添加部分) 最好的资料莫过于官方文档，旧文档不再维护。所以本文其实是翻译并实践学习pipeline，对应的pdf文档，已上传到csdn 笔者是独立翻译实验，不允许转载 本文直接从Pipeline开始，如果对Jenkins不熟悉，请参见Jenkins官方文档或者本系列的第一章Installing Jenkins。 Pipeline本章将会学习Jenkins Pipeline的所有特性，">
 <meta name="twitter:image" content="http://oow5aq3zy.bkt.clouddn.com/image/pp1/pp1-1.jpg">
   
     <link rel="alternate" href="/atom.xml" title="测试人员修炼" type="application/atom+xml">
@@ -93,7 +93,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      Pipeline1-Getting-Started-With-Pipeline
+      (原创)Pipeline1-Getting-Started-With-Pipeline
     </h1>
   
 
@@ -103,6 +103,7 @@
       
         <p><b>前言(笔者自己添加部分)<b></b></b></p>
 <p>最好的资料莫过于<a href="https://github.com/jenkinsci/pipeline-plugin/blob/master/TUTORIAL.md" target="_blank" rel="noopener">官方文档</a>，<a href="https://jenkins.io/doc/book/pipeline/" target="_blank" rel="noopener">旧文档不再维护</a>。<br>所以本文其实是翻译并实践学习pipeline，对应的pdf文档，<a href="http://download.csdn.net/download/0211997/10138881" target="_blank" rel="noopener">已上传到csdn</a></p>
+<p>笔者是独立翻译实验，不允许转载</p>
 <p>本文直接从Pipeline开始，如果对Jenkins不熟悉，请参见Jenkins官方文档或者本系列的第一章Installing Jenkins。</p>
 <h1 id="Pipeline"><a href="#Pipeline" class="headerlink" title="Pipeline"></a>Pipeline</h1><p>本章将会学习Jenkins Pipeline的所有特性，从运行Pipeline到写Pipeline代码，甚至扩展到Pipeline本身。</p>
 <p>本章可以被Jenkins各个水平的用户使用，但是初学者可能要参考下本书”Using Jenkins”的章节去理解本章的一些专有名词。</p>
@@ -231,7 +232,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://roclli.github.io/2017/12/12/Pipeline1-Getting-Started-With-Pipeline/" data-id="cjb3bkgg60001987socf0mi22" class="article-share-link">Teilen</a>
+      <a data-url="https://roclli.github.io/2017/12/12/Pipeline1-Getting-Started-With-Pipeline/" data-id="cjb3bwf0j0000m87syii64zaa" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Pipeline/">Pipeline</a></li></ul>
@@ -296,7 +297,7 @@
       <ul>
         
           <li>
-            <a href="/2017/12/12/Pipeline1-Getting-Started-With-Pipeline/">Pipeline1-Getting-Started-With-Pipeline</a>
+            <a href="/2017/12/12/Pipeline1-Getting-Started-With-Pipeline/">(原创)Pipeline1-Getting-Started-With-Pipeline</a>
           </li>
         
           <li>
