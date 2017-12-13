@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>(原创)Pipeline6-Pipeline-Development-Tools | 测试人员修炼</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="笔者是独立翻译实验，不允许转载 Pipeline Development ToolsPipeline Development ToolsJenkins Pipeline有内嵌的文档和Snipper Generator，这些是开发Pipeline的关键资源。它们针对当前版本的Jenkins和安装的插件提供详细的帮助和信息。本节，我们讨论开发Jenkins Pipeline的其他工具和资源。 命令行C">
+<meta name="keywords" content="Jenkins; Pipeline">
+<meta property="og:type" content="article">
+<meta property="og:title" content="(原创)Pipeline6-Pipeline-Development-Tools">
+<meta property="og:url" content="https://roclli.github.io/2017/12/13/Pipeline6-Pipeline-Development-Tools/index.html">
+<meta property="og:site_name" content="测试人员修炼">
+<meta property="og:description" content="笔者是独立翻译实验，不允许转载 Pipeline Development ToolsPipeline Development ToolsJenkins Pipeline有内嵌的文档和Snipper Generator，这些是开发Pipeline的关键资源。它们针对当前版本的Jenkins和安装的插件提供详细的帮助和信息。本节，我们讨论开发Jenkins Pipeline的其他工具和资源。 命令行C">
+<meta property="og:image" content="http://oow5aq3zy.bkt.clouddn.com/image/pp6/1.png">
+<meta property="og:image" content="http://oow5aq3zy.bkt.clouddn.com/image/pp6/2.png">
+<meta property="og:image" content="http://oow5aq3zy.bkt.clouddn.com/image/pp6/3.png">
+<meta property="og:image" content="http://oow5aq3zy.bkt.clouddn.com/image/pp6/4.png">
+<meta property="og:image" content="http://oow5aq3zy.bkt.clouddn.com/image/pp6/5.png">
+<meta property="og:updated_time" content="2017-12-13T02:08:35.664Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="(原创)Pipeline6-Pipeline-Development-Tools">
+<meta name="twitter:description" content="笔者是独立翻译实验，不允许转载 Pipeline Development ToolsPipeline Development ToolsJenkins Pipeline有内嵌的文档和Snipper Generator，这些是开发Pipeline的关键资源。它们针对当前版本的Jenkins和安装的插件提供详细的帮助和信息。本节，我们讨论开发Jenkins Pipeline的其他工具和资源。 命令行C">
+<meta name="twitter:image" content="http://oow5aq3zy.bkt.clouddn.com/image/pp6/1.png">
+  
+    <link rel="alternate" href="/atom.xml" title="测试人员修炼" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">测试人员修炼</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">测试人员的技术博客;交流请加QQ群:549576208</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Suche"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://roclli.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Pipeline6-Pipeline-Development-Tools" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/12/13/Pipeline6-Pipeline-Development-Tools/" class="article-date">
+  <time datetime="2017-12-13T01:58:11.000Z" itemprop="datePublished">2017-12-13</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      (原创)Pipeline6-Pipeline-Development-Tools
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><b>笔者是独立翻译实验，不允许转载<b></b></b></p>
+<h1 id="Pipeline-Development-Tools"><a href="#Pipeline-Development-Tools" class="headerlink" title="Pipeline Development Tools"></a>Pipeline Development Tools</h1><h2 id="Pipeline-Development-Tools-1"><a href="#Pipeline-Development-Tools-1" class="headerlink" title="Pipeline Development Tools"></a>Pipeline Development Tools</h2><p>Jenkins Pipeline有内嵌的文档和Snipper Generator，这些是开发Pipeline的关键资源。它们针对当前版本的Jenkins和安装的插件提供详细的帮助和信息。本节，我们讨论开发Jenkins Pipeline的其他工具和资源。</p>
+<h2 id="命令行Command-line-Command-line-Pipeline-Linter"><a href="#命令行Command-line-Command-line-Pipeline-Linter" class="headerlink" title="命令行Command-line (Command-line Pipeline Linter)"></a>命令行Command-line (Command-line Pipeline Linter)</h2><p>在实际运行之前，Jenkins能验证，或者<a href="https://en.wikipedia.org/wiki/Lint_(software" target="_blank" rel="noopener">lint</a>一个申明式Pipeline。这些通常是Jenkins CLI命令或者带参数的HTTP POST请求完成的。我们推荐使用<a href="https://jenkins.io/doc/book/managing/cli/#ssh" target="_blank" rel="noopener">SSH interface</a>。请参看<a href="https://jenkins.io/doc/book/managing/cli/" target="_blank" rel="noopener">Jenkins CLI文档</a>怎样配置Jenkins才能安全的命令行存取。</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp6/1.png"></p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp6/2.png"></p>
+<h4 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h4><p>下面是两个Pipeline Linter的例子。第一个示例显示了linter在传递无效<font color="red">Jenkinsfile</font>时的输出, 该结果是缺少代理<font color="red">agent</font>声明的一部分。</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp6/3.png"></p>
+<h2 id="“Replay”-Pipeline-Runs-with-Modifications"><a href="#“Replay”-Pipeline-Runs-with-Modifications" class="headerlink" title="“Replay” Pipeline Runs with Modifications"></a>“Replay” Pipeline Runs with Modifications</h2><p>一般来说Pipeline是定义在经典的Jenkins Web界面上，或者通过提交Jenkinsfile到源代码库中。不幸的是, 这两种方法都不适合对Pipeline进行快速迭代或原型化。“Replay”特性允许在不更改Pipeline配置或创建新提交的情况下快速修改和执行现有Pipeline。</p>
+<h4 id="Usage"><a href="#Usage" class="headerlink" title="Usage"></a>Usage</h4><p>使用”Replay”特性:</p>
+<ol>
+<li>选择一个以前已经完成的运行过的Build History。</li>
+</ol>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp6/4.png"></p>
+<ol>
+<li>点击左边的菜单”Replay”按钮</li>
+</ol>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp6/5.png"></p>
+<h4 id="Features"><a href="#Features" class="headerlink" title="Features"></a>Features</h4><p>•能被同一次运行多次调用—允许很容易的并行测试不同的特性<br>•能被在运行中的Pipeline调用执行—只要是包含正确Groovy语法的Pipeline，就能被重复播放。<br>•能引用共享库的代码同样是可修改的—如果一个引用了共享库的Pipeline运行，共享库的代码同样能被展示和修改。</p>
+<h4 id="Limitations"><a href="#Limitations" class="headerlink" title="Limitations"></a>Limitations</h4><p>•有语法错误的Pipeline不能被重新播放–这意味着无法查看其代码, 并且无法检索其中所做的任何更改。使用重播进行更重要的修改时, 请将更改保存到Jenkins外部的文件或编辑器中, 然后再运行它们。见<a href="https://issues.jenkins-ci.org/browse/JENKINS-36453" target="_blank" rel="noopener">JENKINS-37589</a>。</p>
+<p>•重播的Pipeline行为可能与由其他方法启动的运行不同–对于不属于多分支Pipeline的Pipeline, 提交信息可能会因原始运行和重播运行而异。见<a href="https://issues.jenkins-ci.org/browse/JENKINS-36453" target="_blank" rel="noopener">JENKINS-36453</a>。</p>
+<h2 id="Pipeline-Unit-Testing-Framework"><a href="#Pipeline-Unit-Testing-Framework" class="headerlink" title="Pipeline Unit Testing Framework"></a>Pipeline Unit Testing Framework</h2><p>提示: Pipeline单元测试框架是Jenkins项目不支持的 third-party 工具。<br><a href="https://github.com/lesfurets/JenkinsPipelineUnit" target="_blank" rel="noopener">Pipeline单元测试框架</a>（Pipeline Unit Testing Framework）允许您在完全运行测试Pipeline和共享库之前对其进行单元检测。它提供了一个模拟执行环境, 其中实际的Pipeline步骤将替换为可用于检查预期行为的 mock 对象。新的和粗糙的边缘, 但承诺。该项目的自述文件包含示例和用法说明。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://roclli.github.io/2017/12/13/Pipeline6-Pipeline-Development-Tools/" data-id="cjb4ibanw000bib7su6pbmlcj" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Jenkins-Pipeline/">Jenkins; Pipeline</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/12/13/Pipeline7-Pipeline-Syntax/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Neuer</strong>
+      <div class="article-nav-title">
+        
+          (原创)Pipeline7-Pipeline-Syntax
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/12/13/Pipeline5-Extending-with-Shared-Libraries/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Älter</strong>
+      <div class="article-nav-title">(原创)Pipeline5-Extending-with-Shared-Libraries</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-OOM-Java内存溢出-OutOfMemoryError/">Java; OOM; Java内存溢出; OutOfMemoryError</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jenkins-Pipeline/">Jenkins; Pipeline</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jenkins-Pipeline-Docker/">Jenkins; Pipeline; Docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Pipeline-Jenkins/">Pipeline; Jenkins</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grep-linux-shell-log-file-check/">grep; linux shell; log file check</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Java-OOM-Java内存溢出-OutOfMemoryError/" style="font-size: 10px;">Java; OOM; Java内存溢出; OutOfMemoryError</a> <a href="/tags/Jenkins-Pipeline/" style="font-size: 20px;">Jenkins; Pipeline</a> <a href="/tags/Jenkins-Pipeline-Docker/" style="font-size: 10px;">Jenkins; Pipeline; Docker</a> <a href="/tags/Pipeline-Jenkins/" style="font-size: 15px;">Pipeline; Jenkins</a> <a href="/tags/grep-linux-shell-log-file-check/" style="font-size: 10px;">grep; linux shell; log file check</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archiv</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">letzter Beitrag</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/12/13/Pipeline7-Pipeline-Syntax/">(原创)Pipeline7-Pipeline-Syntax</a>
+          </li>
+        
+          <li>
+            <a href="/2017/12/13/Pipeline6-Pipeline-Development-Tools/">(原创)Pipeline6-Pipeline-Development-Tools</a>
+          </li>
+        
+          <li>
+            <a href="/2017/12/13/Pipeline5-Extending-with-Shared-Libraries/">(原创)Pipeline5-Extending-with-Shared-Libraries</a>
+          </li>
+        
+          <li>
+            <a href="/2017/12/12/Pipeline4-Using-Docker-with-Pipeline/">(原创)Pipeline4-Using-Docker-with-Pipeline</a>
+          </li>
+        
+          <li>
+            <a href="/2017/12/12/Pipeline3-Branches-and-Pull-Requests/">(原创)Pipeline3-Branches-and-Pull-Requests</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 roclli<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

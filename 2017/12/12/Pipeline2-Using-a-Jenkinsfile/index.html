@@ -33,7 +33,7 @@
 <meta property="og:image" content="http://oow5aq3zy.bkt.clouddn.com/image/pp2/16.jpg">
 <meta property="og:image" content="http://oow5aq3zy.bkt.clouddn.com/image/pp2/17.jpg">
 <meta property="og:image" content="http://oow5aq3zy.bkt.clouddn.com/image/pp2/18.jpg">
-<meta property="og:updated_time" content="2017-12-12T09:09:11.915Z">
+<meta property="og:updated_time" content="2017-12-13T04:30:49.255Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="(原创)Pipeline2-Using-a-Jenkinsfile">
 <meta name="twitter:description" content="笔者是独立翻译实验，不允许转载 Using a Jenkinsfile这部分基于前面Getting Started所讲过的信息，介绍更有用的步骤(steps)，一般模式，一些非试用的Jenkinsfile例子。 创建一个Jenkinsfile，然后把这个文件保存到源代码版本控制中(例如svn，git等)，会带来许多好处：  对Pipeline中进行代码审查和迭代(review/iteration)">
@@ -160,7 +160,7 @@
 <p><b>注意：笔者测试下来<b></b></b></p>
 <p>(1).期间发现过无法读取currentBuild.result变量，此时提示” Cannot get property ‘currentBuild’ on null object”，故忽略此处的Deploy。env变量也是如此提示：Cannot get property ‘env’ on null object。最后实测发现：<br>脚本式Pipeline(web UI上面输入)，可以正确输出变量值，如下方式${env.BUILD_NUMBER}<br>申明式Pipeline(Jenkinsfile)，可以正确输出变量值，如下方式${env.BUILD_NUMBER}<br>可以正确用echo输出值，也可以用if判断值。代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">echo &quot;---$&#123;env.BUILD_NUMBER&#125;---&quot;</span><br><span class="line">echo &quot;---$&#123;currentBuild.result&#125;---&quot;</span><br><span class="line">if(currentBuild.result == null || currentBuild.result == &apos;SUCCESS&apos;) &#123;</span><br><span class="line">    echo &quot;---currentBuild.result is:$&#123;currentBuild.result&#125;------&quot;</span><br><span class="line">&#125;</span><br><span class="line">else &#123;</span><br><span class="line">    echo &quot;---currentBuild.result is:$&#123;currentBuild.result&#125;,so, will make publish&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>得到的结果如下几种情况：</p>
-<table><br>    <thead><br>        <tr><br>            <th>Cases结果</th><br>            <th>全局变量</th><br>            <th>备注</th><br>        </tr><br>    </thead><br>    <tbody><br>        <tr><br>            <td>1个skip，其他全对</td><br>            <td>61/null</td><br>            <td></td><br>        </tr><br>        <tr><br>            <td>1个error,其他全对</td><br>            <td>60/UNSTABLE</td><br>            <td>根据前面说明，只要有失败，就是UNSTABLE</td><br>        </tr><br>        <tr><br>            <td>全部正确</td><br>            <td>59/null</td><br>            <td></td><br>        </tr><br>    </tbody><br></table>
+<table><thead><tr><th>Cases结果</th><th>全局变量</th><th>备注</th></tr></thead><tbody><tr><td>1个skip，其他全对</td><td>61/null</td><td></td></tr><tr><td>1个error,其他全对</td><td>60/UNSTABLE</td><td>根据前面说明，只要有失败，就是UNSTABLE</td></tr><tr><td>全部正确</td><td>59/null</td><td></td></tr></tbody></table>
 
 
 <p>(2).申明式Jenkins Pipeline(Jenkinsfile)中，使用steps有报错提示：<br>WorkflowScript: 31: Expected a step @ line 31, column 17.。解决办法：添加script符号<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">stage(&apos;Deploy&apos;)&#123;</span><br><span class="line">    steps &#123;</span><br><span class="line">        script&#123;</span><br><span class="line">            echo &quot;---$&#123;env.BUILD_NUMBER&#125;---&quot;</span><br><span class="line">            echo &quot;---$&#123;currentBuild.result&#125;---&quot;</span><br><span class="line">            if(currentBuild.result == null || currentBuild.result == &quot;SUCCESS&quot;) &#123;</span><br><span class="line">                echo &quot;---currentBuild.result is:$&#123;currentBuild.result&#125;------&quot;</span><br><span class="line">            &#125;</span><br><span class="line">            else &#123;</span><br><span class="line">                echo &quot;---currentBuild.result is:$&#123;currentBuild.result&#125;,so, will make publish&quot;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
@@ -227,7 +227,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://roclli.github.io/2017/12/12/Pipeline2-Using-a-Jenkinsfile/" data-id="cjb4emla50003lw7s07hdyte3" class="article-share-link">Teilen</a>
+      <a data-url="https://roclli.github.io/2017/12/12/Pipeline2-Using-a-Jenkinsfile/" data-id="cjb4ibans0004ib7sdm0pec7g" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Pipeline-Jenkins/">Pipeline; Jenkins</a></li></ul>
@@ -269,7 +269,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-OOM-Java内存溢出-OutOfMemoryError/">Java; OOM; Java内存溢出; OutOfMemoryError</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jenkins-Pipeline/">Jenkins; Pipeline</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Pipeline-Jenkins/">Pipeline; Jenkins</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grep-linux-shell-log-file-check/">grep; linux shell; log file check</a></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-OOM-Java内存溢出-OutOfMemoryError/">Java; OOM; Java内存溢出; OutOfMemoryError</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jenkins-Pipeline/">Jenkins; Pipeline</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jenkins-Pipeline-Docker/">Jenkins; Pipeline; Docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Pipeline-Jenkins/">Pipeline; Jenkins</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grep-linux-shell-log-file-check/">grep; linux shell; log file check</a></li></ul>
     </div>
   </div>
 
@@ -279,7 +279,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/Java-OOM-Java内存溢出-OutOfMemoryError/" style="font-size: 10px;">Java; OOM; Java内存溢出; OutOfMemoryError</a> <a href="/tags/Jenkins-Pipeline/" style="font-size: 20px;">Jenkins; Pipeline</a> <a href="/tags/Pipeline-Jenkins/" style="font-size: 15px;">Pipeline; Jenkins</a> <a href="/tags/grep-linux-shell-log-file-check/" style="font-size: 10px;">grep; linux shell; log file check</a>
+      <a href="/tags/Java-OOM-Java内存溢出-OutOfMemoryError/" style="font-size: 10px;">Java; OOM; Java内存溢出; OutOfMemoryError</a> <a href="/tags/Jenkins-Pipeline/" style="font-size: 20px;">Jenkins; Pipeline</a> <a href="/tags/Jenkins-Pipeline-Docker/" style="font-size: 10px;">Jenkins; Pipeline; Docker</a> <a href="/tags/Pipeline-Jenkins/" style="font-size: 15px;">Pipeline; Jenkins</a> <a href="/tags/grep-linux-shell-log-file-check/" style="font-size: 10px;">grep; linux shell; log file check</a>
     </div>
   </div>
 
@@ -301,6 +301,14 @@
       <ul>
         
           <li>
+            <a href="/2017/12/13/Pipeline7-Pipeline-Syntax/">(原创)Pipeline7-Pipeline-Syntax</a>
+          </li>
+        
+          <li>
+            <a href="/2017/12/13/Pipeline6-Pipeline-Development-Tools/">(原创)Pipeline6-Pipeline-Development-Tools</a>
+          </li>
+        
+          <li>
             <a href="/2017/12/13/Pipeline5-Extending-with-Shared-Libraries/">(原创)Pipeline5-Extending-with-Shared-Libraries</a>
           </li>
         
@@ -310,14 +318,6 @@
         
           <li>
             <a href="/2017/12/12/Pipeline3-Branches-and-Pull-Requests/">(原创)Pipeline3-Branches-and-Pull-Requests</a>
-          </li>
-        
-          <li>
-            <a href="/2017/12/12/Pipeline2-Using-a-Jenkinsfile/">(原创)Pipeline2-Using-a-Jenkinsfile</a>
-          </li>
-        
-          <li>
-            <a href="/2017/12/12/Pipeline1-Getting-Started-With-Pipeline/">(原创)Pipeline1-Getting-Started-With-Pipeline</a>
           </li>
         
       </ul>
