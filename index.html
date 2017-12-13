@@ -57,7 +57,7 @@
         
           <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
         
-        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+        <a id="nav-search-btn" class="nav-icon" title="Suche"></a>
       </nav>
       <div id="search-form-wrap">
         <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://roclli.github.io"></form>
@@ -67,6 +67,138 @@
 </header>
       <div class="outer">
         <section id="main">
+  
+    <article id="post-Pipeline5-Extending-with-Shared-Libraries" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/12/13/Pipeline5-Extending-with-Shared-Libraries/" class="article-date">
+  <time datetime="2017-12-13T01:13:10.000Z" itemprop="datePublished">2017-12-13</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/12/13/Pipeline5-Extending-with-Shared-Libraries/">(原创)Pipeline5-Extending-with-Shared-Libraries</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><b>笔者是独立翻译实验，不允许转载<b></b></b></p>
+<h1 id="Extending-with-Shared-Libraries"><a href="#Extending-with-Shared-Libraries" class="headerlink" title="Extending with Shared Libraries"></a>Extending with Shared Libraries</h1><h2 id="Defining-Shared-Libraries"><a href="#Defining-Shared-Libraries" class="headerlink" title="Defining Shared Libraries"></a>Defining Shared Libraries</h2><p>Pipeline被越来越多的组织和项目所使用，一些常用的模式开始出现。通常共享不同项目的Pipeline片段是非常有用的，能减少冗余，保持代码DRY(Don’t_repeat_yourself)。</p>
+<p>Pipeline支持创建共享库，这些库能被外部源代码库定义，并能被装载到现有的Pipeline中。</p>
+<h4 id="Directory-structure"><a href="#Directory-structure" class="headerlink" title="Directory structure"></a>Directory structure</h4><p>共享库被一个名字，一个例如SCM的代码段定义，默认的版本是可选的。名字是一个短标识符，它能被用在脚本中。</p>
+<p>版本可以是SCM能理解的任何东西；例如分支，标记和提交hashes等所有Git的东西你同样可以申明哪些脚本明确要求下面定义的库，或者默认是禁止的。更进一步，如果你在Jenkins配置中说明一个版本，你就能阻止脚本选择一个不同的版本。</p>
+<p>说明SCM最好的方式就是使用SCM插件，插件已经被更新支持新的API，检查任意的命名版本。最新版本的Git和Subversion插件都支持这个模式；其他也应该这么做。</p>
+<p>如果你的SCM插件没有被整合，你可以选择Legacy SCM，并且挑选已经提供的。在本例中，你需要在SCM配置的某个地方包含(include)<font color="red">${library.yourLibName.version}</font>，以便于在迁出代码阶段，插件能读取这个变量选择想要的版本。例如，对于Subversion，你能设置URI为svnserver/project/${library.yourLibName.version}，然后使用例如<font color="red">trunk</font>或者<font color="red">branches/dev</font>或者<font color="red">tags/1.0</font>。</p>
+<h4 id="目录结构-Directory-structure"><a href="#目录结构-Directory-structure" class="headerlink" title="目录结构(Directory structure)"></a>目录结构(Directory structure)</h4><p>共享库的目录结构如下：</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp5/1.png"></p>
+<p><font color="red">src</font>目录看起来像是标准的java代码目录。当执行Pipeline的时候，这个目录会被加到classpath。</p>
+<p><font color="red">vars</font>目录保存脚本，脚本定义Pipeline可以存取的全局变量。每一个groovy的基本名应该是一个Groovy标识符，方便起见都是驼峰命名法。</p>
+<p>这些目录中的Groovy原文件都与脚本Pipeline同样的”CPS transformation”。</p>
+<p><font color="red">resources</font>目录允许<font color="red">libraryResource</font>被外部库使用加载非Groovy文件。现在这个特性不支持内部库。</p>
+<h4 id="Global-Shared-Libraries"><a href="#Global-Shared-Libraries" class="headerlink" title="Global Shared Libraries"></a>Global Shared Libraries</h4><p>有好几个可以定义共享库的地方，取决于用户情况。Manage Jenkins » Configure System » Global Pipeline Libraries，在这里许多库都能被定义。</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp5/2.png"></p>
+<p>因为这些库是全局使用，系统中的任何Pipeline都可以用这些库中的功能。<br>这些库被认为是”可信任的”，他们能运行Java/Geoovy/Jenkins内部API/Jenkins插件或者第三方库的任何方法。这允许你以一个更高级别封装去包裹独立的不安全的APIs，供其他Pipeline使用。要知道，任何能提交文件到这个SCM库的人都能对Jenkins进行无限的存取。你需要全部/运行权限去配置库(通常权限被授予jenkins管理员)。</p>
+<h4 id="Folder-level-Shared-Libraries"><a href="#Folder-level-Shared-Libraries" class="headerlink" title="Folder-level Shared Libraries"></a>Folder-level Shared Libraries</h4><p>任何创建的目录都可以有和它相关联的共享库。这个机制允许特殊库对目录和子目录中的Pipeline作用范围。<br>目录为基础的库并不被认为是”可信任的”；它们在Groovy sandbox中的运行就像典型的Pipeline一样。</p>
+<h4 id="Automatic-Shared-libraries"><a href="#Automatic-Shared-libraries" class="headerlink" title="Automatic Shared libraries"></a>Automatic Shared libraries</h4><p>其他插件可以增加定义库的方法。例如插件github-branch-source提供一个GitHub组织目录项，这个目录项允许脚本不用任何附加配置就可以使用不受信任的库，例如github.com/someorg/somerepo。本例中，指定的GitHub库将被加载。</p>
+<h2 id="Using-libraries"><a href="#Using-libraries" class="headerlink" title="Using libraries"></a>Using libraries</h2><p>隐式加载的共享库允许Pipeline使用任意这样的库定义的类或者全局变量。存取其他的库，<font color="red">Jenkinsfile</font>需要使用<font color="red">@Library</font>标记，说明库的名字：</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp5/3.png"></p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp5/4.png"></p>
+<p>这些标记可以在Groovy脚本允许的任何地方。当引用类库(<font color="red">src</font>目录)的时候，相应标记需要一个<font color="red">import</font>表达式：</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp5/5.png"></p>
+<p>提示：对于只定义了全局变量的共享库，或者只需要一个全局变量的共享库，<code>&lt;a href=&quot;http://groovy-lang.org/objectorientation.html#&lt;em&gt;annotation&quot;&gt;annotation&lt;/a&gt; pattern &lt;code&gt;@Library(&#39;my-shared-library&#39;) _&lt;/code&gt;</code>保持代码精炼是有用的。本质上，替代标记一个不必要的<code>import</code>表达式，符号<code></code>被标记。</p>
+<p>不推荐import一个全局变量/函数，因为这将强迫编译器将字段和方法解释为静态(static)的。此种情况下的Groovy编译器会产生令人迷惑的错误信息。<br>在脚本的编译过程中, 库在开始执行之前被解析和加载。这使得 Groovy 编译器能够理解静态类型检查中使用的符号的含义, 并允许它们在脚本中的类型声明中使用, 例如</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp5/6.png"></p>
+<p>但是, 全局变量在运行时解析。</p>
+<h4 id="Loading-libraries-dynamically"><a href="#Loading-libraries-dynamically" class="headerlink" title="Loading libraries dynamically"></a>Loading libraries dynamically</h4><p>从Pipeline2.7 版: 共享的 Groovy 库插件中, 有一个新的选项用于在脚本中加载 (non-implicit) 库: 在生成过程中的任何时候动态加载库的一个<font color="red">library</font>步骤。</p>
+<p>如果你只对使用全局变脸函数感兴趣(从<font color="red">vars</font>目录)，语法是相当的简单：</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp5/7.png"></p>
+<p>此后, 脚本将可以访问该库中的任何全局变量。<br>也可以使用<font color="red">src</font>/目录中的类, 但更棘手。虽然 @Library 注释在编译之前已经准备脚本的classpath, 但在遇到<font color="red">library</font> step时, 脚本已经编译完毕。因此, 您无法从库中<font color="red">import</font>或以其他方式，静态引用类型。<br>但是, 您可以动态地使用库类 (没有类型检查), 通过完全访问来自<font color="red">library</font> step的返回值的限定名。可以使用类似于 Java 的语法调用静态<font color="red">static</font>方法:</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp5/8.png"></p>
+<p>您还可以访问<font color="red">静态</font>字段, 并调用构造函数, 就好像它们是名为new的<font color="red">静态</font>方法一样：</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp5/9.png"></p>
+<h4 id="Library-versions"><a href="#Library-versions" class="headerlink" title="Library versions"></a>Library versions</h4><p>当隐式加载被选中的时候，共享库使用默认版本，否则pipeline只通过名字引用库，例如@Library(‘my-shared-library’)。如果默认版本没有定义，Pipeline必须说明一个版本，例如@Library(‘my-shared-library@master’)。</p>
+<p>如果共享库配置中的”允许默认版本被覆盖”被选中，<font color="red">@Library</font>标记有可能覆盖库的默认版本。如果可能的话，这同样允许隐式加载的库能被加载不同的版本。</p>
+<p>当时使用<font color="red">library</font> step，你可以说明一个版本：</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp5/10.png"></p>
+<p>由于这是一个常规步骤(library step), 因此可以计算该版本而不是常量, 就像注释；例如：</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp5/11.png"></p>
+<p>将使用与 multibranch Jenkinsfile 相同的 SCM 分支加载库。另外一个例子中，你可以通过参数选择一个库：</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp5/12.png"></p>
+<p>注意：<font color="red">Library</font> step可能不可以被用来覆盖一个隐式加载库的版本。它在脚本开始的时候已经加载，并且一个用名字加载的库不能被加载两次。</p>
+<h4 id="Retrieval-Method"><a href="#Retrieval-Method" class="headerlink" title="Retrieval Method"></a>Retrieval Method</h4><p>说明SCM最好的方式是使用SCM插件，插件已经被更新支持新的API去检查版本。在写本文时，Git和Subversion插件已经支持这个模式。</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp5/13.png"></p>
+<h4 id="Legacy-SCM"><a href="#Legacy-SCM" class="headerlink" title="Legacy SCM"></a>Legacy SCM</h4><p>SCM插件有可能仍然通过Legacy SCM选项使用，因为插件还没有支持交心的共享库特性。本例中，包含<font color="red">${library.yourlibrarynamehere.version}</font>，在这里分支/tag/ref为了特殊的SCM插件被配置。这确保，在迁出库的源代码时，SCM插件能扩展它的变量去迁出合适的库版本。</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp5/14.png"></p>
+<h4 id="Dynamic-retrieval"><a href="#Dynamic-retrieval" class="headerlink" title="Dynamic retrieval"></a>Dynamic retrieval</h4><p>如果你在<font color="red">Library</font> step中仅仅指明一个库名字(可选的，在version后面<font color="red">@</font>) ，Jenkins将寻找那个名字的预先配置的库。(或者加载一个<font color="red">github.com/owner/repo自动库</font>)<br>但您也可以动态地指定检索方法, 在这种情况下, 不需要在Jenkins中预先定义库。例子如下：</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp5/15.png"></p>
+<p>最好使用Pipeline Syntax寻找你的SCM的精确的语法。<br>注意：在这些cases中，必须要说明库版本。</p>
+<h2 id="Writing-libraries"><a href="#Writing-libraries" class="headerlink" title="Writing libraries"></a>Writing libraries</h2><p>一般来说，任何合法的Groovy代码都可以使用。不同的数据结构，功能方法等，例如：</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp5/16.png"></p>
+<h4 id="Access-steps"><a href="#Access-steps" class="headerlink" title="Access steps"></a>Access steps</h4><p>库的类不能明确的调用steps，例如<font color="red">sh</font>或者<font color="red">git</font>。但是, 它们可以在封闭类的范围之外实现方法, 进而调用Pipeline step，例如：</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp5/17.png"></p>
+<p>然后这个方法可以被脚本式Pipeline调用。</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp5/18.png"></p>
+<p>这个方法是有限制的，例如，它阻止一个父类的定义。<br>或者，在构造函数中，一套<font color="red">steps</font>集合能用<font color="red">this</font>被明确的传递到一个库类，或者仅仅一个方法：</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp5/19.png"></p>
+<p>当保存类的状态的时候，例如上面，类必须实现<font color="red">Serializable</font>接口。</p>
+<p>这确保在Jenkins中，一个使用类的Pipeline，像下面的例子，能挂起(suspend)和回复(resume)。</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp5/20.png"></p>
+<p>如果库需要存取全局变量，例如<font color="red">env</font>，那么这些库应该被明确的传递到库类，或者方法中。<br>而不是将大量的变量从脚本式Pipeline传递到库中,</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp5/21.png"></p>
+<p>上面的例子展示了参数被传递到一个<font color="red">静态(static)</font>方法，脚本式Pipeline按照如下方式调用：</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp5/22.png"></p>
+<h4 id="Defining-global-variables"><a href="#Defining-global-variables" class="headerlink" title="Defining global variables"></a>Defining global variables</h4><p>在内部,<font color="red">vars</font>目录中的脚本按要求实例化为单例。这允许在单个. groovy 文件中定义多个方法以方便使用。<br><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp5/23.png"><br><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp5/24.png"></p>
+<p>声明式Pipeline不允许在脚本指令之外使用全局变量用法 (JENKINS-42360)。</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp5/25.png"></p>
+<p>①    <font color="red">script</font>在声明式Pipeline中访问全局变量所需的脚本指令。<br>注意：在Jenkins加载并使用该库作为成功的Pipeline运行的一部分之后, 在共享库中定义的变量将只显示在全局变量引用 (在Pipeline Syntax中)。<br>警告：<br>避免在全局变量中保留状态<br>避免使用交互或保留状态的方法来定义全局变量。改用静态类或实例化类的局部变量。</p>
+<h4 id="Defining-custom-steps"><a href="#Defining-custom-steps" class="headerlink" title="Defining custom steps"></a>Defining custom steps</h4><p>共享库还可以定义与内置步骤 (如 <font color="red">sh</font> 或 <font color="red">git</font>git) 类似的全局变量。在共享库中定义的全局变量必须用所有 lower-case 或法则命名, 以便通过管道正确加载。</p>
+<p>例如, 要定义 sayHello, 应创建文件 vars/sayHello.groovy, 并应实现调用方法。调用方法允许以类似于步骤的方式调用全局变量:</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp5/26.png"></p>
+<p>Pipeline能引用和调用这个变量：</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp5/27.png"></p>
+<p>如果用块调用, 则<font color="red">调用</font>方法将接收<font color="red">关闭</font>。应显式定义该类型以阐明步骤的意图, 例如:</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp5/28.png"></p>
+<p>然后, Pipeline可以像任何接受块的内置步骤一样使用此变量:</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp5/29.png"></p>
+<h4 id="Defining-a-more-structured-DSL"><a href="#Defining-a-more-structured-DSL" class="headerlink" title="Defining a more structured DSL"></a>Defining a more structured DSL</h4><p>如果您有很多类似的管道, 则全局变量机制提供了一个方便的工具来构建一个 higher-level 的 DSL 来捕获相似性。例如, 所有的詹金斯插件都是以同样的方式构建和测试的, 所以我们可以写一个名为<font color="red">buildPlugin</font>的step。</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp5/30.png"></p>
+<p>假设脚本已作为全局共享库或文件夹级共享库加载, 结果 Jenkinsfile 将大大简化：</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp5/31.png"></p>
+<h4 id="Using-third-party-libraries"><a href="#Using-third-party-libraries" class="headerlink" title="Using third-party libraries"></a>Using third-party libraries</h4><p>可以使用 third-party 的 Java 库, 通常是在 Maven 中心, 从受信任的库代码使用<font color="red">@Grab</font>注释。有关细节, 请参阅Grape document, 但简单地把：</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp5/32.png"></p>
+<p>默认情况下, 第三方库被缓存在~/. groovy/grapes/Jenkins的master节点上。</p>
+<h4 id="Loading-resources"><a href="#Loading-resources" class="headerlink" title="Loading resources"></a>Loading resources</h4><p>外部库可以使用<font color="red">libraryResource</font> step从<font color="red">resources/</font>目录加载辅助文件。该参数是一个相对路径名, 类似于 Java 资源加载:。</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp5/33.png"></p>
+<p>该文件以字符串形式加载, 适合传递给某些 api 或使用 writeFile 保存到工作区。<br>最好使用一个唯一的包结构, 这样您就不会意外地与另一个库发生冲突。</p>
+<h4 id="Pretesting-library-changes"><a href="#Pretesting-library-changes" class="headerlink" title="Pretesting library changes"></a>Pretesting library changes</h4><p>如果您注意到在使用不受信任的库的生成中出现错误, 只需单击重播链接以尝试编辑其一个或多个源文件, 并查看所产生的生成是否按预期的方式工作。一旦你对结果满意，跟随Build状态页上的不同链接，应用不同的库变化，并保存到代码库中。</p>
+<p>(即使为库请求的版本是一个分支, 而不是像标记这样的固定版本, 重播的生成将使用与原始生成完全相同的修订: 将不会再次签出库源。</p>
+<p>受信任的库当前不支持重播。在重播过程中, 当前也不支持修改资源文件。</p>
+<h4 id="Defining-Declarative-Pipeline"><a href="#Defining-Declarative-Pipeline" class="headerlink" title="Defining Declarative Pipeline"></a>Defining Declarative Pipeline</h4><p>从2017年9月下旬发布的声明性1.2 开始, 可以定义声明性管道。也可在共享库中进行。下面是一个示例, 它将执行不同的声明管道, 具体取决于内部版本号是奇数还是偶数:</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp5/34.png"></p>
+<p>此时, 只能在共享库中定义整个Pipeline。这只能在”vars/*.groovy”，仅仅只能在一个方法调用中。在单个生成中只能执行一个声明性Pipeline, 如果尝试执行第二个Pipeline, 则生成结果将失败。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://roclli.github.io/2017/12/13/Pipeline5-Extending-with-Shared-Libraries/" data-id="cjb4emla90008lw7sat7k8fia" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Jenkins-Pipeline/">Jenkins; Pipeline</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
   
     <article id="post-Pipeline4-Using-Docker-with-Pipeline" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
@@ -158,7 +290,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://roclli.github.io/2017/12/12/Pipeline4-Using-Docker-with-Pipeline/" data-id="cjb3mzrzp0005l57s08z590yw" class="article-share-link">Share</a>
+      <a data-url="https://roclli.github.io/2017/12/12/Pipeline4-Using-Docker-with-Pipeline/" data-id="cjb4emla80005lw7ssks36osg" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Jenkins-Pipeline/">Jenkins; Pipeline</a></li></ul>
@@ -215,7 +347,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://roclli.github.io/2017/12/12/Pipeline3-Branches-and-Pull-Requests/" data-id="cjb3mzrzk0003l57sx2sdemc0" class="article-share-link">Share</a>
+      <a data-url="https://roclli.github.io/2017/12/12/Pipeline3-Branches-and-Pull-Requests/" data-id="cjb4emla70004lw7s8gkylpts" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Jenkins-Pipeline/">Jenkins; Pipeline</a></li></ul>
@@ -366,7 +498,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://roclli.github.io/2017/12/12/Pipeline2-Using-a-Jenkinsfile/" data-id="cjb3mzrzh0001l57s51e7agyj" class="article-share-link">Share</a>
+      <a data-url="https://roclli.github.io/2017/12/12/Pipeline2-Using-a-Jenkinsfile/" data-id="cjb4emla50003lw7s07hdyte3" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Pipeline-Jenkins/">Pipeline; Jenkins</a></li></ul>
@@ -531,7 +663,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://roclli.github.io/2017/12/12/Pipeline1-Getting-Started-With-Pipeline/" data-id="cjb3mzrzb0000l57sd4ceahvl" class="article-share-link">Share</a>
+      <a data-url="https://roclli.github.io/2017/12/12/Pipeline1-Getting-Started-With-Pipeline/" data-id="cjb4eml9z0001lw7sjl2o733v" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Pipeline-Jenkins/">Pipeline; Jenkins</a></li></ul>
@@ -737,7 +869,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://roclli.github.io/2017/12/11/Java-OOM-ERROR/" data-id="cjb3mzrzl0004l57s7z08e9tr" class="article-share-link">Share</a>
+      <a data-url="https://roclli.github.io/2017/12/11/Java-OOM-ERROR/" data-id="cjb4eml9v0000lw7shwct4zvl" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java-OOM-Java内存溢出-OutOfMemoryError/">Java; OOM; Java内存溢出; OutOfMemoryError</a></li></ul>
@@ -779,7 +911,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://roclli.github.io/2017/12/11/log-check/" data-id="cjb3mzrzs0009l57ssvxlx4su" class="article-share-link">Share</a>
+      <a data-url="https://roclli.github.io/2017/12/11/log-check/" data-id="cjb4emlac000blw7skjcs8zvh" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/grep-linux-shell-log-file-check/">grep; linux shell; log file check</a></li></ul>
@@ -826,7 +958,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://roclli.github.io/2017/12/11/hello-world/" data-id="cjb3mzrzr0008l57s84mw8vqe" class="article-share-link">Share</a>
+      <a data-url="https://roclli.github.io/2017/12/11/hello-world/" data-id="cjb4emlaa0009lw7su4aw0vzn" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -859,14 +991,14 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/Java-OOM-Java内存溢出-OutOfMemoryError/" style="font-size: 10px;">Java; OOM; Java内存溢出; OutOfMemoryError</a> <a href="/tags/Jenkins-Pipeline/" style="font-size: 20px;">Jenkins; Pipeline</a> <a href="/tags/Pipeline-Jenkins/" style="font-size: 20px;">Pipeline; Jenkins</a> <a href="/tags/grep-linux-shell-log-file-check/" style="font-size: 10px;">grep; linux shell; log file check</a>
+      <a href="/tags/Java-OOM-Java内存溢出-OutOfMemoryError/" style="font-size: 10px;">Java; OOM; Java内存溢出; OutOfMemoryError</a> <a href="/tags/Jenkins-Pipeline/" style="font-size: 20px;">Jenkins; Pipeline</a> <a href="/tags/Pipeline-Jenkins/" style="font-size: 15px;">Pipeline; Jenkins</a> <a href="/tags/grep-linux-shell-log-file-check/" style="font-size: 10px;">grep; linux shell; log file check</a>
     </div>
   </div>
 
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Archives</h3>
+    <h3 class="widget-title">Archiv</h3>
     <div class="widget">
       <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li></ul>
     </div>
@@ -876,9 +1008,13 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Recent Posts</h3>
+    <h3 class="widget-title">letzter Beitrag</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2017/12/13/Pipeline5-Extending-with-Shared-Libraries/">(原创)Pipeline5-Extending-with-Shared-Libraries</a>
+          </li>
         
           <li>
             <a href="/2017/12/12/Pipeline4-Using-Docker-with-Pipeline/">(原创)Pipeline4-Using-Docker-with-Pipeline</a>
@@ -894,10 +1030,6 @@
         
           <li>
             <a href="/2017/12/12/Pipeline1-Getting-Started-With-Pipeline/">(原创)Pipeline1-Getting-Started-With-Pipeline</a>
-          </li>
-        
-          <li>
-            <a href="/2017/12/11/Java-OOM-ERROR/">Java OOM ERROR</a>
           </li>
         
       </ul>
