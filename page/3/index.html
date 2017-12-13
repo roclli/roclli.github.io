@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>测试人员修炼</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="My-Description">
+<meta property="og:type" content="website">
+<meta property="og:title" content="测试人员修炼">
+<meta property="og:url" content="https://roclli.github.io/page/3/index.html">
+<meta property="og:site_name" content="测试人员修炼">
+<meta property="og:description" content="My-Description">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="测试人员修炼">
+<meta name="twitter:description" content="My-Description">
+  
+    <link rel="alternate" href="/atom.xml" title="测试人员修炼" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">测试人员修炼</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">测试人员的技术博客;交流请加QQ群:549576208</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Suche"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://roclli.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main">
+  
+    <article id="post-PP2-Demo-build-script" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/12/13/PP2-Demo-build-script/" class="article-date">
+  <time datetime="2017-12-13T05:09:50.000Z" itemprop="datePublished">2017-12-13</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/12/13/PP2-Demo-build-script/">PP2-Demo-build-script</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">node &#123;</span><br><span class="line">    stage(&apos;Build&apos;) &#123;</span><br><span class="line">        echo &apos;Building....&apos;</span><br><span class="line">        def username = &apos;Jenkins&apos;</span><br><span class="line">        echo &apos;Hello Mr. $&#123;username&#125;&apos;</span><br><span class="line">        echo &quot;I said, Hello Mr. $&#123;username&#125;&quot;</span><br><span class="line">        checkout([$class: &apos;GitSCM&apos;, branches: [[name: &apos;*/master&apos;], [name: &apos;*/testbr&apos;]], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: &apos;https://gitee.com/roclli/simple-maven-project-with-tests.git&apos;]]])</span><br><span class="line">        sh &quot;mvn -B -Dmaven.test.failure.ignore verify&quot;</span><br><span class="line">    &#125;</span><br><span class="line">    stage(&apos;Test&apos;) &#123;</span><br><span class="line">        echo &apos;Testing....&apos;</span><br><span class="line">    &#125;</span><br><span class="line">    stage(&apos;Deploy&apos;) &#123;</span><br><span class="line">        echo &apos;Deploying....&apos;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://roclli.github.io/2017/12/13/PP2-Demo-build-script/" data-id="cjb4mesvs00041r7s2pxn5dha" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Pipeline-Jenkins/">Pipeline; Jenkins</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-PP2-Demo-build-declarative" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/12/13/PP2-Demo-build-declarative/" class="article-date">
+  <time datetime="2017-12-13T05:07:38.000Z" itemprop="datePublished">2017-12-13</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/12/13/PP2-Demo-build-declarative/">PP2-Demo-build-declarative</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Jenkins代码详见：<br><a href="https://gitee.com/roclli/4-declarative.git" target="_blank" rel="noopener">https://gitee.com/roclli/4-declarative.git</a></p>
+<p>Jenkinsfile内容为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bing/env groovy</span><br><span class="line"></span><br><span class="line">//Declarative</span><br><span class="line">pipeline &#123;</span><br><span class="line">	agent any    		//agent必需的,告诉Jenkins分配执行器和工作空间</span><br><span class="line"></span><br><span class="line">    stages &#123;			//stage必需的,</span><br><span class="line">		stage(&apos;Build&apos;) &#123;</span><br><span class="line">			steps &#123;		//step必需的</span><br><span class="line">				echo &apos;Building....&apos;</span><br><span class="line">				checkout([$class: &apos;GitSCM&apos;, branches: [[name: &apos;*/master&apos;]], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: &apos;https://gitee.com/roclli/4-declarative.git&apos;]]])\</span><br><span class="line">//				def username = &apos;Jenkins&apos;</span><br><span class="line">//				echo &apos;Hello Mr. $&#123;username&#125;&apos;</span><br><span class="line">//				echo &quot;I said, Hello Mr. $&#123;username&#125;&quot;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		stage(&apos;Test&apos;) &#123;</span><br><span class="line">			steps&#123;</span><br><span class="line">				echo &apos;Testing....&apos;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		stage(&apos;Deploy&apos;) &#123;</span><br><span class="line">			steps&#123;</span><br><span class="line">				echo &apos;Deploying....&apos;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://roclli.github.io/2017/12/13/PP2-Demo-build-declarative/" data-id="cjb4mesvo00011r7sedbx1v4r" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Pipeline-Jenkins/">Pipeline; Jenkins</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-PP2-Demo-checkoutscm" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/12/13/PP2-Demo-checkoutscm/" class="article-date">
+  <time datetime="2017-12-13T05:04:30.000Z" itemprop="datePublished">2017-12-13</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/12/13/PP2-Demo-checkoutscm/">Pipeline2-Demo-checkoutscm</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Jenkins代码详见：<br><a href="https://gitee.com/roclli/simple-maven-project-with-tests.git" target="_blank" rel="noopener">https://gitee.com/roclli/simple-maven-project-with-tests.git</a></p>
+<p>Jenkinsfile内容为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bing/env groovy</span><br><span class="line"></span><br><span class="line">node(&apos;master&apos;) &#123;</span><br><span class="line">	echo &quot;----------------------start git url----------------------&quot;</span><br><span class="line">  checkout scm</span><br><span class="line">	echo &quot;----------------------version()----------------------&quot;</span><br><span class="line">    def v = version()</span><br><span class="line">    if (v) &#123;</span><br><span class="line">        echo &quot;---Building version $&#123;v&#125;---&quot;</span><br><span class="line">    &#125;</span><br><span class="line">    def mvnHome = tool &apos;M3&apos;</span><br><span class="line">	echo &quot;----------------------mvn -B -D verify----------------------&quot;</span><br><span class="line">    sh &quot;$&#123;mvnHome&#125;/bin/mvn -B -Dmaven.test.failure.ignore verify&quot;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">def version() &#123;</span><br><span class="line">    def matcher = readFile(&apos;pom.xml&apos;) =~ &apos;&lt;version&gt;(.+)&lt;/version&gt;&apos;</span><br><span class="line">    echo &quot;---$&#123;matcher[0][1]&#125;---&quot;   //---1.0-SNAPSHOT---</span><br><span class="line">    echo &quot;---$&#123;matcher[0][2]&#125;---&quot;   //---null---</span><br><span class="line">    echo &quot;---$&#123;matcher[0][3]&#125;---&quot;   //---null---</span><br><span class="line">    echo &quot;---$&#123;matcher[1][1]&#125;---&quot;   //---2.18.1---</span><br><span class="line">    echo &quot;---$&#123;matcher[1][2]&#125;---&quot;   //---null---</span><br><span class="line">    echo &quot;---$&#123;matcher[1][3]&#125;---&quot;   //---null---</span><br><span class="line">    echo &quot;---$&#123;matcher[2][1]&#125;---&quot;   //---4.11---</span><br><span class="line">    echo &quot;---$&#123;matcher[2][2]&#125;---&quot;   //---null---</span><br><span class="line">    echo &quot;---$&#123;matcher[2][3]&#125;---&quot;   //---null---</span><br><span class="line">    matcher ? matcher[0][1] : null</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://roclli.github.io/2017/12/13/PP2-Demo-checkoutscm/" data-id="cjb4mesvs00051r7s89fei9ly" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Pipeline-Jenkins/">Pipeline; Jenkins</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-PP1-Demo-Helloworld" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/12/13/PP1-Demo-Helloworld/" class="article-date">
+  <time datetime="2017-12-13T05:03:07.000Z" itemprop="datePublished">2017-12-13</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/12/13/PP1-Demo-Helloworld/">Pipeline1-Demo-Helloworld</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">node &#123;</span><br><span class="line">    echo &quot;Hello World!!!&quot;</span><br><span class="line">    echo &apos;Hello World!!!&apos;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://roclli.github.io/2017/12/13/PP1-Demo-Helloworld/" data-id="cjb4mesvk00001r7s1wo64qdi" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Pipeline-Jenkins/">Pipeline; Jenkins</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Pipeline7-Pipeline-Syntax" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/12/13/Pipeline7-Pipeline-Syntax/" class="article-date">
+  <time datetime="2017-12-13T02:09:15.000Z" itemprop="datePublished">2017-12-13</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/12/13/Pipeline7-Pipeline-Syntax/">(原创)Pipeline7-Pipeline-Syntax</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><b>笔者是独立翻译实验，不允许转载<b></b></b></p>
+<h1 id="Pipeline-Syntax"><a href="#Pipeline-Syntax" class="headerlink" title="Pipeline Syntax"></a>Pipeline Syntax</h1><p>本节基于入门中介绍的信息, 应仅作为参考进行处理。有关如何在实际示例中使用Pipeline语法的详细信息, 请参阅本章的 Jenkinsfile 部分。在Pipeline插件的2.5 版中, Pipeline支持两个离散的语法, 下面是详细的。对于每个优点和缺点, 请参见语法比较。</p>
+<p>正如在入门中所讨论的, Pipeline最基本的部分是步骤step。基本上, 步骤step告诉Jenkins该做什么, 并作为声明式和脚本式Pipeline语法的基本构造块。</p>
+<p>有关可用步骤的概述, 请参阅Pipeline步骤参考, 其中包含内置的步骤的全面列表以及插件提供的步骤。</p>
+<h2 id="Declarative-Pipeline"><a href="#Declarative-Pipeline" class="headerlink" title="Declarative Pipeline"></a>Declarative Pipeline</h2><p>声明式Pipeline是Jenkins Pipeline的一个相对最近的加法, 它在Pipeline子系统的顶部提供了一种更简化和自以为是的语法。</p>
+<p>所有有效的声明Pipeline必须包含在Pipeline块中, 例如:</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp7/1.png"></p>
+<p>在声明性Pipeline中有效的基本语句和表达式遵循与 Groovy 语法相同的规则, 但有以下例外情况:</p>
+<ul>
+<li>Pipeline的 top-level 必须是一个块, 特别是: pipeline {}</li>
+<li>没有分号作为语句分隔符。每个语句都必须在自己的行上</li>
+<li>块必须由节、指令、步骤或赋值语句组成。</li>
+<li>属性引用语句被视为参数方法调用。例如, 输入被视为输入 ()</li>
+</ul>
+<h4 id="Sections"><a href="#Sections" class="headerlink" title="Sections"></a>Sections</h4><p>声明性Pipeline中的节通常包含一个或多个指令Directive或步骤steps。</p>
+<h5 id="agent"><a href="#agent" class="headerlink" title="agent"></a>agent</h5><p>代理部分指定在Jenkins环境中执行整个Pipeline或特定阶段的位置, 具体取决于代理部分的放置位置。该节必须在Pipeline块内的 top-level 中定义, 但阶段级别的时候使用是可选的。</p>
+<table><tr><td>Required</td><td>Yes</td></tr><tr><td>Parameters</td><td>Described below</td></tr><tr><td>Allowed</td><td>In the top-level pipeline block and each stage block</td></tr></table>
+
+<h5 id="Parameters"><a href="#Parameters" class="headerlink" title="Parameters"></a>Parameters</h5><p>为了支持Pipeline作者可能有的各种用例, 代理部分支持几种不同类型的参数。这些参数可在Pipeline块的 top-level 或每个阶段指令中应用。</p>
+<h6 id="any"><a href="#any" class="headerlink" title="any"></a>any</h6><p>在任何可用的代理上执行Pipeline或阶段。例如: 代理任何agent any。</p>
+<h6 id="none"><a href="#none" class="headerlink" title="none"></a>none</h6><p>当在Pipeline块的 top-level 应用时, 将不会为整个Pipeline运行分配全局代理, 并且每个阶段部分都需要包含其自己的代理部分。例如: 代理无agent none。</p>
+<h6 id="label"><a href="#label" class="headerlink" title="label"></a>label</h6><p>使用所提供的标签, 在Jenkins环境中可用的代理上执行Pipeline或stage。例如: 代理 {标签为‘my-defined-label’}。</p>
+<h6 id="node"><a href="#node" class="headerlink" title="node"></a>node</h6><p>agent{ node {label ‘labelName’}}}和agent { label ‘labelName’}一样，node允许附加的选项，例如customWorkspace。</p>
+<h6 id="docker"><a href="#docker" class="headerlink" title="docker"></a>docker</h6><p>对给定的容器执行Pipeline或stage, 在预先配置为接受 Docker-based Pipeline的节点上或在与可选的标签参数匹配的节点上动态调配。Docker还可以选择接受参数, 其中可能包含直接传递到docker运行调用的参数, 以及一个 alwaysPull 选项, 即使图像名称已存在, 也会强制执行docker。例如 agent { docker ‘maven：3-alpine’}</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp7/2.png"></p>
+<h6 id="dockerfile"><a href="#dockerfile" class="headerlink" title="dockerfile"></a>dockerfile</h6><p>使用源存储库中包含的<font color="red">Dockerfile</font>生成的容器来执行Pipeline或stage。要想使用这个选项，<font color="red">Jenkinsfile</font>必须通过Multibranch Pipeline或者Pipeline from SCM。通常这是源存储库根目录中的 <font color="red">Dockerfile</font>：<font color="red">agent { dockerfile true }</font>。如果在另一个目录中生成<font color="red">Dockerfile</font>, 请使用<font color="red">dir</font>选项：<font color="red">agent { dockerfile { dir ‘somSubDir’} }</font>。您可以用<font color="red">additionalBuildArgs</font>选项传递参数到<font color="red">docker build……</font>命令中，像<font color="red">agent { dockerfile { additionalBuildArgs ‘–build-arg foo=bar’ } }</font>。</p>
+<h4 id="Common-Options"><a href="#Common-Options" class="headerlink" title="Common Options"></a>Common Options</h4><p>这些是可以应用两个或更多agent实现的几个选项。除非明确说明, 否则不是必需的。</p>
+<h6 id="Label"><a href="#Label" class="headerlink" title="Label"></a>Label</h6><p>一个字符串。要在其上运行Pipeline或单个stage的标签。<br>此选项对于node，docker和dockerfile有效，并且对node是必需的。</p>
+<h6 id="customWorkspace"><a href="#customWorkspace" class="headerlink" title="customWorkspace"></a>customWorkspace</h6><p>一个字符串。运行Pipeline或单个stage，此agent在该自定义工作区中应用, 而不是默认。它可以是相对路径, 在这种情况下, 自定义工作区将位于节点的工作区根目录下, 或者是绝对路径。例如：</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp7/3.png"></p>
+<p>此选项对于node，docker和dockerfile有效。</p>
+<h6 id="reuseNode"><a href="#reuseNode" class="headerlink" title="reuseNode"></a>reuseNode</h6><p>布尔值, 默认为 false。如果为 true, 则在Pipeline的 top-level 上指定的节点上, 在同一工作区中, 而不是在新节点上运行容器。</p>
+<p>此选项对<font color="red">docker</font>和<font color="red">dockerfile</font>有效, 并且仅在用于单个<font color="red">stage</font>的<font color="red">agent</font>时具有效果。</p>
+<h4 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h4><p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp7/4.png"></p>
+<p>①在新创建的给定名称和标记(<font color="red">maven:3-alpine</font>)容器中, 执行此Pipeline中定义的所有步骤。</p>
+<p>Stage-level <font color="red">agent</font>部分<br><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp7/5.png"></p>
+<ul>
+<li><p>在Pipeline的 top-level 定义agent none, 确保不会不必要地分配执行器。使用agent none 还强制每个stage部分包含其自己的agent部分。</p>
+</li>
+<li><p>使用此image在新创建的容器中执行此阶段中的步骤。</p>
+</li>
+<li><p>使用上一个阶段的不同image, 在新创建的容器中执行此阶段中的步骤。</p>
+</li>
+</ul>
+<h4 id="Post"><a href="#Post" class="headerlink" title="Post"></a>Post</h4><p>post 部分定义将在Pipeline运行或阶段结束时运行的操作。post 部分中支持许多条件块: 始终(<font color="red">always</font>)、已更改(<font color="red">changed</font>)、失败(<font color="red">failure</font>)、成功(<font color="red">success</font>)、不稳定(<font color="red">unstable</font>)和中止(<font color="red">aborted</font>)。这些块允许在Pipeline运行或阶段的末尾执行步骤, 具体取决于管线的状态。</p>
+<table><thead><tr><th>Required</th><th>No</th></tr></thead><tbody><tr>  <td>Parameters</td><td>None</td></tr><tr><td>Allowed</td><td>In the top-level <font color="red">pipeline</font> block and each <font color="red">stage</font> block</td></tr></tbody></table>
+
+<h4 id="Conditions"><a href="#Conditions" class="headerlink" title="Conditions"></a>Conditions</h4><font color="red">always</font>
+
+<p>无论Pipeline运行的完成状态如何, 都将运行。</p>
+<font color="red">changed</font>
+
+<p>仅当当前Pipeline运行与以前完成的Pipeline的状态不同时才运行。</p>
+<font color="red">failure</font>
+
+<p>只有在当前Pipeline出现故障状态时才运行, 通常在 web UI 中用红色指示表示。</p>
+<font color="red">success</font>
+
+<p>只有在当前Pipeline具有成功状态时才运行, 通常在 web UI 中用蓝色或绿色表示。</p>
+<font color="red">unstable</font>
+
+<p>只有在当前Pipeline的状态不稳定时才运行, 通常是由测试失败、代码违规等引起的。通常用黄色指示在 web UI 中表示。</p>
+<font color="red">aborted</font>
+
+<p>仅在当前Pipeline具有中止状态时运行, 通常是由于Pipeline被手动中止。通常在 web UI 中用灰色指示表示。</p>
+<h4 id="Example-1"><a href="#Example-1" class="headerlink" title="Example"></a>Example</h4><p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp7/6.png"></p>
+<ul>
+<li><p>通常情况下, post部分应放置在Pipeline的末尾。</p>
+</li>
+<li><p>Post-condition块包含与steps部分相同的steps。</p>
+</li>
+</ul>
+<h4 id="stages"><a href="#stages" class="headerlink" title="stages"></a>stages</h4><p>包含一个或多个stage指令的序列, stages部分是Pipeline所描述的大部分”work”的位置。至少建议stages对连续传递过程中的每个离散部分 ，如生成、测试和部署， 至少包含一个阶段指令。</p>
+<table><thead><tr><th>Required</th><th>Yes</th></tr></thead><tbody><tr><td>Parameters</td><td>None</td></tr><tr><td>Allowed</td><td>Only once, inside the <font color="red">pipeline</font> block</td></tr></tbody></table>
+
+<h4 id="Example-2"><a href="#Example-2" class="headerlink" title="Example"></a>Example</h4><p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp7/7.png"></p>
+<ul>
+<li>stage部分通常遵循指令, 如代理<font color="red">agent</font>、选项<font color="red">options</font>等。</li>
+</ul>
+<h4 id="steps"><a href="#steps" class="headerlink" title="steps"></a>steps</h4><p>steps部分在指定的stage指令中定义一系列一个或多个将要执行的steps。</p>
+<table><thead><tr><th>Required</th><th>Yes</th></tr></thead><tbody><tr><td>Parameters</td><td>None</td></tr><tr><td>Allowed</td><td>inside each <font color="red">stage</font> block</td></tr></tbody></table>
+
+<h4 id="Example-3"><a href="#Example-3" class="headerlink" title="Example"></a>Example</h4><p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp7/8.png"></p>
+<ul>
+<li>steps部分包含一个或多个steps。</li>
+</ul>
+<h4 id="Directives"><a href="#Directives" class="headerlink" title="Directives"></a>Directives</h4><h6 id="environment"><a href="#environment" class="headerlink" title="environment"></a>environment</h6><p>环境<font color="red">environment</font>指令指定一个键值对序列, 它将被定义为所有steps的环境变量, 或特定阶段的steps, 具体取决于环境<font color="red">environment</font>指令在Pipeline中的位置。</p>
+<p>此指令支持一种特殊的方法<font color="red">credentials()</font>, 可用于通过Jenkins环境中的标识符来访问预定义的凭据。对于类型为机密文本的凭据, credentials()方法将确保指定的环境变量包含秘密文本内容。对于类型为标准用户名和密码的凭据, 指定的环境变量将被设置为<font color="red">用户名: 密码</font>和另外两个环境变量将被自动定义：<font color="red">MYVARNAME_USR</font>和<font color="red">MYVARNAME_PSW</font>。</p>
+<table><thead><tr><th>Required</th><th>No</th></tr></thead><tbody><tr><td>Parameters</td><td>None</td></tr><tr><td>Allowed</td><td>inside the <font color="red">pipeline</font> block, or within <font color="red">stage</font> directives</td></tr></tbody></table>
+
+<h6 id="Example-4"><a href="#Example-4" class="headerlink" title="Example"></a>Example</h6><p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp7/9.png"></p>
+<ul>
+<li>top-level Pipeline块中使用的environment指令将应用于Pipeline中的所有步骤。</li>
+<li>在stage中定义的environment指令只将给定的环境变量应用于stage中的步骤。</li>
+<li>environment块具有定义的帮助方法credentials() 可用于通过Jenkins环境中的标识符来访问预定义的凭据。</li>
+</ul>
+<h4 id="Options"><a href="#Options" class="headerlink" title="Options"></a>Options</h4><font color="red">options</font>指令允许在管线本身内配置Pipeline特定的选项。Pipeline提供了许多这些选项, 如<font color="red">buildDiscarder</font>, 但它们也可能由插件提供, 如时间戳<font color="red">timestamps</font>。<br><table><thead><tr><th>Required</th><th>No</th></tr></thead><tbody><tr><td>Parameters</td><td>None</td></tr><tr><td>Allowed</td><td>Only Once, inside the <font color="red">pipeline</font> block</td></tr></tbody></table><br><br>#### Available Options<br><br>###### buildDiscarder<br><br>持久性工件(Persist artifacts)和控制台输出的特定数量的最近Pipeline运行。例如：<font color="red">options { buildDiscarder(logRotator(numToKeepStr: ‘1’)) }</font>。<br><br>###### disableConcurrentBuilds<br>不允许并发执行Pipeline。可用于防止同时访问共享资源等。例如：<font color="red">options { disableConcurrentBuilds() }</font>。<br><br>###### overrideIndexTriggers<br>允许重写分支索引触发器的默认处理。如果在 multibranch 或组织标签中禁用了分支索引触发器, 则<font color="red">options {overrideIndexTriggers (true)}</font>将仅为该作业启用它们。否则,<font color="red">options {overrideIndexTriggers (false)}</font>将仅禁用此作业的分支索引触发器。<br><br>###### skipDefaultCheckout<br>在agent指令中, 在默认情况下跳过源代码管理中的签出。例如: <font color="red">options {skipDefaultCheckout ()}</font>。<br><br>###### skipStageAfterUnstable<br>一旦生成状态不稳定, 就跳过各个阶段。例如: <font color="red">options {skipStagesAfterUnstable ()}</font>。<br><br>###### timeout<br>设置Pipeline运行的超时期限, 之后Jenkins应中止Pipeline。例如: <font color="red">options { timeout(time: 1, unit: ‘HOURS’) }</font>。<br><br>###### retry<br>失败时, 请在指定的次数内重试整个管线。例如: <font color="red">options { retry(3) }</font>。<br><br>###### timestamps<br>将管线所生成的所有控制台输出与发出该行的时间放在一起。例如: <font color="red">options { timestamps() }</font>。<br><br>###### Examples<br><br><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp7/10.png"><br><br>* 指定一个小时的全局执行超时, 之后Jenkins将中止Pipeline运行。<br>提示：可供选择的综合清单尚待<a href="https://issues.jenkins-ci.org/browse/INFRA-1053" target="_blank" rel="noopener">INFRA-1503</a>完成。<br><br>#### parameters<br>参数<font color="red">parameters</font>指令提供用户在触发Pipeline时应提供的参数列表。这些用户指定的参数的值可通过参数<font color="red">params</font>对象提供给Pipeline steps, 请参阅<a href="https://jenkins.io/doc/book/pipeline/syntax/#parameters-example" target="_blank" rel="noopener">]示例</a>中的特定用法。<br><table><thead><tr><th>Required</th><th>No</th></tr></thead><tbody><tr><td>Parameters</td><td>None</td></tr><tr><td>Allowed</td><td>Only Once, inside the <font color="red">pipeline</font> block</td></tr></tbody></table><br><br>#### Available Parameters<br>###### string<br>字符串类型参数，例如：<font color="red">parameters { string(name: ‘DEPLOY_ENV’, defaultValue: ‘staging’, description: ‘’) }</font>
+
+<h6 id="booleanParam"><a href="#booleanParam" class="headerlink" title="booleanParam"></a>booleanParam</h6><p>布尔值参数，例如：<font color="red">parameters { booleanParam(name: ‘DEBUG_BUILD’, defaultValue: true, description: ‘’) }</font></p>
+<h4 id="Examples"><a href="#Examples" class="headerlink" title="Examples"></a>Examples</h4><p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp7/11.png"></p>
+<p>提示：可供选择的综合清单尚待<a href="https://issues.jenkins-ci.org/browse/INFRA-1053" target="_blank" rel="noopener">INFRA-1503</a>完成。</p>
+<h6 id="Triggers"><a href="#Triggers" class="headerlink" title="Triggers"></a>Triggers</h6><p><font color="red">triggers</font>指令定义了Pipeline应 re-triggered 的自动方式。对于与源 (如 GitHub 或 BitBucket) 集成的管线, 可能不需要<font color="red">triggers</font>, 因为 webhooks-based 集成可能已经存在。当前可用的触发器有 <font color="red">cron</font>、<font color="red">pollSCM</font> 和<font color="red">upstream</font>。</p>
+<table><thead><tr><th>Required</th><th>No</th></tr></thead><tbody><tr><td>Parameters</td><td>None</td></tr><tr><td>Allowed</td><td>Only Once, inside the <font color="red">pipeline</font> block</td></tr></tbody></table>
+
+<h6 id="Cron"><a href="#Cron" class="headerlink" title="Cron"></a>Cron</h6><p>接受一个 cron 样式的字符串来定义Pipeline应 re-triggered 的规则间隔。例如：<font color="red">triggers { cron(‘H */4 <em> </em> 1-5’) }</font>。</p>
+<h6 id="pollSCM"><a href="#pollSCM" class="headerlink" title="pollSCM"></a>pollSCM</h6><p>接受一个 cron 样式的字符串来定义一个规则的时间间隔, 詹金斯应该检查新的源更改。例如：<font color="red">triggers { pollSCM(‘H */4 <em> </em> 1-5’) }</font>。</p>
+<h6 id="upstream"><a href="#upstream" class="headerlink" title="upstream"></a>upstream</h6><p>接受一个逗号分隔的作业字符串和一个阈值。当字符串中的任何作业以最小阈值结束时, 管线将被 re-triggered。例如：<font color="red">triggers { upstream(upstreamProjects: ‘job1,job2’, threshold: hudson.model.Result.SUCCESS) }</font>。<br>提示：pollSCM触发器只在Jenkins版本2.22或者以后有效。。</p>
+<h6 id="Example-5"><a href="#Example-5" class="headerlink" title="Example"></a>Example</h6><p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp7/12.png"></p>
+<h6 id="stage"><a href="#stage" class="headerlink" title="stage"></a>stage</h6><p><font color="red">stage</font>指令进入<font color="red">stages</font>部分，应该包含一个steps部分，一个可选的agent部分，或者其它特殊平台指令。实际上, Pipeline所完成的所有工作都将在一个或多个<font color="red">stage</font>指令中进行包装。</p>
+<table><thead><tr><th>Required</th><th>At least one</th></tr></thead><tbody><tr><td>Parameters</td><td>One mandatory parameter, a string for the name of the stage.</td></tr><tr><td>Allowed</td><td>Inside the <font color="red">stages</font> section</td></tr></tbody></table>
+
+<h6 id="Example-6"><a href="#Example-6" class="headerlink" title="Example"></a>Example</h6><p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp7/13.png"></p>
+<h6 id="tools"><a href="#tools" class="headerlink" title="tools"></a>tools</h6><p>定义用于自动和放置<font color="red">PATH</font>的工具的部分。如果<font color="red">agent none</font>指定, 则忽略此项。</p>
+<table><thead><tr><th>Required</th><th>No</th></tr></thead><tbody><tr><td>Parameters</td><td>None</td></tr><tr><td>Allowed</td><td>Inside the <font color="red">pipeline</font> block or a <font color="red">stage</font> block.</td></tr></tbody></table>
+
+
+<h6 id="Supported-Tools"><a href="#Supported-Tools" class="headerlink" title="Supported Tools"></a>Supported Tools</h6><h6 id="maven"><a href="#maven" class="headerlink" title="maven"></a>maven</h6><h6 id="jdk"><a href="#jdk" class="headerlink" title="jdk"></a>jdk</h6><h6 id="gradle"><a href="#gradle" class="headerlink" title="gradle"></a>gradle</h6><h6 id="Example-7"><a href="#Example-7" class="headerlink" title="Example"></a>Example</h6><p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp7/14.png"></p>
+<ul>
+<li>工具名称必须在Jenkins中预先配置：Manage Jenkins → Global Tool Configuration。</li>
+</ul>
+<h6 id="when"><a href="#when" class="headerlink" title="when"></a>when</h6><p><font color="red">when</font>指令允许Pipeline根据给定的条件来决定是否执行stage。<font color="red">when</font>指令必须包含至少一个条件。如果<font color="red">when</font>指令包含多个条件时, 所有子条件必须返回 true 才能执行阶段。这与子条件嵌套在<font color="red">allof</font>条件下的情况相同 (请参见下面的<a href="https://jenkins.io/doc/book/pipeline/syntax/#when-example" target="_blank" rel="noopener">示例</a>)。</p>
+<p>可以使用嵌套条件构建更复杂的条件结构: <font color="red">not</font>、<font color="red">allOf</font>或<font color="red">anyOf</font>。嵌套条件可以嵌套到任意深度。</p>
+<table><thead><tr><th>Required</th><th>No</th></tr></thead><tbody><tr><td>Parameters</td><td>None</td></tr><tr><td>Allowed</td><td>Inside a <font color="red">stage</font> directive</td></tr></tbody></table>
+
+<h6 id="Built-in-Conditions"><a href="#Built-in-Conditions" class="headerlink" title="Built-in Conditions"></a>Built-in Conditions</h6><h6 id="branch"><a href="#branch" class="headerlink" title="branch"></a>branch</h6><p>在所构建的分支与给定的分支模式匹配时执行stage，例如：<font color="red">when { branch ‘master’ }</font>。注意：这仅仅在multibranch Pipeline有效。</p>
+<h6 id="environment-1"><a href="#environment-1" class="headerlink" title="environment"></a>environment</h6><p>特殊环境变量被设置给定值以后，执行stage，例如：<font color="red">when { environment name: ‘DEPLOY_TO’, value: ‘production’ }</font>。</p>
+<h6 id="expression"><a href="#expression" class="headerlink" title="expression"></a>expression</h6><p>当指定的Groovy表达式计算为真时执行stage，例如：<font color="red">when { expression { return params.DEBUG_BUILD } }</font>。</p>
+<h6 id="not"><a href="#not" class="headerlink" title="not"></a>not</h6><p>当嵌套条件为假时执行stage。例如：<font color="red">when { not { branch ‘master’ } }</font>。</p>
+<h6 id="allOf"><a href="#allOf" class="headerlink" title="allOf"></a>allOf</h6><p>当所有嵌套条件为真时执行stage。必须包含至少一个条件，例如：<font color="red">when { allOf { branch ‘master’; environment name: ‘DEPLOY_TO’, value: ‘production’ } }</font>。</p>
+<h6 id="anyOf"><a href="#anyOf" class="headerlink" title="anyOf"></a>anyOf</h6><p>当至少一个前条件为真时执行stage。必须包含至少一个条件，例如：<font color="red">when { anyOf { branch ‘master’; branch ‘staging’ } }</font>。</p>
+<h6 id="Examples-1"><a href="#Examples-1" class="headerlink" title="Examples"></a>Examples</h6><p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp7/15.png"></p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp7/16.png"></p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp7/17.png"></p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp7/18.png"></p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp7/19.png"></p>
+<h2 id="Parallel"><a href="#Parallel" class="headerlink" title="Parallel"></a>Parallel</h2><p>申明式Pipeline中有可能在里面申明许多嵌套的stages，这些stage将被并行执行。请注意, 一个stage必须有一个且只有一个<font color="red">steps</font>或<font color="red">parallel</font>。嵌套stage本身不能包含进一步的<font color="red">parallel</font> stages, 但其他的行为与其他<font color="red">stages</font>相同。包含<font color="red">parallel</font>的任何stage都不能包含<font color="red">agent</font>或<font color="red">tools</font>, 因为没有<font color="red">steps</font>，他们并不具有相关性。</p>
+<p>此外, 您可以强制您的<font color="red">parallel stage</font>全部被中止, 当其中一个失败, 通过增加’failFast true’到包含<font color="red">parallel</font>的<font color="red">stage</font>。</p>
+<h4 id="Example-8"><a href="#Example-8" class="headerlink" title="Example"></a>Example</h4><p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp7/20.png"></p>
+<h2 id="Steps"><a href="#Steps" class="headerlink" title="Steps"></a>Steps</h2><p>声明式Pipeline可能会使用<a href="https://jenkins.io/doc/pipeline/steps" target="_blank" rel="noopener">Pipeline steps reference</a>中记录的所有可用steps, 其中包含一个完整的steps列表, 其中添加了仅在声明性Pipeline中支持的下面列出的steps。</p>
+<h6 id="script"><a href="#script" class="headerlink" title="script"></a>script</h6><p>script step采用了一个<a href="https://jenkins.io/doc/book/pipeline/syntax/#scripted-pipeline" target="_blank" rel="noopener">脚本化的Pipeline块</a>, 并在声明性Pipeline中执行。对于大多数用例, 脚本步骤在声明性Pipeline中应该是不必要的, 但它可以提供一个有用的”escape hatch”。 Script块和/或复杂性的脚本script块应该改为<a href="https://jenkins.io/doc/book/pipeline/shared-libraries/" target="_blank" rel="noopener">]共享库</a>。</p>
+<h6 id="Example-9"><a href="#Example-9" class="headerlink" title="Example"></a>Example</h6><p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp7/21.png"></p>
+<h2 id="Scripted-Pipeline"><a href="#Scripted-Pipeline" class="headerlink" title="Scripted Pipeline"></a>Scripted Pipeline</h2><p>脚本化Pipeline (如<a href="https://jenkins.io/doc/book/pipeline/syntax/#declarative-pipeline" target="_blank" rel="noopener">声明式Pipeline</a>) 建立在底层管线子系统的顶部。不像声明式, 脚本Pipeline是有效的通用 DSL 内置的 Groovy。Groovy 语言提供的大多数功能都可供脚本Pipeline用户使用, 这意味着它可以是一个非常富有表现力和灵活性的工具, 可以创作连续的交付Pipeline。</p>
+<h2 id="Flow-Control"><a href="#Flow-Control" class="headerlink" title="Flow Control"></a>Flow Control</h2><p>脚本化Pipeline从 Jenkinsfile 的顶部向下连续执行, 就像 Groovy 或其他语言中的大多数传统脚本一样。因此, 提供流控制依赖于 Groovy 表达式, 如 if/else 条件, 例如:<br><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp7/22.png"></p>
+<p>通过 Groovy 的异常处理支持, 可以管理另一种脚本式Pipeline流控制。当steps因任何原因而失败时, 它们抛出一个异常。错误处理行为必须使用 Groovy 中的 try/catch/finally 块, 例如:<br><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp7/23.png"></p>
+<h2 id="Steps-1"><a href="#Steps-1" class="headerlink" title="Steps"></a>Steps</h2><p>正如在入门中所讨论的, Pipeline最基本的部分是”step”。从根本上讲, step告诉Jenkins该做什么, 并充当声明性和脚本化Pipeline语法的基本构建基块。<br>脚本Pipeline不引入特定于其语法的任何steps; <a href="https://jenkins.io/doc/pipeline/steps" target="_blank" rel="noopener">Pipeline Steps reference</a>, 其中包含Pipeline和插件提供的steps的全面列表。</p>
+<h2 id="Differences-from-plain-Groovy"><a href="#Differences-from-plain-Groovy" class="headerlink" title="Differences from plain Groovy"></a>Differences from plain Groovy</h2><p>为了提供耐用性, 这意味着运行Pipeline可以生存的Jenkins master重启, 脚本Pipeline必须序列化数据回master。由于这一设计要求, 一些 Groovy 成语如<font color="red">collection.each { item -&gt; /* perform operation */ }</font>不完全受支持。有关详细信息, 请参阅 <a href="https://issues.jenkins-ci.org/browse/JENKINS-27421" target="_blank" rel="noopener">JENKINS-27421</a> 和 <a href="https://issues.jenkins-ci.org/browse/JENKINS-26481" target="_blank" rel="noopener">JENKINS-26481</a>。</p>
+<h2 id="Syntax-Comparison"><a href="#Syntax-Comparison" class="headerlink" title="Syntax Comparison"></a>Syntax Comparison</h2><p>当Jenkins Pipeline首次创建时, Groovy 被选为基础。Jenkins长期推出了一个嵌入式的 Groovy 引擎, 为管理员和用户提供高级脚本功能。此外, Jenkins Pipeline的实现基于 Groovy 的基础上, 建立现在称为”脚本Pipeline” DSL。</p>
+<p>由于它是一个功能完备的编程环境, 因此脚本化的管道为Jenkins用户提供了大量的灵活性和可扩展性。对于给定团队的所有成员来说, Groovy 学习曲线通常并不可取, 因此创建了声明性Pipeline, 为创作Jenkins Pipeline提供了更简单、更可用的语法。</p>
+<p>两者基本上是相同的Pipeline子系统下面。它们都是作为”代码即管道(Pipeline as code)”的持久实现。他们都能够使用Pipeline内置的steps或由插件提供。都可以利用<a href="https://jenkins.io/doc/book/pipeline/shared-libraries/" target="_blank" rel="noopener">共享库</a>。</p>
+<p>然而他们不同的地方在句法和灵活性。声明性限制用户使用更严格和预先定义的结构, 使其成为更简单的连续传递Pipeline的理想选择。脚本提供的限制很少, 因为结构和语法的唯一限制往往是由 Groovy 本身定义的, 而不是任何特定于Pipeline的系统, 这使得它成为了电力用户和更复杂需求的理想选择。顾名思义, 声明性Pipeline是鼓励一个声明式编程模型。而脚本化的Pipeline遵循更命令性的编程模型。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://roclli.github.io/2017/12/13/Pipeline7-Pipeline-Syntax/" data-id="cjb4meswi001u1r7s7cfvaniz" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Jenkins-Pipeline-Docker/">Jenkins; Pipeline; Docker</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Pipeline6-Pipeline-Development-Tools" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/12/13/Pipeline6-Pipeline-Development-Tools/" class="article-date">
+  <time datetime="2017-12-13T01:58:11.000Z" itemprop="datePublished">2017-12-13</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/12/13/Pipeline6-Pipeline-Development-Tools/">(原创)Pipeline6-Pipeline-Development-Tools</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><b>笔者是独立翻译实验，不允许转载<b></b></b></p>
+<h1 id="Pipeline-Development-Tools"><a href="#Pipeline-Development-Tools" class="headerlink" title="Pipeline Development Tools"></a>Pipeline Development Tools</h1><h2 id="Pipeline-Development-Tools-1"><a href="#Pipeline-Development-Tools-1" class="headerlink" title="Pipeline Development Tools"></a>Pipeline Development Tools</h2><p>Jenkins Pipeline有内嵌的文档和Snipper Generator，这些是开发Pipeline的关键资源。它们针对当前版本的Jenkins和安装的插件提供详细的帮助和信息。本节，我们讨论开发Jenkins Pipeline的其他工具和资源。</p>
+<h2 id="命令行Command-line-Command-line-Pipeline-Linter"><a href="#命令行Command-line-Command-line-Pipeline-Linter" class="headerlink" title="命令行Command-line (Command-line Pipeline Linter)"></a>命令行Command-line (Command-line Pipeline Linter)</h2><p>在实际运行之前，Jenkins能验证，或者<a href="https://en.wikipedia.org/wiki/Lint_(software" target="_blank" rel="noopener">lint</a>一个申明式Pipeline。这些通常是Jenkins CLI命令或者带参数的HTTP POST请求完成的。我们推荐使用<a href="https://jenkins.io/doc/book/managing/cli/#ssh" target="_blank" rel="noopener">SSH interface</a>。请参看<a href="https://jenkins.io/doc/book/managing/cli/" target="_blank" rel="noopener">Jenkins CLI文档</a>怎样配置Jenkins才能安全的命令行存取。</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp6/1.png"></p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp6/2.png"></p>
+<h4 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h4><p>下面是两个Pipeline Linter的例子。第一个示例显示了linter在传递无效<font color="red">Jenkinsfile</font>时的输出, 该结果是缺少代理<font color="red">agent</font>声明的一部分。</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp6/3.png"></p>
+<h2 id="“Replay”-Pipeline-Runs-with-Modifications"><a href="#“Replay”-Pipeline-Runs-with-Modifications" class="headerlink" title="“Replay” Pipeline Runs with Modifications"></a>“Replay” Pipeline Runs with Modifications</h2><p>一般来说Pipeline是定义在经典的Jenkins Web界面上，或者通过提交Jenkinsfile到源代码库中。不幸的是, 这两种方法都不适合对Pipeline进行快速迭代或原型化。“Replay”特性允许在不更改Pipeline配置或创建新提交的情况下快速修改和执行现有Pipeline。</p>
+<h4 id="Usage"><a href="#Usage" class="headerlink" title="Usage"></a>Usage</h4><p>使用”Replay”特性:</p>
+<ol>
+<li>选择一个以前已经完成的运行过的Build History。</li>
+</ol>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp6/4.png"></p>
+<ol>
+<li>点击左边的菜单”Replay”按钮</li>
+</ol>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp6/5.png"></p>
+<h4 id="Features"><a href="#Features" class="headerlink" title="Features"></a>Features</h4><p>•能被同一次运行多次调用—允许很容易的并行测试不同的特性<br>•能被在运行中的Pipeline调用执行—只要是包含正确Groovy语法的Pipeline，就能被重复播放。<br>•能引用共享库的代码同样是可修改的—如果一个引用了共享库的Pipeline运行，共享库的代码同样能被展示和修改。</p>
+<h4 id="Limitations"><a href="#Limitations" class="headerlink" title="Limitations"></a>Limitations</h4><p>•有语法错误的Pipeline不能被重新播放–这意味着无法查看其代码, 并且无法检索其中所做的任何更改。使用重播进行更重要的修改时, 请将更改保存到Jenkins外部的文件或编辑器中, 然后再运行它们。见<a href="https://issues.jenkins-ci.org/browse/JENKINS-36453" target="_blank" rel="noopener">JENKINS-37589</a>。</p>
+<p>•重播的Pipeline行为可能与由其他方法启动的运行不同–对于不属于多分支Pipeline的Pipeline, 提交信息可能会因原始运行和重播运行而异。见<a href="https://issues.jenkins-ci.org/browse/JENKINS-36453" target="_blank" rel="noopener">JENKINS-36453</a>。</p>
+<h2 id="Pipeline-Unit-Testing-Framework"><a href="#Pipeline-Unit-Testing-Framework" class="headerlink" title="Pipeline Unit Testing Framework"></a>Pipeline Unit Testing Framework</h2><p>提示: Pipeline单元测试框架是Jenkins项目不支持的 third-party 工具。<br><a href="https://github.com/lesfurets/JenkinsPipelineUnit" target="_blank" rel="noopener">Pipeline单元测试框架</a>（Pipeline Unit Testing Framework）允许您在完全运行测试Pipeline和共享库之前对其进行单元检测。它提供了一个模拟执行环境, 其中实际的Pipeline步骤将替换为可用于检查预期行为的 mock 对象。新的和粗糙的边缘, 但承诺。该项目的自述文件包含示例和用法说明。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://roclli.github.io/2017/12/13/Pipeline6-Pipeline-Development-Tools/" data-id="cjb4meswh001s1r7sjw47x3vj" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Jenkins-Pipeline/">Jenkins; Pipeline</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Pipeline5-Extending-with-Shared-Libraries" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/12/13/Pipeline5-Extending-with-Shared-Libraries/" class="article-date">
+  <time datetime="2017-12-13T01:13:10.000Z" itemprop="datePublished">2017-12-13</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/12/13/Pipeline5-Extending-with-Shared-Libraries/">(原创)Pipeline5-Extending-with-Shared-Libraries</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><b>笔者是独立翻译实验，不允许转载<b></b></b></p>
+<h1 id="Extending-with-Shared-Libraries"><a href="#Extending-with-Shared-Libraries" class="headerlink" title="Extending with Shared Libraries"></a>Extending with Shared Libraries</h1><h2 id="Defining-Shared-Libraries"><a href="#Defining-Shared-Libraries" class="headerlink" title="Defining Shared Libraries"></a>Defining Shared Libraries</h2><p>Pipeline被越来越多的组织和项目所使用，一些常用的模式开始出现。通常共享不同项目的Pipeline片段是非常有用的，能减少冗余，保持代码DRY(Don’t_repeat_yourself)。</p>
+<p>Pipeline支持创建共享库，这些库能被外部源代码库定义，并能被装载到现有的Pipeline中。</p>
+<h4 id="Directory-structure"><a href="#Directory-structure" class="headerlink" title="Directory structure"></a>Directory structure</h4><p>共享库被一个名字，一个例如SCM的代码段定义，默认的版本是可选的。名字是一个短标识符，它能被用在脚本中。</p>
+<p>版本可以是SCM能理解的任何东西；例如分支，标记和提交hashes等所有Git的东西你同样可以申明哪些脚本明确要求下面定义的库，或者默认是禁止的。更进一步，如果你在Jenkins配置中说明一个版本，你就能阻止脚本选择一个不同的版本。</p>
+<p>说明SCM最好的方式就是使用SCM插件，插件已经被更新支持新的API，检查任意的命名版本。最新版本的Git和Subversion插件都支持这个模式；其他也应该这么做。</p>
+<p>如果你的SCM插件没有被整合，你可以选择Legacy SCM，并且挑选已经提供的。在本例中，你需要在SCM配置的某个地方包含(include)<font color="red">${library.yourLibName.version}</font>，以便于在迁出代码阶段，插件能读取这个变量选择想要的版本。例如，对于Subversion，你能设置URI为svnserver/project/${library.yourLibName.version}，然后使用例如<font color="red">trunk</font>或者<font color="red">branches/dev</font>或者<font color="red">tags/1.0</font>。</p>
+<h4 id="目录结构-Directory-structure"><a href="#目录结构-Directory-structure" class="headerlink" title="目录结构(Directory structure)"></a>目录结构(Directory structure)</h4><p>共享库的目录结构如下：</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp5/1.png"></p>
+<p><font color="red">src</font>目录看起来像是标准的java代码目录。当执行Pipeline的时候，这个目录会被加到classpath。</p>
+<p><font color="red">vars</font>目录保存脚本，脚本定义Pipeline可以存取的全局变量。每一个groovy的基本名应该是一个Groovy标识符，方便起见都是驼峰命名法。</p>
+<p>这些目录中的Groovy原文件都与脚本Pipeline同样的”CPS transformation”。</p>
+<p><font color="red">resources</font>目录允许<font color="red">libraryResource</font>被外部库使用加载非Groovy文件。现在这个特性不支持内部库。</p>
+<h4 id="Global-Shared-Libraries"><a href="#Global-Shared-Libraries" class="headerlink" title="Global Shared Libraries"></a>Global Shared Libraries</h4><p>有好几个可以定义共享库的地方，取决于用户情况。Manage Jenkins » Configure System » Global Pipeline Libraries，在这里许多库都能被定义。</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp5/2.png"></p>
+<p>因为这些库是全局使用，系统中的任何Pipeline都可以用这些库中的功能。<br>这些库被认为是”可信任的”，他们能运行Java/Geoovy/Jenkins内部API/Jenkins插件或者第三方库的任何方法。这允许你以一个更高级别封装去包裹独立的不安全的APIs，供其他Pipeline使用。要知道，任何能提交文件到这个SCM库的人都能对Jenkins进行无限的存取。你需要全部/运行权限去配置库(通常权限被授予jenkins管理员)。</p>
+<h4 id="Folder-level-Shared-Libraries"><a href="#Folder-level-Shared-Libraries" class="headerlink" title="Folder-level Shared Libraries"></a>Folder-level Shared Libraries</h4><p>任何创建的目录都可以有和它相关联的共享库。这个机制允许特殊库对目录和子目录中的Pipeline作用范围。<br>目录为基础的库并不被认为是”可信任的”；它们在Groovy sandbox中的运行就像典型的Pipeline一样。</p>
+<h4 id="Automatic-Shared-libraries"><a href="#Automatic-Shared-libraries" class="headerlink" title="Automatic Shared libraries"></a>Automatic Shared libraries</h4><p>其他插件可以增加定义库的方法。例如插件github-branch-source提供一个GitHub组织目录项，这个目录项允许脚本不用任何附加配置就可以使用不受信任的库，例如github.com/someorg/somerepo。本例中，指定的GitHub库将被加载。</p>
+<h2 id="Using-libraries"><a href="#Using-libraries" class="headerlink" title="Using libraries"></a>Using libraries</h2><p>隐式加载的共享库允许Pipeline使用任意这样的库定义的类或者全局变量。存取其他的库，<font color="red">Jenkinsfile</font>需要使用<font color="red">@Library</font>标记，说明库的名字：</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp5/3.png"></p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp5/4.png"></p>
+<p>这些标记可以在Groovy脚本允许的任何地方。当引用类库(<font color="red">src</font>目录)的时候，相应标记需要一个<font color="red">import</font>表达式：</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp5/5.png"></p>
+<p>提示：对于只定义了全局变量的共享库，或者只需要一个全局变量的共享库，<code>&lt;a href=&quot;http://groovy-lang.org/objectorientation.html#&lt;em&gt;annotation&quot;&gt;annotation&lt;/a&gt; pattern &lt;code&gt;@Library(&#39;my-shared-library&#39;) _&lt;/code&gt;</code>保持代码精炼是有用的。本质上，替代标记一个不必要的<code>import</code>表达式，符号<code></code>被标记。</p>
+<p>不推荐import一个全局变量/函数，因为这将强迫编译器将字段和方法解释为静态(static)的。此种情况下的Groovy编译器会产生令人迷惑的错误信息。<br>在脚本的编译过程中, 库在开始执行之前被解析和加载。这使得 Groovy 编译器能够理解静态类型检查中使用的符号的含义, 并允许它们在脚本中的类型声明中使用, 例如</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp5/6.png"></p>
+<p>但是, 全局变量在运行时解析。</p>
+<h4 id="Loading-libraries-dynamically"><a href="#Loading-libraries-dynamically" class="headerlink" title="Loading libraries dynamically"></a>Loading libraries dynamically</h4><p>从Pipeline2.7 版: 共享的 Groovy 库插件中, 有一个新的选项用于在脚本中加载 (non-implicit) 库: 在生成过程中的任何时候动态加载库的一个<font color="red">library</font>步骤。</p>
+<p>如果你只对使用全局变脸函数感兴趣(从<font color="red">vars</font>目录)，语法是相当的简单：</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp5/7.png"></p>
+<p>此后, 脚本将可以访问该库中的任何全局变量。<br>也可以使用<font color="red">src</font>/目录中的类, 但更棘手。虽然 @Library 注释在编译之前已经准备脚本的classpath, 但在遇到<font color="red">library</font> step时, 脚本已经编译完毕。因此, 您无法从库中<font color="red">import</font>或以其他方式，静态引用类型。<br>但是, 您可以动态地使用库类 (没有类型检查), 通过完全访问来自<font color="red">library</font> step的返回值的限定名。可以使用类似于 Java 的语法调用静态<font color="red">static</font>方法:</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp5/8.png"></p>
+<p>您还可以访问<font color="red">静态</font>字段, 并调用构造函数, 就好像它们是名为new的<font color="red">静态</font>方法一样：</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp5/9.png"></p>
+<h4 id="Library-versions"><a href="#Library-versions" class="headerlink" title="Library versions"></a>Library versions</h4><p>当隐式加载被选中的时候，共享库使用默认版本，否则pipeline只通过名字引用库，例如@Library(‘my-shared-library’)。如果默认版本没有定义，Pipeline必须说明一个版本，例如@Library(‘my-shared-library@master’)。</p>
+<p>如果共享库配置中的”允许默认版本被覆盖”被选中，<font color="red">@Library</font>标记有可能覆盖库的默认版本。如果可能的话，这同样允许隐式加载的库能被加载不同的版本。</p>
+<p>当时使用<font color="red">library</font> step，你可以说明一个版本：</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp5/10.png"></p>
+<p>由于这是一个常规步骤(library step), 因此可以计算该版本而不是常量, 就像注释；例如：</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp5/11.png"></p>
+<p>将使用与 multibranch Jenkinsfile 相同的 SCM 分支加载库。另外一个例子中，你可以通过参数选择一个库：</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp5/12.png"></p>
+<p>注意：<font color="red">Library</font> step可能不可以被用来覆盖一个隐式加载库的版本。它在脚本开始的时候已经加载，并且一个用名字加载的库不能被加载两次。</p>
+<h4 id="Retrieval-Method"><a href="#Retrieval-Method" class="headerlink" title="Retrieval Method"></a>Retrieval Method</h4><p>说明SCM最好的方式是使用SCM插件，插件已经被更新支持新的API去检查版本。在写本文时，Git和Subversion插件已经支持这个模式。</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp5/13.png"></p>
+<h4 id="Legacy-SCM"><a href="#Legacy-SCM" class="headerlink" title="Legacy SCM"></a>Legacy SCM</h4><p>SCM插件有可能仍然通过Legacy SCM选项使用，因为插件还没有支持交心的共享库特性。本例中，包含<font color="red">${library.yourlibrarynamehere.version}</font>，在这里分支/tag/ref为了特殊的SCM插件被配置。这确保，在迁出库的源代码时，SCM插件能扩展它的变量去迁出合适的库版本。</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp5/14.png"></p>
+<h4 id="Dynamic-retrieval"><a href="#Dynamic-retrieval" class="headerlink" title="Dynamic retrieval"></a>Dynamic retrieval</h4><p>如果你在<font color="red">Library</font> step中仅仅指明一个库名字(可选的，在version后面<font color="red">@</font>) ，Jenkins将寻找那个名字的预先配置的库。(或者加载一个<font color="red">github.com/owner/repo自动库</font>)<br>但您也可以动态地指定检索方法, 在这种情况下, 不需要在Jenkins中预先定义库。例子如下：</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp5/15.png"></p>
+<p>最好使用Pipeline Syntax寻找你的SCM的精确的语法。<br>注意：在这些cases中，必须要说明库版本。</p>
+<h2 id="Writing-libraries"><a href="#Writing-libraries" class="headerlink" title="Writing libraries"></a>Writing libraries</h2><p>一般来说，任何合法的Groovy代码都可以使用。不同的数据结构，功能方法等，例如：</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp5/16.png"></p>
+<h4 id="Access-steps"><a href="#Access-steps" class="headerlink" title="Access steps"></a>Access steps</h4><p>库的类不能明确的调用steps，例如<font color="red">sh</font>或者<font color="red">git</font>。但是, 它们可以在封闭类的范围之外实现方法, 进而调用Pipeline step，例如：</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp5/17.png"></p>
+<p>然后这个方法可以被脚本式Pipeline调用。</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp5/18.png"></p>
+<p>这个方法是有限制的，例如，它阻止一个父类的定义。<br>或者，在构造函数中，一套<font color="red">steps</font>集合能用<font color="red">this</font>被明确的传递到一个库类，或者仅仅一个方法：</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp5/19.png"></p>
+<p>当保存类的状态的时候，例如上面，类必须实现<font color="red">Serializable</font>接口。</p>
+<p>这确保在Jenkins中，一个使用类的Pipeline，像下面的例子，能挂起(suspend)和回复(resume)。</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp5/20.png"></p>
+<p>如果库需要存取全局变量，例如<font color="red">env</font>，那么这些库应该被明确的传递到库类，或者方法中。<br>而不是将大量的变量从脚本式Pipeline传递到库中,</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp5/21.png"></p>
+<p>上面的例子展示了参数被传递到一个<font color="red">静态(static)</font>方法，脚本式Pipeline按照如下方式调用：</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp5/22.png"></p>
+<h4 id="Defining-global-variables"><a href="#Defining-global-variables" class="headerlink" title="Defining global variables"></a>Defining global variables</h4><p>在内部,<font color="red">vars</font>目录中的脚本按要求实例化为单例。这允许在单个. groovy 文件中定义多个方法以方便使用。<br><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp5/23.png"><br><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp5/24.png"></p>
+<p>声明式Pipeline不允许在脚本指令之外使用全局变量用法 (JENKINS-42360)。</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp5/25.png"></p>
+<p>①    <font color="red">script</font>在声明式Pipeline中访问全局变量所需的脚本指令。<br>注意：在Jenkins加载并使用该库作为成功的Pipeline运行的一部分之后, 在共享库中定义的变量将只显示在全局变量引用 (在Pipeline Syntax中)。<br>警告：<br>避免在全局变量中保留状态<br>避免使用交互或保留状态的方法来定义全局变量。改用静态类或实例化类的局部变量。</p>
+<h4 id="Defining-custom-steps"><a href="#Defining-custom-steps" class="headerlink" title="Defining custom steps"></a>Defining custom steps</h4><p>共享库还可以定义与内置步骤 (如 <font color="red">sh</font> 或 <font color="red">git</font>git) 类似的全局变量。在共享库中定义的全局变量必须用所有 lower-case 或法则命名, 以便通过管道正确加载。</p>
+<p>例如, 要定义 sayHello, 应创建文件 vars/sayHello.groovy, 并应实现调用方法。调用方法允许以类似于步骤的方式调用全局变量:</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp5/26.png"></p>
+<p>Pipeline能引用和调用这个变量：</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp5/27.png"></p>
+<p>如果用块调用, 则<font color="red">调用</font>方法将接收<font color="red">关闭</font>。应显式定义该类型以阐明步骤的意图, 例如:</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp5/28.png"></p>
+<p>然后, Pipeline可以像任何接受块的内置步骤一样使用此变量:</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp5/29.png"></p>
+<h4 id="Defining-a-more-structured-DSL"><a href="#Defining-a-more-structured-DSL" class="headerlink" title="Defining a more structured DSL"></a>Defining a more structured DSL</h4><p>如果您有很多类似的管道, 则全局变量机制提供了一个方便的工具来构建一个 higher-level 的 DSL 来捕获相似性。例如, 所有的詹金斯插件都是以同样的方式构建和测试的, 所以我们可以写一个名为<font color="red">buildPlugin</font>的step。</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp5/30.png"></p>
+<p>假设脚本已作为全局共享库或文件夹级共享库加载, 结果 Jenkinsfile 将大大简化：</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp5/31.png"></p>
+<h4 id="Using-third-party-libraries"><a href="#Using-third-party-libraries" class="headerlink" title="Using third-party libraries"></a>Using third-party libraries</h4><p>可以使用 third-party 的 Java 库, 通常是在 Maven 中心, 从受信任的库代码使用<font color="red">@Grab</font>注释。有关细节, 请参阅Grape document, 但简单地把：</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp5/32.png"></p>
+<p>默认情况下, 第三方库被缓存在~/. groovy/grapes/Jenkins的master节点上。</p>
+<h4 id="Loading-resources"><a href="#Loading-resources" class="headerlink" title="Loading resources"></a>Loading resources</h4><p>外部库可以使用<font color="red">libraryResource</font> step从<font color="red">resources/</font>目录加载辅助文件。该参数是一个相对路径名, 类似于 Java 资源加载:。</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp5/33.png"></p>
+<p>该文件以字符串形式加载, 适合传递给某些 api 或使用 writeFile 保存到工作区。<br>最好使用一个唯一的包结构, 这样您就不会意外地与另一个库发生冲突。</p>
+<h4 id="Pretesting-library-changes"><a href="#Pretesting-library-changes" class="headerlink" title="Pretesting library changes"></a>Pretesting library changes</h4><p>如果您注意到在使用不受信任的库的生成中出现错误, 只需单击重播链接以尝试编辑其一个或多个源文件, 并查看所产生的生成是否按预期的方式工作。一旦你对结果满意，跟随Build状态页上的不同链接，应用不同的库变化，并保存到代码库中。</p>
+<p>(即使为库请求的版本是一个分支, 而不是像标记这样的固定版本, 重播的生成将使用与原始生成完全相同的修订: 将不会再次签出库源。</p>
+<p>受信任的库当前不支持重播。在重播过程中, 当前也不支持修改资源文件。</p>
+<h4 id="Defining-Declarative-Pipeline"><a href="#Defining-Declarative-Pipeline" class="headerlink" title="Defining Declarative Pipeline"></a>Defining Declarative Pipeline</h4><p>从2017年9月下旬发布的声明性1.2 开始, 可以定义声明性管道。也可在共享库中进行。下面是一个示例, 它将执行不同的声明管道, 具体取决于内部版本号是奇数还是偶数:</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp5/34.png"></p>
+<p>此时, 只能在共享库中定义整个Pipeline。这只能在”vars/*.groovy”，仅仅只能在一个方法调用中。在单个生成中只能执行一个声明性Pipeline, 如果尝试执行第二个Pipeline, 则生成结果将失败。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://roclli.github.io/2017/12/13/Pipeline5-Extending-with-Shared-Libraries/" data-id="cjb4meswg001q1r7sb5jgipgy" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Jenkins-Pipeline/">Jenkins; Pipeline</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Pipeline4-Using-Docker-with-Pipeline" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/12/12/Pipeline4-Using-Docker-with-Pipeline/" class="article-date">
+  <time datetime="2017-12-12T09:25:36.000Z" itemprop="datePublished">2017-12-12</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/12/12/Pipeline4-Using-Docker-with-Pipeline/">(原创)Pipeline4-Using-Docker-with-Pipeline</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><b>笔者是独立翻译实验，不允许转载<b></b></b></p>
+<h1 id="Using-Docker-with-Pipeline"><a href="#Using-Docker-with-Pipeline" class="headerlink" title="Using Docker with Pipeline"></a>Using Docker with Pipeline</h1><p>许多组织都是用Docker来统一编译和测试环境，提供一个发布应用的有效机制。从Pipeline 2.5版本或者更高，Pipeline内嵌支持同Jenkinsfile内Docker交互。<br>本章覆盖了使用Jenkinsfile内Docker基本使用，并不包括Docker的使用。关于Docker使用，请参考<a href="https://docs.docker.com/get-started/。" target="_blank" rel="noopener">https://docs.docker.com/get-started/。</a></p>
+<h2 id="Customizing-the-execution-environment"><a href="#Customizing-the-execution-environment" class="headerlink" title="Customizing the execution environment"></a>Customizing the execution environment</h2><p>Pipeline较早被设计使用Docker images作为执行环境，执行一个单独的stage或者整个Pipeline，意味着用户可以定义他们的Pipeline需要使用的工具，不必手动配置代理。实践上，任何工具都能被打包到Docker container中，能被一个Jenkinsfile容易使用。</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp4/1.jpg"></p>
+<p>当Pipeline执行的时候，Jenkins自动开启特定的container，执行里面定义的steps。</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp4/2.jpg"></p>
+<h4 id="Caching-data-for-containers"><a href="#Caching-data-for-containers" class="headerlink" title="Caching data for containers"></a>Caching data for containers</h4><p>许多编译工具会下载外部依赖，并把它们缓存在本地。因为containers初始化的时候是干净的文件系统，这能导致较小的Pipelines，因此他们并不能充分利用硬盘缓存的优势。<br>Pipeline支持添加定制化参数，参数能被传入到Docker中，允许用户指定特定的Docker Volumes去挂载，Volumes能被用来缓存代理上的数据。下面的例子将在Pipeline运行的时候，缓存~/.m2，可以避免重复下载依赖。</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp4/3.jpg"></p>
+<p><b>注意：实测表明<b></b></b></p>
+<p>使用本地机器的maven repo，不用再单独下载的技巧，要点在于</p>
+<p>(1).启动docker的时候就要传入repo</p>
+<p>(2).启动编译命令的时候，要再传一次repo，否则mvn会单独下载依赖的包</p>
+<h4 id="Using-multiple-containers"><a href="#Using-multiple-containers" class="headerlink" title="Using multiple containers"></a>Using multiple containers</h4><p>现在非常普遍，代码依赖多个，不同的技术。例如一个库既有Java-based的后端API实现，也有JavaScript基础的前端实现。组合Docker和Pipeline，允许Jenkinsfile通过agent{}在不同阶段使用多种技术。</p>
+<p>  <img src="http://oow5aq3zy.bkt.clouddn.com/image/pp4/4.jpg"></p>
+<h4 id="Using-a-Dockerfile"><a href="#Using-a-Dockerfile" class="headerlink" title="Using a Dockerfile"></a>Using a Dockerfile</h4><p>对于那些需要特定执行环境的项目，Pipeline同样支持在Dockerfile中创建和运行容器(container)。同前面使用”off-the-shell”容器相反，使用代理{dockerfile true}语法将创建新的image，而不是从Docker Hub拉取。</p>
+<p>重新使用前面的例子，用一个定制化的Dockerfile。</p>
+<p>Dockerfile</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp4/5.jpg"></p>
+<p>把这个提交到源代码库的根目录，Jenkinsfile被改变去构建一个基于这个Dockerfile的容器，用这个容器运行定义好的steps。</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp4/6.png"></p>
+<p><font color="red">agent { dockerfile true}</font>语法支持许多其他选项，关于这些选项详见<a href="https://jenkins.io/doc/book/pipeline/syntax#agent" target="_blank" rel="noopener">Pipeline Syntax</a>部分。</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp4/7.jpg"></p>
+<p>Using a Dockerfile with Jenkins Pipeline</p>
+<p><b>注意：笔者添加。<b></b></b></p>
+<p>其他一些使用说明，请参见：<a href="https://github.com/jenkinsci/pipeline-model-definition-plugin/wiki/Syntax-Reference" target="_blank" rel="noopener">https://github.com/jenkinsci/pipeline-model-definition-plugin/wiki/Syntax-Reference</a><br>其实本例的目的：仅仅只是制作了一个新的docker image，完全可以自己手动做，也可以使用linux shell脚本和docker配合使用做出来，不一定非要通过Jenkins的插件做。此方法的一个不好的地方就是：自己设置生成的image的名字以后，通过参数加进去，最终会出来两个一样的docker image，因为再生成的时候，必须要设置一个名字，哪怕是随机的名字。<br>参数如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">agent &#123; dockerfile true &#125;</span><br><span class="line">agent &#123;</span><br><span class="line">	dockerfile &#123;</span><br><span class="line">		additionalBuildArgs &apos;-t node-svn:7-alpine&apos;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="Specifying-a-Docker-label"><a href="#Specifying-a-Docker-label" class="headerlink" title="Specifying a Docker label"></a>Specifying a Docker label</h4><p>默认情况下，Pipeline假设任何配置的代理都能运行基于Docker的Pipeline。对于Jenkins环境，有macOS，Windows或者其他不能运行Docker代理，默认设置可能有问题。Pipeline在Manage Jenkins页面(manage Jenkins–&gt;Configuration)上提供一个全局选项。</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp4/8.jpg"></p>
+<p><b>注意：测试表明<b></b></b></p>
+<p>此label只是为了区分在哪个node上运行，本例运行的node label为:linux，其实换成master应该也可以，如果不设置，就会寻找一个默认的本地的符合条件的node执行。</p>
+<h2 id="Advanced-Usage-with-Scripted-Pipeline"><a href="#Advanced-Usage-with-Scripted-Pipeline" class="headerlink" title="Advanced Usage with Scripted Pipeline"></a>Advanced Usage with Scripted Pipeline</h2><h4 id="Running-“sidecar”-containers"><a href="#Running-“sidecar”-containers" class="headerlink" title="Running “sidecar” containers"></a>Running “sidecar” containers</h4><p>在Pipeline中使用Docker是运行服务/一套测试的一个有效方式，类似于sidecar模式，Docker Pipeline能在后台运行容器。使用sidecar方法，对于每一次Pipeline运行，Pipeline能有一个干净的容器。</p>
+<p>考虑一个依赖于本地MySQL数据库的集成测试套件。使用插件<a href="https://plugins.jenkins.io/docker-workflow" target="_blank" rel="noopener">docker-workflow</a>插件实现的withRun方法，一个能运行MySQL作为sidecar的Jenkinsfile文件：</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp4/9.jpg"></p>
+<p><b>注意：本例笔者运行失败。<b></b></b></p>
+<p>(1).本地必需安装有mysqladmin工具，否则执行失败。<br>(2).docker run -d -e MYSQL_ROOT_PASSWORD=my-secret-pw -p 3306:3306 mysql:5这样启动以后，确实发现container里面的mysql启动成功，但是如果使用docker run -d -e MYSQL_ROOT_PASSWORD=my-secret-pw -p 3306:3306 mysql:5 /bin/sh进去以后，发现mysql没有启动，或者说启动失败。</p>
+<p>示例可以更进一步，同时使用两个容器。一个”sidecar”运行MySQL，另一个用Docker container links提供执行环境。</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp4/10.jpg"></p>
+<p>上面的示例使用withRun暴露的对象，withRun有运行的容器ID。用容器ID，Pipeline能创建一个链接，通过传递客制化的Docker参数到inside()方法。</p>
+<p>Id属性对于查看正在运行容器的log同样有用：</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp4/011.jpg"></p>
+<p><b>注意：笔者实测，<b></b></b></p>
+<p>执行的sh命令都是在container里面执行的。所以起了两个container。</p>
+<h4 id="Building-containers"><a href="#Building-containers" class="headerlink" title="Building containers"></a>Building containers</h4><p>创建一个Docker image，插件docker-workflow同样提供一个<font color="red">build()</font>方法创建新的image，在Pipeline运行的时候，从代码库中的Dockerfile文件也能创建image。</p>
+<p>使用<font color="red">docker.build(“my-image-name”))</font>语法的一个主要好处：脚本是的Pipeline能使用返回值用于后面的Docker Pipeline调用，例如：</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp4/11.jpg"></p>
+<p>返回值能被用来保存Docker image到Docker Hub或者私有的Registry，通过<font color="red">push()</font>方法，例如：</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp4/12.jpg"></p>
+<p>Image的tag属性常用方法是<font color="red">latest</font>标记。<font color="red">push()</font>方法接受一个可选的<font color="red">tag</font>参数，允许Pipeline用不同的标记存储<font color="red">customImage</font>，例如：</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp4/13.jpg"></p>
+<p><b>笔者注：<b></b></b></p>
+<p>此类制作image，完全可以shell和docker独立做，如有必要，可以来此参照执行。</p>
+<h4 id="Using-a-remote-Docker-server"><a href="#Using-a-remote-Docker-server" class="headerlink" title="Using a remote Docker server"></a>Using a remote Docker server</h4><p>默认情况下，插件docker-workflow会和本地的Docker交互，典型的是通过<font color="red">/var/run/docker.sock</font>。</p>
+<p>选择一个不是非默认Docker server，例如Docker Swarm，<font color="red">withServer()</font>方法可以使用。</p>
+<p>通过传递一个URI，可选的Docker Server Certificate Authentication认证信息，方法如下：</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp4/14.jpg"></p>
+<p>注意：<font color="red">inside()</font>和<font color="red">build()</font>将不能同Docker Swarm server正常工作。</p>
+<p>对于函数<font color="red">inside()</font>正常执行，Docker server和Jenkins代理必须使用同样的文件系统，以便工作空间能被挂载。</p>
+<p>现在Jenkins插件和Docker CLI都不能自动检测远端server运行的case；一个典型的现象就是嵌套<font color="red">sh</font>命令出现错误，例如</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp4/15.jpg"></p>
+<p>当Jenkins检测到代理运行在Docker容器中的时候，它将自动传递<font color="red">–volumes-from</font>参数到<font color="red">inside</font>容器，确保它能同代理共享工作空间。<br>另外，一些Docker Swarm版本并不支持定制化的Registry。</p>
+<h4 id="Using-a-custom-registry"><a href="#Using-a-custom-registry" class="headerlink" title="Using a custom registry"></a>Using a custom registry</h4><p>默认情况下，docker-workflow插件使用默认的Docker Registry—Docker Hub。<br>为了使用定制化的Docker Registry，脚本是的Pipeline用户可以用withRegistry方法去包含steps，传递定制化的Registry URL，例如：</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp4/16.jpg"></p>
+<p>对于需要认证的Docker Registry，从Jenkins主页上添加用户名/密码项，并使用认证ID作为<font color="red">withRegistry()</font>的第二个参数。</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp4/17.jpg"></p>
+<p>注意：此类是制作docker image然后保存到私有的registry，可以shell和docker实现，如有必要，来此参照制作。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://roclli.github.io/2017/12/12/Pipeline4-Using-Docker-with-Pipeline/" data-id="cjb4meswg001n1r7s3yq7k55e" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Jenkins-Pipeline/">Jenkins; Pipeline</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Pipeline3-Branches-and-Pull-Requests" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/12/12/Pipeline3-Branches-and-Pull-Requests/" class="article-date">
+  <time datetime="2017-12-12T09:14:44.000Z" itemprop="datePublished">2017-12-12</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/12/12/Pipeline3-Branches-and-Pull-Requests/">(原创)Pipeline3-Branches-and-Pull-Requests</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><b>笔者是独立翻译实验，不允许转载<b></b></b></p>
+<h1 id="分支和拉取请求"><a href="#分支和拉取请求" class="headerlink" title="分支和拉取请求"></a>分支和拉取请求</h1><h2 id="Branches-and-Pull-Requests"><a href="#Branches-and-Pull-Requests" class="headerlink" title="Branches and Pull Requests"></a>Branches and Pull Requests</h2><p>在上一节中，实现了Jenkinsfile，这个文件能被迁入到源代码版本控制中。这部分涵盖了 Multibranch Pipeline的概念, 建立在Jenkinsfile基础上, 提供更多的动态和自动功能。</p>
+<h2 id="Creating-a-Multibranch-Pipeline"><a href="#Creating-a-Multibranch-Pipeline" class="headerlink" title="Creating a Multibranch Pipeline"></a>Creating a Multibranch Pipeline</h2><p>Multibranch Pipeline项目使得在同一个项目中不同的分支需要实现不同的Jenkinsfile。在一个Multibranch Pipeline项目中，Jenkins将为不同分支的Pipelines自动发现/管理/执行，不同的分支都包含一个Jenkinsfile文件。</p>
+<p>这将减少人工Pipeline的创建和管理。</p>
+<p>创建一个Multibranch Pipeline：</p>
+<p>•在Jenkins home页上点击”new Item”。</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp3/1.jpg"></p>
+<p>•为你的Pipeline输入名字，选择Multibranch Pipeline，然后点击OK。</p>
+<p>注意：Jenkins用Pipeline的名字在磁盘上创建目录。包含空格的Pipeline名字可能有未查到的bug，脚本不期望路径包含空格。</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp3/2.jpg"></p>
+<p>•添加一个Branch Source(例如Git)，输入源代码库的地址。</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp3/3.jpg"></p>
+<p>•保存多分支Pipeline项目。</p>
+<p>一旦保存，Jenkins将自动扫描代码库，为库中包含Jenkinsfile的每一个分支创建合适的项。</p>
+<p>默认情况下，Jenkins不会自动索引用于分支添加或删除的存储库 (除非使用组织文件夹), 因此将 Multibranch Pipeline配置为定期索引在配置中通常很有用:</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp3/4.jpg"></p>
+<h2 id="附加的环境变量-Additional-Environment-Variables"><a href="#附加的环境变量-Additional-Environment-Variables" class="headerlink" title="附加的环境变量(Additional Environment Variables)"></a>附加的环境变量(Additional Environment Variables)</h2><p>Multibranch Pipeline暴露了关于分支的附加信息，分支可以通过全局变量env创建，例如：<br>BRANCH_NAME<br>    这个Pipeline将要被执行的分支，例如master分支。<br>CHANGE_ID<br>    各种改变请求的标识符，例如a pull request号码/数字。</p>
+<h2 id="支持Pull-Requests-Supporting-Pull-Requests"><a href="#支持Pull-Requests-Supporting-Pull-Requests" class="headerlink" title="支持Pull Requests(Supporting Pull Requests)"></a>支持Pull Requests(Supporting Pull Requests)</h2><p>GitHub或者Bitbucket分支源，Multibranch Pipeline能被用来验证pull/change请求。这个功能被插件github-branch-source和插件cloudbees-bitbucket-branch-source提供。请查阅相关文档得到如何使用的进一步信息。</p>
+<h2 id="使用组织目录-Using-Organization-Folders"><a href="#使用组织目录-Using-Organization-Folders" class="headerlink" title="使用组织目录(Using Organization Folders)"></a>使用组织目录(Using Organization Folders)</h2><p>Organization Folder使Jenkins能监控整个GitHub组织或者Bitbucket Team/Project，自动为代码库创建新的Multibranch Pipeline项目，代码库包含分支和包含Jenkinsfile的pull request。<br>现在，这个功能仅仅存在于GitHub和bitbucket，功能分别被插件github-branch-source和插件cloudbees-bitbucket-branch-source提供。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://roclli.github.io/2017/12/12/Pipeline3-Branches-and-Pull-Requests/" data-id="cjb4meswf001l1r7sa4miwhe1" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Jenkins-Pipeline/">Jenkins; Pipeline</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Pipeline2-Using-a-Jenkinsfile" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/12/12/Pipeline2-Using-a-Jenkinsfile/" class="article-date">
+  <time datetime="2017-12-12T07:54:10.000Z" itemprop="datePublished">2017-12-12</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/12/12/Pipeline2-Using-a-Jenkinsfile/">(原创)Pipeline2-Using-a-Jenkinsfile</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><b>笔者是独立翻译实验，不允许转载<b></b></b></p>
+<h2 id="Using-a-Jenkinsfile"><a href="#Using-a-Jenkinsfile" class="headerlink" title="Using a Jenkinsfile"></a>Using a Jenkinsfile</h2><p>这部分基于前面<a href="https://jenkins.io/doc/book/pipeline/getting-started/" target="_blank" rel="noopener">Getting Started</a>所讲过的信息，介绍更有用的步骤(steps)，一般模式，一些非试用的<font color="red">Jenkinsfile</font>例子。</p>
+<p>创建一个<font color="red">Jenkinsfile</font>，然后把这个文件保存到源代码版本控制中(例如svn，git等)，会带来许多好处：</p>
+<ul>
+<li>对Pipeline中进行代码审查和迭代(review/iteration)</li>
+<li>Pipeline的审核和跟踪</li>
+<li>Pipeline唯一的真相来源，可以由项目的多个成员查看和编辑。</li>
+</ul>
+<p>Pipeline支持<a href="https://jenkins.io/doc/book/pipeline/syntax/" target="_blank" rel="noopener">两种语法</a>: 声明式 (在Pipeline2.5 中引入) 和脚本Pipeline。两者都支持构建持续集成的Pipeline。都可以被用来定义一个Pipeline，不管是在web UI上还是在<font color="red">Jenkinsfile</font>文件中，一般认为最好的实践是创建一个<font color="red">Jenkinsfile</font>文件，并放到源代码管理库中。</p>
+<h2 id="Creating-a-Jenkinsfile"><a href="#Creating-a-Jenkinsfile" class="headerlink" title="Creating a Jenkinsfile"></a>Creating a Jenkinsfile</h2><p>像前面<a href="https://jenkins.io/doc/book/pipeline/getting-started/#defining-a-pipeline-in-scm" target="_blank" rel="noopener">Getting Started</a>章节讨论的一样，<font color="red">Jenkinsfile</font>文件是一个文本文件，包含一个Jenkins Pipeline定义。考虑如下部分，实现了一个三阶段的持续集成pipeline。</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp2/1.jpg"></p>
+<p>并不是所有的Pipelines都有同样的三个阶段，但是对于大多数项目来说，这是一个很好的开始。下面的部分将说明一个简单的Pipeline的创建和执行。</p>
+<p>注意：假设已经为项目创建好了源代码版本库，并且一个Pipeline已经按照前面Getting Started步骤定义好了。</p>
+<p>用一个支持Groovy语法高亮的文本编辑器，创建一个新的Jenkinsfile文件，放到项目的根目录下。</p>
+<p>上面声明式的Pipeline例子包含实现一个持续集成pipeline最小的必须的结构。Agent指示符是必须的，告诉Jenkins为这个pipeline分配一个执行器和工作空间。没有agent指示符，不仅申明式的Pipeline不是合法的，而且它也不能做任何工作！默认情况下，agent指示符确保源代码库代码被签出，并且是有效的可以被后面阶段的步骤(steps)使用。</p>
+<p>对于一个有效的申明式的Pipeline，stage指示符和steps指示符同样是必须的，因为它们告诉Jenkins执行什么，哪个阶段做什么事情。</p>
+<p>对于脚本式Pipeline的更高级用法，上面例子中的node是至关重要的第一步，因为它为Pipeline申请了执行器和工作空间。确切的说，没有node，一个Pipeline不能做任何工作！在node里面，业务的第一个命令将是迁出源代码。因为Jenkinsfile文件是直接从源代码库中迁出，所以Pipeline提供了一个快速和容易的方式存取正确的源代码版本。</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp2/02.jpg"></p>
+<p>①    <font color="red">checkout</font>步骤将从源代码库中迁出代码；scm是一个特殊的变量，它将告诉checkout克隆特定的版本，然后触发Pipeline运行。</p>
+<p><b>注意，笔者实测如下：<b></b></b></p>
+<ul>
+<li><p>在脚本式Pipeline中<br>checkout([$class: ‘GitSCM’, branches: [[name: ‘*/master’]], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: ‘<a href="https://gitee.com/roclli/simple-maven-project-with-tests.git&#39;]]])。" target="_blank" rel="noopener">https://gitee.com/roclli/simple-maven-project-with-tests.git&#39;]]])。</a></p>
+</li>
+<li><p>申明式Pipeline(Jenkinsfile中)，采用checkout scm，会导致checkout两次，根据说明Specify where to obtain a source code repository containing your Groovy script. It will be checked out somewhere on the Jenkins master and used to load your Pipeline script. (If you wish to use other files from the same repository during your Pipeline, you will need to check them out separately on some slave; this checkout cannot be reused.)。</p>
+</li>
+</ul>
+<h2 id="Build"><a href="#Build" class="headerlink" title="Build"></a>Build</h2><p>许多使用Pipeline的项目开始工作第一步都是”编译(Build)”阶段。通常情况下, Pipeline的此阶段将是源代码的组装、编译或打包。Jenkinsfile文件并不是替代现有的编译工具例如GNU/Make，Maven，Gradle等等，但可以看作是一个粘合层, 以粘合绑定(bind)项目开发的多个阶段生命周期 (构建、测试、部署等) 一起。</p>
+<p>Jenkins有许多插件，可以调用几乎所有的构建工具，但是这个例子将简单的使用shell步骤(sh)调用make命令。sh假设系统是Unix/Linux，如果是Windows系统，将会使用bat。</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp2/2.jpg"></p>
+<p>①    <font color="red">sh</font>调用<font color="red">make</font>命令，将一直运行，如果命令返回0。任何非0的返回值都将使Pipeline失败。</p>
+<p>②    <font color="red">archiveArtifacts</font>捕获模式匹配(<font color="red">**/target/*.jar</font>)文件，并且把他们保存到Jenkins的master中。</p>
+<p>提示：存档文件不是使用外部文件资料库 (如 Artifactory 或Nexus) 的替代品, 应该只考虑基本的报告和档案存档。</p>
+<h2 id="Test"><a href="#Test" class="headerlink" title="Test"></a>Test</h2><p>运行自动测试是任何成功持续集成的关键组件。因此Jenkins有许多测试记录，报告，可视化插件。一般来说, 当有测试失败, 它是有用的，Jenkins会记录web UI中的报告和可视化失败。下面的示例使用junit步骤, 由<a href="https://plugins.jenkins.io/junit" target="_blank" rel="noopener">junit插件</a>提供。</p>
+<p>下面的例子，如果运行失败，Pipeline被标记不稳定”unstable”，在网页上用一个黄色的球标记。基于记录的测试报告，Jenkins同样提供历史趋势分析和可视化报告。</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp2/3.jpg"></p>
+<p>①    使用内置的shell条件(<font color="red">sh ‘make || true’</font>)确保<font color="red">sh</font>总是有一个0的返回值，这样使得<font color="red">junit</font>机会去捕获和处理测试报告。或者使用下面的处理失败[handing-failures]部分。<br>②    Junit捕获并关联Junit XML文件，模式匹配(<font color="red">**/target/*.xml</font>)</p>
+<p><b>注意：此处笔者测试下来是有出入的，区别在于脚本式Pipeline<b></b></b></p>
+<ul>
+<li>示例的stage必须放到stages里面，是和stage(‘Build’)并行的兄弟节点。</li>
+<li>stage里的内容(sh和junit必须放到steps里面)，否则会报错。</li>
+</ul>
+<h2 id="Deploy"><a href="#Deploy" class="headerlink" title="Deploy"></a>Deploy</h2><p>部署可能意味着各种步骤, 具体取决于项目或组织的要求，可能是从将生成的文件发布到 Artifactory 服务器的任何东西, 或者将代码推送到生产系统。</p>
+<p>在示例Pipeline的这个阶段，”Build”和”Test”阶段都已成功执行。因此发布阶段假设前面的阶段已经成功执行，否则Pipeline将退出。</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp2/4.jpg"></p>
+<p><font color="red">①</font>    读取currentBuild.result变量允许Pipeline判断是否有失败。这种情况之下，值是UNSTABLE。</p>
+<p>假设示例的Jenkins Pipeline都被成功执行，每一个成功的Pipeline部分都将会关联到存档文件，测试结果报告和控制台输出。</p>
+<p>脚本式的Pipeline能包含条件测试(像上面所示)，循环(loop)，try/catch/finally块，甚至函数。接下来的部分将详细讲解脚本式Pipeline语法的高级用法。</p>
+<p><b>注意：笔者测试下来<b></b></b></p>
+<p>(1).期间发现过无法读取currentBuild.result变量，此时提示” Cannot get property ‘currentBuild’ on null object”，故忽略此处的Deploy。env变量也是如此提示：Cannot get property ‘env’ on null object。最后实测发现：<br>脚本式Pipeline(web UI上面输入)，可以正确输出变量值，如下方式${env.BUILD_NUMBER}<br>申明式Pipeline(Jenkinsfile)，可以正确输出变量值，如下方式${env.BUILD_NUMBER}<br>可以正确用echo输出值，也可以用if判断值。代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">echo &quot;---$&#123;env.BUILD_NUMBER&#125;---&quot;</span><br><span class="line">echo &quot;---$&#123;currentBuild.result&#125;---&quot;</span><br><span class="line">if(currentBuild.result == null || currentBuild.result == &apos;SUCCESS&apos;) &#123;</span><br><span class="line">    echo &quot;---currentBuild.result is:$&#123;currentBuild.result&#125;------&quot;</span><br><span class="line">&#125;</span><br><span class="line">else &#123;</span><br><span class="line">    echo &quot;---currentBuild.result is:$&#123;currentBuild.result&#125;,so, will make publish&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>得到的结果如下几种情况：</p>
+<table><thead><tr><th>Cases结果</th><th>全局变量</th><th>备注</th></tr></thead><tbody><tr><td>1个skip，其他全对</td><td>61/null</td><td></td></tr><tr><td>1个error,其他全对</td><td>60/UNSTABLE</td><td>根据前面说明，只要有失败，就是UNSTABLE</td></tr><tr><td>全部正确</td><td>59/null</td><td></td></tr></tbody></table>
+
+
+<p>(2).申明式Jenkins Pipeline(Jenkinsfile)中，使用steps有报错提示：<br>WorkflowScript: 31: Expected a step @ line 31, column 17.。解决办法：添加script符号<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">stage(&apos;Deploy&apos;)&#123;</span><br><span class="line">    steps &#123;</span><br><span class="line">        script&#123;</span><br><span class="line">            echo &quot;---$&#123;env.BUILD_NUMBER&#125;---&quot;</span><br><span class="line">            echo &quot;---$&#123;currentBuild.result&#125;---&quot;</span><br><span class="line">            if(currentBuild.result == null || currentBuild.result == &quot;SUCCESS&quot;) &#123;</span><br><span class="line">                echo &quot;---currentBuild.result is:$&#123;currentBuild.result&#125;------&quot;</span><br><span class="line">            &#125;</span><br><span class="line">            else &#123;</span><br><span class="line">                echo &quot;---currentBuild.result is:$&#123;currentBuild.result&#125;,so, will make publish&quot;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="Pipeline高级语法-Advanced-Syntax-for-Pipeline"><a href="#Pipeline高级语法-Advanced-Syntax-for-Pipeline" class="headerlink" title="Pipeline高级语法(Advanced Syntax for Pipeline)"></a>Pipeline高级语法(Advanced Syntax for Pipeline)</h2><h4 id="字符串插值-String-Interpolation"><a href="#字符串插值-String-Interpolation" class="headerlink" title="字符串插值(String Interpolation)"></a>字符串插值(String Interpolation)</h4><p>Jenkins Pipeline使用与 Groovy 相同的规则来进行字符串插值。Groovy的字符串插值规则可能会让这个语言的初学者感到混乱。因为Groovy支持申明一个字符串使用单引号或者双引号，例如：</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp2/5.jpg"></p>
+<p>只有后一个字符串将支持基于美元符号 ($) 的字符串插值, 例如:</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp2/6.jpg"></p>
+<p>运行结果是：</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp2/7.jpg"></p>
+<p><b>笔者加：测试运行结果如下：<b><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Hello Mr. $&#123;username&#125;</span><br><span class="line">I said, Hello Mr. Jenkins</span><br></pre></td></tr></table></figure></b></b></p>
+<p>对于Pipeline的高级特性，理解怎样使用字符串插值是很重要。</p>
+<h2 id="环境变量-Working-with-the-Environment"><a href="#环境变量-Working-with-the-Environment" class="headerlink" title="环境变量(Working with the Environment)"></a>环境变量(Working with the Environment)</h2><p>Jenkins Pipeline通过全局变量env暴露了许多环境变量，env可以在Jenkindfile中任何地方使用。Jenkins中完整的环境变量列表请参见：localhost:8080/pipeline-syntax/globals#env(假设Jenkins运行在本地的8080端口)，环境变量包括：</p>
+<h6 id="BUILD-ID"><a href="#BUILD-ID" class="headerlink" title="BUILD_ID"></a>BUILD_ID</h6><p>当前的build ID，同BUILD_NUMBER一致。</p>
+<h6 id="JOB-NAME"><a href="#JOB-NAME" class="headerlink" title="JOB_NAME"></a>JOB_NAME</h6><p>被执行的项目的名字，例如foo或者foo/bar。</p>
+<h6 id="JENKINS-URL"><a href="#JENKINS-URL" class="headerlink" title="JENKINS_URL"></a>JENKINS_URL</h6><p>Jenkins的全URL，例如example.com:port/Jenkins/（注意：只有”System COnfiguration”中设置Jenkins URL以后才有效）</p>
+<p>引用或使用这些环境变量可以实现, 如访问Groovy 映射, 例如:</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp2/8.jpg"></p>
+<h4 id="设置环境变量-Setting-environment-variables"><a href="#设置环境变量-Setting-environment-variables" class="headerlink" title="设置环境变量(Setting environment variables)"></a>设置环境变量(Setting environment variables)</h4><p>在申明式Pipeline或者脚本式Pipeline中设置环境变量是不同的。<br>申明式Pipeline支持环境申明，而脚本式Pipeline必须使用withEnv。</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp2/9.jpg"></p>
+<p>①    一个<font color="red">environment</font>申明使用在pipeline块中，将对<font color="red">pipeline</font>中的所有step有效。<br>②    在<font color="red">stage</font>中的<font color="red">environment</font>申明将只对stage内的step有效。</p>
+<h2 id="参数-Parameters"><a href="#参数-Parameters" class="headerlink" title="参数(Parameters)"></a>参数(Parameters)</h2><p>声明式Pipeline支持现成的参数, 允许Pipeline接受用户通过<a href="https://jenkins.io/doc/book/pipeline/syntax/#parameters" target="_blank" rel="noopener">参数指令</a>在运行时指定参数。在脚本式Pipeline中配置参数，可以通过<font color="red">properties</font>实现，关于properties我们可以在Snippet Generator中找到。</p>
+<p>如果想要配置你的Pipeline接受Build With parameters的参数，那些参数是可以通过<font color="red">params</font>变量读取。</p>
+<p>假设一个名叫Greeting的字符串变量被配置在<font color="red">Jenkinsfile</font>中，那么可以通过<font color="red">${params.Greeting}</font>读取。</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp2/10.jpg"></p>
+<p><b>注意：笔者测试如下：本例如果是script(web UI上直接输入脚本方式)执行，会出现参数输入<b></b></b></p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp2/11.jpg"></p>
+<p>如果是Jenkisnfile(声明式执行)，会直接使用默认值Hello。</p>
+<h2 id="处理失败-Handling-Failures"><a href="#处理失败-Handling-Failures" class="headerlink" title="处理失败(Handling Failures)"></a>处理失败(Handling Failures)</h2><p>申明式Pipeline支持健壮的错误处理，默认通过它的post section处理，post section允许申明许多不同的”post conditions”，例如<font color="red">always</font>，<font color="red">unstable</font>，<font color="red">success</font>，<font color="red">failure</font>，和<font color="red">changed</font>。Pipeline<br>语法(<a href="https://jenkins.io/doc/book/pipeline/jenkinsfile/#syntax" target="_blank" rel="noopener">Pipeline Syntax</a>)部分提供更多的细节，怎样使用不同的post情况。</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp2/12.jpg"></p>
+<p>脚本式Pipeline依赖于Groovy内嵌的try/catch/finally语法处理Pipeline执行期间出现的错误。</p>
+<p>在上面的测试例子中，sh被修改永远不返回非0值(sh ‘make check || true’)。这个方法意味着接下来的阶段需要检查currentBuild.result去判断是否存在错误发生。</p>
+<p>另一种处理此问题的方法是使用一系列try/finally 块, 它可以保留Pipeline中故障的早期退出行为, 同时仍使 junit 有机会捕获测试报告：</p>
+<p><b>注意：笔者实测，申明式添加了post；其次mail的各参数，必须用单引号括起来。<b></b></b></p>
+<p>申明式(Jenkinsfile)邮件发送失败，以下两种方式都失败(脚本式Pipeline无邮件部分)：</p>
+<ul>
+<li>mail to: ‘a@b.com’, subject: ‘The Pipeline(handing failure) failed :(‘, body: ‘this is body’</li>
+<li>emailext body: ‘this is body’, subject: ‘title’, to: ‘ a@b.com ‘</li>
+</ul>
+<p>如果前面执行成功，那么就不会执行post里面的failure部分。</p>
+<h2 id="使用多个代理-Using-multiple-agents"><a href="#使用多个代理-Using-multiple-agents" class="headerlink" title="使用多个代理(Using multiple agents)"></a>使用多个代理(Using multiple agents)</h2><p>在所有前面的例子中，只使用一个代理。这意味着Jenkins分配的所有执行器，只有一个是有效的，无论它是如何被标记和配置。Pipeline允许在一个Jenkinsfile中使用多个代理，这对于高级的用户案例是很帮助的，例如在多个平台上执行builds/tests。</p>
+<p>在下面的例子中，Build阶段在一个代理上执行，build的结果将被两个子代理重用，在test阶段，标记linux和windows的两个代理是相互独立的。</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp2/13.jpg"></p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp2/14.jpg"></p>
+<p>①    stash允许捕获模式匹配的文件(<em>/target/</em>.jar)，只在同一个Pipeline其他地方重用。一旦Pipeline完成了执行，stash捕获的文件将被Jenkins master删除。</p>
+<p>②    在agent/node中的参数允许任何有效的Jenkins标签表达式。查阅”Pipeline Syntax” 部分可以更详细的信息。</p>
+<p>③    unstash 将从Jenkins主机中检索stash到Pipeline的当前工作区中。</p>
+<p>④    bat脚本允许在windows平台上执行脚本。</p>
+<p><b>注意：笔者实测<b></b></b></p>
+<p>(1).首先需要配置windows slave node，关于windows slave，需要配置master上已有的需要用到的环境变量：</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp2/15.jpg"></p>
+<p>(2).首先分别修改两个node的label为linux(master)和windows(slave)。</p>
+<h2 id="可选的step参数-Optional-step-arguments"><a href="#可选的step参数-Optional-step-arguments" class="headerlink" title="可选的step参数(Optional step arguments)"></a>可选的step参数(Optional step arguments)</h2><p>Pipeline遵循Groovy语言约定, 允许在方法参数周围省略括号。</p>
+<p>许多Pipeline steps还使用命名参数语法作为在Groovy中创建映射的简写形式, 它使用语法 [key1: value1、key2: value2]。使语句像以下功能等效：</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp2/16.jpg"></p>
+<p>方便起见，当参数只有一个参数的时候，参数名可以省略，例如：</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp2/17.jpg"></p>
+<h2 id="高级脚本Pipeline"><a href="#高级脚本Pipeline" class="headerlink" title="高级脚本Pipeline"></a>高级脚本Pipeline</h2><p>脚本Pipeline是一个domain-specific语言，基于Groovy，大多数的Groovy语法都能不用修改被用在脚本Pipeline中。</p>
+<h4 id="并行执行-Executing-in-parallel"><a href="#并行执行-Executing-in-parallel" class="headerlink" title="并行执行(Executing in parallel)"></a>并行执行(Executing in parallel)</h4><p>上面部分中的示例在一个线性序列中跨两个不同的平台运行测试。实践中，如果make check需要花30分钟执行完，”Test”阶段将花费60分钟完成。</p>
+<p>幸运的是，Pipeline具有内置的功能, 用于并行执行Pipeline脚本部分, 并在恰当命名的并行(parallel)步骤中实现。</p>
+<p>重构上面的示例以使用并行(parallel)步骤:</p>
+<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp2/18.jpg"></p>
+<p>不像原先的在linux和windows上线性执行，他们现在可以并行执行。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://roclli.github.io/2017/12/12/Pipeline2-Using-a-Jenkinsfile/" data-id="cjb4meswe001j1r7si534eb0c" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Pipeline-Jenkins/">Pipeline; Jenkins</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+
+
+  <nav id="page-nav">
+    
+    <a class="extend prev" rel="prev" href="/page/2/">&laquo; zurück</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/4/">weiter &raquo;</a>
+  </nav>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-OOM-Java内存溢出-OutOfMemoryError/">Java; OOM; Java内存溢出; OutOfMemoryError</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jenkins-Pipeline/">Jenkins; Pipeline</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jenkins-Pipeline-Docker/">Jenkins; Pipeline; Docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Pipeline-Jenkins/">Pipeline; Jenkins</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Pipeline-Jenkins-Docker/">Pipeline; Jenkins; Docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Pipeline-Jenkins-Docker-Dockerfile/">Pipeline; Jenkins; Docker; Dockerfile</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grep-linux-shell-log-file-check/">grep; linux shell; log file check</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Java-OOM-Java内存溢出-OutOfMemoryError/" style="font-size: 10px;">Java; OOM; Java内存溢出; OutOfMemoryError</a> <a href="/tags/Jenkins-Pipeline/" style="font-size: 13.33px;">Jenkins; Pipeline</a> <a href="/tags/Jenkins-Pipeline-Docker/" style="font-size: 10px;">Jenkins; Pipeline; Docker</a> <a href="/tags/Pipeline-Jenkins/" style="font-size: 20px;">Pipeline; Jenkins</a> <a href="/tags/Pipeline-Jenkins-Docker/" style="font-size: 10px;">Pipeline; Jenkins; Docker</a> <a href="/tags/Pipeline-Jenkins-Docker-Dockerfile/" style="font-size: 16.67px;">Pipeline; Jenkins; Docker; Dockerfile</a> <a href="/tags/grep-linux-shell-log-file-check/" style="font-size: 10px;">grep; linux shell; log file check</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archiv</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">letzter Beitrag</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/12/13/PP4-Demo-sidecar-script-2/">PP4-Demo-sidecar-script-2</a>
+          </li>
+        
+          <li>
+            <a href="/2017/12/13/PP4-Demo-sidecar-script-1/">PP4-Demo-sidecar-script-1</a>
+          </li>
+        
+          <li>
+            <a href="/2017/12/13/PP4-Demo-dockerfile-declarative/">PP4-Demo-dockerfile-declarative</a>
+          </li>
+        
+          <li>
+            <a href="/2017/12/13/PP4-Demo-multip-container-script/">PP4-Demo-multip-container-script</a>
+          </li>
+        
+          <li>
+            <a href="/2017/12/13/PP4-Demo-multip-container-declarative/">PP4-Demo-multip-container-declarative</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 roclli<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

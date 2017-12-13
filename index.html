@@ -68,10 +68,10 @@
       <div class="outer">
         <section id="main">
   
-    <article id="post-Pipeline7-Pipeline-Syntax" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-PP4-Demo-sidecar-script-2" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2017/12/13/Pipeline7-Pipeline-Syntax/" class="article-date">
-  <time datetime="2017-12-13T02:09:15.000Z" itemprop="datePublished">2017-12-13</time>
+    <a href="/2017/12/13/PP4-Demo-sidecar-script-2/" class="article-date">
+  <time datetime="2017-12-13T05:31:45.000Z" itemprop="datePublished">2017-12-13</time>
 </a>
     
   </div>
@@ -82,7 +82,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/12/13/Pipeline7-Pipeline-Syntax/">(原创)Pipeline7-Pipeline-Syntax</a>
+      <a class="article-title" href="/2017/12/13/PP4-Demo-sidecar-script-2/">PP4-Demo-sidecar-script-2</a>
     </h1>
   
 
@@ -90,164 +90,15 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p><b>笔者是独立翻译实验，不允许转载<b></b></b></p>
-<h1 id="Pipeline-Syntax"><a href="#Pipeline-Syntax" class="headerlink" title="Pipeline Syntax"></a>Pipeline Syntax</h1><p>本节基于入门中介绍的信息, 应仅作为参考进行处理。有关如何在实际示例中使用Pipeline语法的详细信息, 请参阅本章的 Jenkinsfile 部分。在Pipeline插件的2.5 版中, Pipeline支持两个离散的语法, 下面是详细的。对于每个优点和缺点, 请参见语法比较。</p>
-<p>正如在入门中所讨论的, Pipeline最基本的部分是步骤step。基本上, 步骤step告诉Jenkins该做什么, 并作为声明式和脚本式Pipeline语法的基本构造块。</p>
-<p>有关可用步骤的概述, 请参阅Pipeline步骤参考, 其中包含内置的步骤的全面列表以及插件提供的步骤。</p>
-<h2 id="Declarative-Pipeline"><a href="#Declarative-Pipeline" class="headerlink" title="Declarative Pipeline"></a>Declarative Pipeline</h2><p>声明式Pipeline是Jenkins Pipeline的一个相对最近的加法, 它在Pipeline子系统的顶部提供了一种更简化和自以为是的语法。</p>
-<p>所有有效的声明Pipeline必须包含在Pipeline块中, 例如:</p>
-<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp7/1.png"></p>
-<p>在声明性Pipeline中有效的基本语句和表达式遵循与 Groovy 语法相同的规则, 但有以下例外情况:</p>
-<ul>
-<li>Pipeline的 top-level 必须是一个块, 特别是: pipeline {}</li>
-<li>没有分号作为语句分隔符。每个语句都必须在自己的行上</li>
-<li>块必须由节、指令、步骤或赋值语句组成。</li>
-<li>属性引用语句被视为参数方法调用。例如, 输入被视为输入 ()</li>
-</ul>
-<h4 id="Sections"><a href="#Sections" class="headerlink" title="Sections"></a>Sections</h4><p>声明性Pipeline中的节通常包含一个或多个指令Directive或步骤steps。</p>
-<h5 id="agent"><a href="#agent" class="headerlink" title="agent"></a>agent</h5><p>代理部分指定在Jenkins环境中执行整个Pipeline或特定阶段的位置, 具体取决于代理部分的放置位置。该节必须在Pipeline块内的 top-level 中定义, 但阶段级别的时候使用是可选的。</p>
-<table><tr><td>Required</td><td>Yes</td></tr><tr><td>Parameters</td><td>Described below</td></tr><tr><td>Allowed</td><td>In the top-level pipeline block and each stage block</td></tr></table>
-
-<h5 id="Parameters"><a href="#Parameters" class="headerlink" title="Parameters"></a>Parameters</h5><p>为了支持Pipeline作者可能有的各种用例, 代理部分支持几种不同类型的参数。这些参数可在Pipeline块的 top-level 或每个阶段指令中应用。</p>
-<h6 id="any"><a href="#any" class="headerlink" title="any"></a>any</h6><p>在任何可用的代理上执行Pipeline或阶段。例如: 代理任何agent any。</p>
-<h6 id="none"><a href="#none" class="headerlink" title="none"></a>none</h6><p>当在Pipeline块的 top-level 应用时, 将不会为整个Pipeline运行分配全局代理, 并且每个阶段部分都需要包含其自己的代理部分。例如: 代理无agent none。</p>
-<h6 id="label"><a href="#label" class="headerlink" title="label"></a>label</h6><p>使用所提供的标签, 在Jenkins环境中可用的代理上执行Pipeline或stage。例如: 代理 {标签为‘my-defined-label’}。</p>
-<h6 id="node"><a href="#node" class="headerlink" title="node"></a>node</h6><p>agent{ node {label ‘labelName’}}}和agent { label ‘labelName’}一样，node允许附加的选项，例如customWorkspace。</p>
-<h6 id="docker"><a href="#docker" class="headerlink" title="docker"></a>docker</h6><p>对给定的容器执行Pipeline或stage, 在预先配置为接受 Docker-based Pipeline的节点上或在与可选的标签参数匹配的节点上动态调配。Docker还可以选择接受参数, 其中可能包含直接传递到docker运行调用的参数, 以及一个 alwaysPull 选项, 即使图像名称已存在, 也会强制执行docker。例如 agent { docker ‘maven：3-alpine’}</p>
-<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp7/2.png"></p>
-<h6 id="dockerfile"><a href="#dockerfile" class="headerlink" title="dockerfile"></a>dockerfile</h6><p>使用源存储库中包含的<font color="red">Dockerfile</font>生成的容器来执行Pipeline或stage。要想使用这个选项，<font color="red">Jenkinsfile</font>必须通过Multibranch Pipeline或者Pipeline from SCM。通常这是源存储库根目录中的 <font color="red">Dockerfile</font>：<font color="red">agent { dockerfile true }</font>。如果在另一个目录中生成<font color="red">Dockerfile</font>, 请使用<font color="red">dir</font>选项：<font color="red">agent { dockerfile { dir ‘somSubDir’} }</font>。您可以用<font color="red">additionalBuildArgs</font>选项传递参数到<font color="red">docker build……</font>命令中，像<font color="red">agent { dockerfile { additionalBuildArgs ‘–build-arg foo=bar’ } }</font>。</p>
-<h4 id="Common-Options"><a href="#Common-Options" class="headerlink" title="Common Options"></a>Common Options</h4><p>这些是可以应用两个或更多agent实现的几个选项。除非明确说明, 否则不是必需的。</p>
-<h6 id="Label"><a href="#Label" class="headerlink" title="Label"></a>Label</h6><p>一个字符串。要在其上运行Pipeline或单个stage的标签。<br>此选项对于node，docker和dockerfile有效，并且对node是必需的。</p>
-<h6 id="customWorkspace"><a href="#customWorkspace" class="headerlink" title="customWorkspace"></a>customWorkspace</h6><p>一个字符串。运行Pipeline或单个stage，此agent在该自定义工作区中应用, 而不是默认。它可以是相对路径, 在这种情况下, 自定义工作区将位于节点的工作区根目录下, 或者是绝对路径。例如：</p>
-<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp7/3.png"></p>
-<p>此选项对于node，docker和dockerfile有效。</p>
-<h6 id="reuseNode"><a href="#reuseNode" class="headerlink" title="reuseNode"></a>reuseNode</h6><p>布尔值, 默认为 false。如果为 true, 则在Pipeline的 top-level 上指定的节点上, 在同一工作区中, 而不是在新节点上运行容器。</p>
-<p>此选项对<font color="red">docker</font>和<font color="red">dockerfile</font>有效, 并且仅在用于单个<font color="red">stage</font>的<font color="red">agent</font>时具有效果。</p>
-<h4 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h4><p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp7/4.png"></p>
-<p>①在新创建的给定名称和标记(<font color="red">maven:3-alpine</font>)容器中, 执行此Pipeline中定义的所有步骤。</p>
-<p>Stage-level <font color="red">agent</font>部分<br><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp7/5.png"></p>
-<ul>
-<li><p>在Pipeline的 top-level 定义agent none, 确保不会不必要地分配执行器。使用agent none 还强制每个stage部分包含其自己的agent部分。</p>
-</li>
-<li><p>使用此image在新创建的容器中执行此阶段中的步骤。</p>
-</li>
-<li><p>使用上一个阶段的不同image, 在新创建的容器中执行此阶段中的步骤。</p>
-</li>
-</ul>
-<h4 id="Post"><a href="#Post" class="headerlink" title="Post"></a>Post</h4><p>post 部分定义将在Pipeline运行或阶段结束时运行的操作。post 部分中支持许多条件块: 始终(<font color="red">always</font>)、已更改(<font color="red">changed</font>)、失败(<font color="red">failure</font>)、成功(<font color="red">success</font>)、不稳定(<font color="red">unstable</font>)和中止(<font color="red">aborted</font>)。这些块允许在Pipeline运行或阶段的末尾执行步骤, 具体取决于管线的状态。</p>
-<table><thead><tr><th>Required</th><th>No</th></tr></thead><tbody><tr>  <td>Parameters</td><td>None</td></tr><tr><td>Allowed</td><td>In the top-level <font color="red">pipeline</font> block and each <font color="red">stage</font> block</td></tr></tbody></table>
-
-<h4 id="Conditions"><a href="#Conditions" class="headerlink" title="Conditions"></a>Conditions</h4><font color="red">always</font>
-
-<p>无论Pipeline运行的完成状态如何, 都将运行。</p>
-<font color="red">changed</font>
-
-<p>仅当当前Pipeline运行与以前完成的Pipeline的状态不同时才运行。</p>
-<font color="red">failure</font>
-
-<p>只有在当前Pipeline出现故障状态时才运行, 通常在 web UI 中用红色指示表示。</p>
-<font color="red">success</font>
-
-<p>只有在当前Pipeline具有成功状态时才运行, 通常在 web UI 中用蓝色或绿色表示。</p>
-<font color="red">unstable</font>
-
-<p>只有在当前Pipeline的状态不稳定时才运行, 通常是由测试失败、代码违规等引起的。通常用黄色指示在 web UI 中表示。</p>
-<font color="red">aborted</font>
-
-<p>仅在当前Pipeline具有中止状态时运行, 通常是由于Pipeline被手动中止。通常在 web UI 中用灰色指示表示。</p>
-<h4 id="Example-1"><a href="#Example-1" class="headerlink" title="Example"></a>Example</h4><p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp7/6.png"></p>
-<ul>
-<li><p>通常情况下, post部分应放置在Pipeline的末尾。</p>
-</li>
-<li><p>Post-condition块包含与steps部分相同的steps。</p>
-</li>
-</ul>
-<h4 id="stages"><a href="#stages" class="headerlink" title="stages"></a>stages</h4><p>包含一个或多个stage指令的序列, stages部分是Pipeline所描述的大部分”work”的位置。至少建议stages对连续传递过程中的每个离散部分 ，如生成、测试和部署， 至少包含一个阶段指令。</p>
-<table><thead><tr><th>Required</th><th>Yes</th></tr></thead><tbody><tr><td>Parameters</td><td>None</td></tr><tr><td>Allowed</td><td>Only once, inside the <font color="red">pipeline</font> block</td></tr></tbody></table>
-
-<h4 id="Example-2"><a href="#Example-2" class="headerlink" title="Example"></a>Example</h4><p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp7/7.png"></p>
-<ul>
-<li>stage部分通常遵循指令, 如代理<font color="red">agent</font>、选项<font color="red">options</font>等。</li>
-</ul>
-<h4 id="steps"><a href="#steps" class="headerlink" title="steps"></a>steps</h4><p>steps部分在指定的stage指令中定义一系列一个或多个将要执行的steps。</p>
-<table><thead><tr><th>Required</th><th>Yes</th></tr></thead><tbody><tr><td>Parameters</td><td>None</td></tr><tr><td>Allowed</td><td>inside each <font color="red">stage</font> block</td></tr></tbody></table>
-
-<h4 id="Example-3"><a href="#Example-3" class="headerlink" title="Example"></a>Example</h4><p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp7/8.png"></p>
-<ul>
-<li>steps部分包含一个或多个steps。</li>
-</ul>
-<h4 id="Directives"><a href="#Directives" class="headerlink" title="Directives"></a>Directives</h4><h6 id="environment"><a href="#environment" class="headerlink" title="environment"></a>environment</h6><p>环境<font color="red">environment</font>指令指定一个键值对序列, 它将被定义为所有steps的环境变量, 或特定阶段的steps, 具体取决于环境<font color="red">environment</font>指令在Pipeline中的位置。</p>
-<p>此指令支持一种特殊的方法<font color="red">credentials()</font>, 可用于通过Jenkins环境中的标识符来访问预定义的凭据。对于类型为机密文本的凭据, credentials()方法将确保指定的环境变量包含秘密文本内容。对于类型为标准用户名和密码的凭据, 指定的环境变量将被设置为<font color="red">用户名: 密码</font>和另外两个环境变量将被自动定义：<font color="red">MYVARNAME_USR</font>和<font color="red">MYVARNAME_PSW</font>。</p>
-<table><thead><tr><th>Required</th><th>No</th></tr></thead><tbody><tr><td>Parameters</td><td>None</td></tr><tr><td>Allowed</td><td>inside the <font color="red">pipeline</font> block, or within <font color="red">stage</font> directives</td></tr></tbody></table>
-
-<h6 id="Example-4"><a href="#Example-4" class="headerlink" title="Example"></a>Example</h6><p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp7/9.png"></p>
-<ul>
-<li>top-level Pipeline块中使用的environment指令将应用于Pipeline中的所有步骤。</li>
-<li>在stage中定义的environment指令只将给定的环境变量应用于stage中的步骤。</li>
-<li>environment块具有定义的帮助方法credentials() 可用于通过Jenkins环境中的标识符来访问预定义的凭据。</li>
-</ul>
-<h4 id="Options"><a href="#Options" class="headerlink" title="Options"></a>Options</h4><font color="red">options</font>指令允许在管线本身内配置Pipeline特定的选项。Pipeline提供了许多这些选项, 如<font color="red">buildDiscarder</font>, 但它们也可能由插件提供, 如时间戳<font color="red">timestamps</font>。<br><table><thead><tr><th>Required</th><th>No</th></tr></thead><tbody><tr><td>Parameters</td><td>None</td></tr><tr><td>Allowed</td><td>Only Once, inside the <font color="red">pipeline</font> block</td></tr></tbody></table><br><br>#### Available Options<br><br>###### buildDiscarder<br><br>持久性工件(Persist artifacts)和控制台输出的特定数量的最近Pipeline运行。例如：<font color="red">options { buildDiscarder(logRotator(numToKeepStr: ‘1’)) }</font>。<br><br>###### disableConcurrentBuilds<br>不允许并发执行Pipeline。可用于防止同时访问共享资源等。例如：<font color="red">options { disableConcurrentBuilds() }</font>。<br><br>###### overrideIndexTriggers<br>允许重写分支索引触发器的默认处理。如果在 multibranch 或组织标签中禁用了分支索引触发器, 则<font color="red">options {overrideIndexTriggers (true)}</font>将仅为该作业启用它们。否则,<font color="red">options {overrideIndexTriggers (false)}</font>将仅禁用此作业的分支索引触发器。<br><br>###### skipDefaultCheckout<br>在agent指令中, 在默认情况下跳过源代码管理中的签出。例如: <font color="red">options {skipDefaultCheckout ()}</font>。<br><br>###### skipStageAfterUnstable<br>一旦生成状态不稳定, 就跳过各个阶段。例如: <font color="red">options {skipStagesAfterUnstable ()}</font>。<br><br>###### timeout<br>设置Pipeline运行的超时期限, 之后Jenkins应中止Pipeline。例如: <font color="red">options { timeout(time: 1, unit: ‘HOURS’) }</font>。<br><br>###### retry<br>失败时, 请在指定的次数内重试整个管线。例如: <font color="red">options { retry(3) }</font>。<br><br>###### timestamps<br>将管线所生成的所有控制台输出与发出该行的时间放在一起。例如: <font color="red">options { timestamps() }</font>。<br><br>###### Examples<br><br><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp7/10.png"><br><br>* 指定一个小时的全局执行超时, 之后Jenkins将中止Pipeline运行。<br>提示：可供选择的综合清单尚待<a href="https://issues.jenkins-ci.org/browse/INFRA-1053" target="_blank" rel="noopener">INFRA-1503</a>完成。<br><br>#### parameters<br>参数<font color="red">parameters</font>指令提供用户在触发Pipeline时应提供的参数列表。这些用户指定的参数的值可通过参数<font color="red">params</font>对象提供给Pipeline steps, 请参阅<a href="https://jenkins.io/doc/book/pipeline/syntax/#parameters-example" target="_blank" rel="noopener">]示例</a>中的特定用法。<br><table><thead><tr><th>Required</th><th>No</th></tr></thead><tbody><tr><td>Parameters</td><td>None</td></tr><tr><td>Allowed</td><td>Only Once, inside the <font color="red">pipeline</font> block</td></tr></tbody></table><br><br>#### Available Parameters<br>###### string<br>字符串类型参数，例如：<font color="red">parameters { string(name: ‘DEPLOY_ENV’, defaultValue: ‘staging’, description: ‘’) }</font>
-
-<h6 id="booleanParam"><a href="#booleanParam" class="headerlink" title="booleanParam"></a>booleanParam</h6><p>布尔值参数，例如：<font color="red">parameters { booleanParam(name: ‘DEBUG_BUILD’, defaultValue: true, description: ‘’) }</font></p>
-<h4 id="Examples"><a href="#Examples" class="headerlink" title="Examples"></a>Examples</h4><p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp7/11.png"></p>
-<p>提示：可供选择的综合清单尚待<a href="https://issues.jenkins-ci.org/browse/INFRA-1053" target="_blank" rel="noopener">INFRA-1503</a>完成。</p>
-<h6 id="Triggers"><a href="#Triggers" class="headerlink" title="Triggers"></a>Triggers</h6><p><font color="red">triggers</font>指令定义了Pipeline应 re-triggered 的自动方式。对于与源 (如 GitHub 或 BitBucket) 集成的管线, 可能不需要<font color="red">triggers</font>, 因为 webhooks-based 集成可能已经存在。当前可用的触发器有 <font color="red">cron</font>、<font color="red">pollSCM</font> 和<font color="red">upstream</font>。</p>
-<table><thead><tr><th>Required</th><th>No</th></tr></thead><tbody><tr><td>Parameters</td><td>None</td></tr><tr><td>Allowed</td><td>Only Once, inside the <font color="red">pipeline</font> block</td></tr></tbody></table>
-
-<h6 id="Cron"><a href="#Cron" class="headerlink" title="Cron"></a>Cron</h6><p>接受一个 cron 样式的字符串来定义Pipeline应 re-triggered 的规则间隔。例如：<font color="red">triggers { cron(‘H */4 <em> </em> 1-5’) }</font>。</p>
-<h6 id="pollSCM"><a href="#pollSCM" class="headerlink" title="pollSCM"></a>pollSCM</h6><p>接受一个 cron 样式的字符串来定义一个规则的时间间隔, 詹金斯应该检查新的源更改。例如：<font color="red">triggers { pollSCM(‘H */4 <em> </em> 1-5’) }</font>。</p>
-<h6 id="upstream"><a href="#upstream" class="headerlink" title="upstream"></a>upstream</h6><p>接受一个逗号分隔的作业字符串和一个阈值。当字符串中的任何作业以最小阈值结束时, 管线将被 re-triggered。例如：<font color="red">triggers { upstream(upstreamProjects: ‘job1,job2’, threshold: hudson.model.Result.SUCCESS) }</font>。<br>提示：pollSCM触发器只在Jenkins版本2.22或者以后有效。。</p>
-<h6 id="Example-5"><a href="#Example-5" class="headerlink" title="Example"></a>Example</h6><p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp7/12.png"></p>
-<h6 id="stage"><a href="#stage" class="headerlink" title="stage"></a>stage</h6><p><font color="red">stage</font>指令进入<font color="red">stages</font>部分，应该包含一个steps部分，一个可选的agent部分，或者其它特殊平台指令。实际上, Pipeline所完成的所有工作都将在一个或多个<font color="red">stage</font>指令中进行包装。</p>
-<table><thead><tr><th>Required</th><th>At least one</th></tr></thead><tbody><tr><td>Parameters</td><td>One mandatory parameter, a string for the name of the stage.</td></tr><tr><td>Allowed</td><td>Inside the <font color="red">stages</font> section</td></tr></tbody></table>
-
-<h6 id="Example-6"><a href="#Example-6" class="headerlink" title="Example"></a>Example</h6><p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp7/13.png"></p>
-<h6 id="tools"><a href="#tools" class="headerlink" title="tools"></a>tools</h6><p>定义用于自动和放置<font color="red">PATH</font>的工具的部分。如果<font color="red">agent none</font>指定, 则忽略此项。</p>
-<table><thead><tr><th>Required</th><th>No</th></tr></thead><tbody><tr><td>Parameters</td><td>None</td></tr><tr><td>Allowed</td><td>Inside the <font color="red">pipeline</font> block or a <font color="red">stage</font> block.</td></tr></tbody></table>
-
-
-<h6 id="Supported-Tools"><a href="#Supported-Tools" class="headerlink" title="Supported Tools"></a>Supported Tools</h6><h6 id="maven"><a href="#maven" class="headerlink" title="maven"></a>maven</h6><h6 id="jdk"><a href="#jdk" class="headerlink" title="jdk"></a>jdk</h6><h6 id="gradle"><a href="#gradle" class="headerlink" title="gradle"></a>gradle</h6><h6 id="Example-7"><a href="#Example-7" class="headerlink" title="Example"></a>Example</h6><p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp7/14.png"></p>
-<ul>
-<li>工具名称必须在Jenkins中预先配置：Manage Jenkins → Global Tool Configuration。</li>
-</ul>
-<h6 id="when"><a href="#when" class="headerlink" title="when"></a>when</h6><p><font color="red">when</font>指令允许Pipeline根据给定的条件来决定是否执行stage。<font color="red">when</font>指令必须包含至少一个条件。如果<font color="red">when</font>指令包含多个条件时, 所有子条件必须返回 true 才能执行阶段。这与子条件嵌套在<font color="red">allof</font>条件下的情况相同 (请参见下面的<a href="https://jenkins.io/doc/book/pipeline/syntax/#when-example" target="_blank" rel="noopener">示例</a>)。</p>
-<p>可以使用嵌套条件构建更复杂的条件结构: <font color="red">not</font>、<font color="red">allOf</font>或<font color="red">anyOf</font>。嵌套条件可以嵌套到任意深度。</p>
-<table><thead><tr><th>Required</th><th>No</th></tr></thead><tbody><tr><td>Parameters</td><td>None</td></tr><tr><td>Allowed</td><td>Inside a <font color="red">stage</font> directive</td></tr></tbody></table>
-
-<h6 id="Built-in-Conditions"><a href="#Built-in-Conditions" class="headerlink" title="Built-in Conditions"></a>Built-in Conditions</h6><h6 id="branch"><a href="#branch" class="headerlink" title="branch"></a>branch</h6><p>在所构建的分支与给定的分支模式匹配时执行stage，例如：<font color="red">when { branch ‘master’ }</font>。注意：这仅仅在multibranch Pipeline有效。</p>
-<h6 id="environment-1"><a href="#environment-1" class="headerlink" title="environment"></a>environment</h6><p>特殊环境变量被设置给定值以后，执行stage，例如：<font color="red">when { environment name: ‘DEPLOY_TO’, value: ‘production’ }</font>。</p>
-<h6 id="expression"><a href="#expression" class="headerlink" title="expression"></a>expression</h6><p>当指定的Groovy表达式计算为真时执行stage，例如：<font color="red">when { expression { return params.DEBUG_BUILD } }</font>。</p>
-<h6 id="not"><a href="#not" class="headerlink" title="not"></a>not</h6><p>当嵌套条件为假时执行stage。例如：<font color="red">when { not { branch ‘master’ } }</font>。</p>
-<h6 id="allOf"><a href="#allOf" class="headerlink" title="allOf"></a>allOf</h6><p>当所有嵌套条件为真时执行stage。必须包含至少一个条件，例如：<font color="red">when { allOf { branch ‘master’; environment name: ‘DEPLOY_TO’, value: ‘production’ } }</font>。</p>
-<h6 id="anyOf"><a href="#anyOf" class="headerlink" title="anyOf"></a>anyOf</h6><p>当至少一个前条件为真时执行stage。必须包含至少一个条件，例如：<font color="red">when { anyOf { branch ‘master’; branch ‘staging’ } }</font>。</p>
-<h6 id="Examples-1"><a href="#Examples-1" class="headerlink" title="Examples"></a>Examples</h6><p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp7/15.png"></p>
-<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp7/16.png"></p>
-<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp7/17.png"></p>
-<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp7/18.png"></p>
-<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp7/19.png"></p>
-<h2 id="Parallel"><a href="#Parallel" class="headerlink" title="Parallel"></a>Parallel</h2><p>申明式Pipeline中有可能在里面申明许多嵌套的stages，这些stage将被并行执行。请注意, 一个stage必须有一个且只有一个<font color="red">steps</font>或<font color="red">parallel</font>。嵌套stage本身不能包含进一步的<font color="red">parallel</font> stages, 但其他的行为与其他<font color="red">stages</font>相同。包含<font color="red">parallel</font>的任何stage都不能包含<font color="red">agent</font>或<font color="red">tools</font>, 因为没有<font color="red">steps</font>，他们并不具有相关性。</p>
-<p>此外, 您可以强制您的<font color="red">parallel stage</font>全部被中止, 当其中一个失败, 通过增加’failFast true’到包含<font color="red">parallel</font>的<font color="red">stage</font>。</p>
-<h4 id="Example-8"><a href="#Example-8" class="headerlink" title="Example"></a>Example</h4><p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp7/20.png"></p>
-<h2 id="Steps"><a href="#Steps" class="headerlink" title="Steps"></a>Steps</h2><p>声明式Pipeline可能会使用<a href="https://jenkins.io/doc/pipeline/steps" target="_blank" rel="noopener">Pipeline steps reference</a>中记录的所有可用steps, 其中包含一个完整的steps列表, 其中添加了仅在声明性Pipeline中支持的下面列出的steps。</p>
-<h6 id="script"><a href="#script" class="headerlink" title="script"></a>script</h6><p>script step采用了一个<a href="https://jenkins.io/doc/book/pipeline/syntax/#scripted-pipeline" target="_blank" rel="noopener">脚本化的Pipeline块</a>, 并在声明性Pipeline中执行。对于大多数用例, 脚本步骤在声明性Pipeline中应该是不必要的, 但它可以提供一个有用的”escape hatch”。 Script块和/或复杂性的脚本script块应该改为<a href="https://jenkins.io/doc/book/pipeline/shared-libraries/" target="_blank" rel="noopener">]共享库</a>。</p>
-<h6 id="Example-9"><a href="#Example-9" class="headerlink" title="Example"></a>Example</h6><p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp7/21.png"></p>
-<h2 id="Scripted-Pipeline"><a href="#Scripted-Pipeline" class="headerlink" title="Scripted Pipeline"></a>Scripted Pipeline</h2><p>脚本化Pipeline (如<a href="https://jenkins.io/doc/book/pipeline/syntax/#declarative-pipeline" target="_blank" rel="noopener">声明式Pipeline</a>) 建立在底层管线子系统的顶部。不像声明式, 脚本Pipeline是有效的通用 DSL 内置的 Groovy。Groovy 语言提供的大多数功能都可供脚本Pipeline用户使用, 这意味着它可以是一个非常富有表现力和灵活性的工具, 可以创作连续的交付Pipeline。</p>
-<h2 id="Flow-Control"><a href="#Flow-Control" class="headerlink" title="Flow Control"></a>Flow Control</h2><p>脚本化Pipeline从 Jenkinsfile 的顶部向下连续执行, 就像 Groovy 或其他语言中的大多数传统脚本一样。因此, 提供流控制依赖于 Groovy 表达式, 如 if/else 条件, 例如:<br><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp7/22.png"></p>
-<p>通过 Groovy 的异常处理支持, 可以管理另一种脚本式Pipeline流控制。当steps因任何原因而失败时, 它们抛出一个异常。错误处理行为必须使用 Groovy 中的 try/catch/finally 块, 例如:<br><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp7/23.png"></p>
-<h2 id="Steps-1"><a href="#Steps-1" class="headerlink" title="Steps"></a>Steps</h2><p>正如在入门中所讨论的, Pipeline最基本的部分是”step”。从根本上讲, step告诉Jenkins该做什么, 并充当声明性和脚本化Pipeline语法的基本构建基块。<br>脚本Pipeline不引入特定于其语法的任何steps; <a href="https://jenkins.io/doc/pipeline/steps" target="_blank" rel="noopener">Pipeline Steps reference</a>, 其中包含Pipeline和插件提供的steps的全面列表。</p>
-<h2 id="Differences-from-plain-Groovy"><a href="#Differences-from-plain-Groovy" class="headerlink" title="Differences from plain Groovy"></a>Differences from plain Groovy</h2><p>为了提供耐用性, 这意味着运行Pipeline可以生存的Jenkins master重启, 脚本Pipeline必须序列化数据回master。由于这一设计要求, 一些 Groovy 成语如<font color="red">collection.each { item -&gt; /* perform operation */ }</font>不完全受支持。有关详细信息, 请参阅 <a href="https://issues.jenkins-ci.org/browse/JENKINS-27421" target="_blank" rel="noopener">JENKINS-27421</a> 和 <a href="https://issues.jenkins-ci.org/browse/JENKINS-26481" target="_blank" rel="noopener">JENKINS-26481</a>。</p>
-<h2 id="Syntax-Comparison"><a href="#Syntax-Comparison" class="headerlink" title="Syntax Comparison"></a>Syntax Comparison</h2><p>当Jenkins Pipeline首次创建时, Groovy 被选为基础。Jenkins长期推出了一个嵌入式的 Groovy 引擎, 为管理员和用户提供高级脚本功能。此外, Jenkins Pipeline的实现基于 Groovy 的基础上, 建立现在称为”脚本Pipeline” DSL。</p>
-<p>由于它是一个功能完备的编程环境, 因此脚本化的管道为Jenkins用户提供了大量的灵活性和可扩展性。对于给定团队的所有成员来说, Groovy 学习曲线通常并不可取, 因此创建了声明性Pipeline, 为创作Jenkins Pipeline提供了更简单、更可用的语法。</p>
-<p>两者基本上是相同的Pipeline子系统下面。它们都是作为”代码即管道(Pipeline as code)”的持久实现。他们都能够使用Pipeline内置的steps或由插件提供。都可以利用<a href="https://jenkins.io/doc/book/pipeline/shared-libraries/" target="_blank" rel="noopener">共享库</a>。</p>
-<p>然而他们不同的地方在句法和灵活性。声明性限制用户使用更严格和预先定义的结构, 使其成为更简单的连续传递Pipeline的理想选择。脚本提供的限制很少, 因为结构和语法的唯一限制往往是由 Groovy 本身定义的, 而不是任何特定于Pipeline的系统, 这使得它成为了电力用户和更复杂需求的理想选择。顾名思义, 声明性Pipeline是鼓励一个声明式编程模型。而脚本化的Pipeline遵循更命令性的编程模型。</p>
+        <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">node &#123;</span><br><span class="line">//    checkout scm</span><br><span class="line">    docker.image(&apos;mysql:5&apos;).withRun(&apos;-e &quot;MYSQL_ROOT_PASSWORD=my-secret-pw&quot;&apos;) &#123; c -&gt;</span><br><span class="line">        docker.image(&apos;mysql:5&apos;).inside(&quot;--link $&#123;c.id&#125;:db&quot;) &#123;</span><br><span class="line">            /* Wait until mysql service is up */</span><br><span class="line">            echo &quot;---1output cat /etc/os-release end---&quot;</span><br><span class="line">            sh &quot;cat /etc/os-release&quot;</span><br><span class="line">            echo &quot;---1output cat /etc/os-release end---&quot;</span><br><span class="line">            sh &apos;while ! mysqladmin ping -hdb --silent; do sleep 1; done&apos;</span><br><span class="line">        &#125;</span><br><span class="line">        docker.image(&apos;centos:7&apos;).inside(&quot;--link $&#123;c.id&#125;:db&quot;) &#123;</span><br><span class="line">            /*</span><br><span class="line">             * Run some tests which require MySQL, and assume that it is</span><br><span class="line">             * available on the host name `db`</span><br><span class="line">             */</span><br><span class="line">//            sh &apos;make check&apos;</span><br><span class="line">            echo &quot;---2output cat /etc/os-release end---&quot;</span><br><span class="line">            sh &quot;cat /etc/os-release&quot;</span><br><span class="line">            echo &quot;---2output cat /etc/os-release end---&quot;</span><br><span class="line">            echo &quot;---run test whcih require MySQL---&quot;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://roclli.github.io/2017/12/13/Pipeline7-Pipeline-Syntax/" data-id="cjb4ibanv0009ib7s4la70xzu" class="article-share-link">Teilen</a>
+      <a data-url="https://roclli.github.io/2017/12/13/PP4-Demo-sidecar-script-2/" data-id="cjb4meswc001e1r7syyabhd38" class="article-share-link">Teilen</a>
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Jenkins-Pipeline-Docker/">Jenkins; Pipeline; Docker</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Pipeline-Jenkins-Docker-Dockerfile/">Pipeline; Jenkins; Docker; Dockerfile</a></li></ul>
 
     </footer>
   </div>
@@ -256,10 +107,10 @@
 
 
   
-    <article id="post-Pipeline6-Pipeline-Development-Tools" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-PP4-Demo-sidecar-script-1" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2017/12/13/Pipeline6-Pipeline-Development-Tools/" class="article-date">
-  <time datetime="2017-12-13T01:58:11.000Z" itemprop="datePublished">2017-12-13</time>
+    <a href="/2017/12/13/PP4-Demo-sidecar-script-1/" class="article-date">
+  <time datetime="2017-12-13T05:31:42.000Z" itemprop="datePublished">2017-12-13</time>
 </a>
     
   </div>
@@ -270,7 +121,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/12/13/Pipeline6-Pipeline-Development-Tools/">(原创)Pipeline6-Pipeline-Development-Tools</a>
+      <a class="article-title" href="/2017/12/13/PP4-Demo-sidecar-script-1/">PP4-Demo-sidecar-script-1</a>
     </h1>
   
 
@@ -278,35 +129,15 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p><b>笔者是独立翻译实验，不允许转载<b></b></b></p>
-<h1 id="Pipeline-Development-Tools"><a href="#Pipeline-Development-Tools" class="headerlink" title="Pipeline Development Tools"></a>Pipeline Development Tools</h1><h2 id="Pipeline-Development-Tools-1"><a href="#Pipeline-Development-Tools-1" class="headerlink" title="Pipeline Development Tools"></a>Pipeline Development Tools</h2><p>Jenkins Pipeline有内嵌的文档和Snipper Generator，这些是开发Pipeline的关键资源。它们针对当前版本的Jenkins和安装的插件提供详细的帮助和信息。本节，我们讨论开发Jenkins Pipeline的其他工具和资源。</p>
-<h2 id="命令行Command-line-Command-line-Pipeline-Linter"><a href="#命令行Command-line-Command-line-Pipeline-Linter" class="headerlink" title="命令行Command-line (Command-line Pipeline Linter)"></a>命令行Command-line (Command-line Pipeline Linter)</h2><p>在实际运行之前，Jenkins能验证，或者<a href="https://en.wikipedia.org/wiki/Lint_(software" target="_blank" rel="noopener">lint</a>一个申明式Pipeline。这些通常是Jenkins CLI命令或者带参数的HTTP POST请求完成的。我们推荐使用<a href="https://jenkins.io/doc/book/managing/cli/#ssh" target="_blank" rel="noopener">SSH interface</a>。请参看<a href="https://jenkins.io/doc/book/managing/cli/" target="_blank" rel="noopener">Jenkins CLI文档</a>怎样配置Jenkins才能安全的命令行存取。</p>
-<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp6/1.png"></p>
-<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp6/2.png"></p>
-<h4 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h4><p>下面是两个Pipeline Linter的例子。第一个示例显示了linter在传递无效<font color="red">Jenkinsfile</font>时的输出, 该结果是缺少代理<font color="red">agent</font>声明的一部分。</p>
-<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp6/3.png"></p>
-<h2 id="“Replay”-Pipeline-Runs-with-Modifications"><a href="#“Replay”-Pipeline-Runs-with-Modifications" class="headerlink" title="“Replay” Pipeline Runs with Modifications"></a>“Replay” Pipeline Runs with Modifications</h2><p>一般来说Pipeline是定义在经典的Jenkins Web界面上，或者通过提交Jenkinsfile到源代码库中。不幸的是, 这两种方法都不适合对Pipeline进行快速迭代或原型化。“Replay”特性允许在不更改Pipeline配置或创建新提交的情况下快速修改和执行现有Pipeline。</p>
-<h4 id="Usage"><a href="#Usage" class="headerlink" title="Usage"></a>Usage</h4><p>使用”Replay”特性:</p>
-<ol>
-<li>选择一个以前已经完成的运行过的Build History。</li>
-</ol>
-<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp6/4.png"></p>
-<ol>
-<li>点击左边的菜单”Replay”按钮</li>
-</ol>
-<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp6/5.png"></p>
-<h4 id="Features"><a href="#Features" class="headerlink" title="Features"></a>Features</h4><p>•能被同一次运行多次调用—允许很容易的并行测试不同的特性<br>•能被在运行中的Pipeline调用执行—只要是包含正确Groovy语法的Pipeline，就能被重复播放。<br>•能引用共享库的代码同样是可修改的—如果一个引用了共享库的Pipeline运行，共享库的代码同样能被展示和修改。</p>
-<h4 id="Limitations"><a href="#Limitations" class="headerlink" title="Limitations"></a>Limitations</h4><p>•有语法错误的Pipeline不能被重新播放–这意味着无法查看其代码, 并且无法检索其中所做的任何更改。使用重播进行更重要的修改时, 请将更改保存到Jenkins外部的文件或编辑器中, 然后再运行它们。见<a href="https://issues.jenkins-ci.org/browse/JENKINS-36453" target="_blank" rel="noopener">JENKINS-37589</a>。</p>
-<p>•重播的Pipeline行为可能与由其他方法启动的运行不同–对于不属于多分支Pipeline的Pipeline, 提交信息可能会因原始运行和重播运行而异。见<a href="https://issues.jenkins-ci.org/browse/JENKINS-36453" target="_blank" rel="noopener">JENKINS-36453</a>。</p>
-<h2 id="Pipeline-Unit-Testing-Framework"><a href="#Pipeline-Unit-Testing-Framework" class="headerlink" title="Pipeline Unit Testing Framework"></a>Pipeline Unit Testing Framework</h2><p>提示: Pipeline单元测试框架是Jenkins项目不支持的 third-party 工具。<br><a href="https://github.com/lesfurets/JenkinsPipelineUnit" target="_blank" rel="noopener">Pipeline单元测试框架</a>（Pipeline Unit Testing Framework）允许您在完全运行测试Pipeline和共享库之前对其进行单元检测。它提供了一个模拟执行环境, 其中实际的Pipeline步骤将替换为可用于检查预期行为的 mock 对象。新的和粗糙的边缘, 但承诺。该项目的自述文件包含示例和用法说明。</p>
+        <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">node &#123;</span><br><span class="line">//    checkout scm</span><br><span class="line">    /*</span><br><span class="line">     * In order to communicate with the MySQL server, this Pipeline explicitly</span><br><span class="line">     * maps the port (`3306`) to a known port on the host machine.</span><br><span class="line">     */</span><br><span class="line">    docker.image(&apos;mysql:5&apos;).withRun(&apos;-e &quot;MYSQL_ROOT_PASSWORD=my-secret-pw&quot; -p 3306:3306&apos;) &#123; c -&gt;</span><br><span class="line">        /* Wait until mysql service is up */</span><br><span class="line">//        echo &quot;---start mysql---&quot;</span><br><span class="line">//        sh &quot;service mysql start&quot;</span><br><span class="line">        //shijianzhengming实践证明，不需要单独启动MySQL</span><br><span class="line">//        sh &apos;while ! mysqladmin ping -h0.0.0.0 --silent; do sleep 1; done&apos;</span><br><span class="line">//        echo &quot;---output pwd start---&quot;</span><br><span class="line">//        sh &quot;pwd&quot;</span><br><span class="line">//        echo &quot;---output pwd end---&quot;</span><br><span class="line">//        sh &quot;cat /etc/os-release&quot;</span><br><span class="line">//        echo &quot;---output cat /etc/os-release end---&quot;</span><br><span class="line">        sh &apos;while ! mysqladmin ping -h0.0.0.0 --silent; do sleep 1; done&apos;</span><br><span class="line">//        sh &quot;while ! /usr/bin/mysql -uroot -h0.0.0.0 -p my-secret-pw -e &apos;show databases&apos; --silent; do sleep 1; done&quot;</span><br><span class="line">        /* Run some tests which require MySQL */</span><br><span class="line">//        sh &apos;make check&apos;</span><br><span class="line">        echo &quot;---run some tests which require MySQL---&quot;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://roclli.github.io/2017/12/13/Pipeline6-Pipeline-Development-Tools/" data-id="cjb4ibanw000bib7su6pbmlcj" class="article-share-link">Teilen</a>
+      <a data-url="https://roclli.github.io/2017/12/13/PP4-Demo-sidecar-script-1/" data-id="cjb4meswb001c1r7s8vpagwh3" class="article-share-link">Teilen</a>
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Jenkins-Pipeline/">Jenkins; Pipeline</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Pipeline-Jenkins-Docker-Dockerfile/">Pipeline; Jenkins; Docker; Dockerfile</a></li></ul>
 
     </footer>
   </div>
@@ -315,10 +146,10 @@
 
 
   
-    <article id="post-Pipeline5-Extending-with-Shared-Libraries" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-PP4-Demo-dockerfile-declarative" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2017/12/13/Pipeline5-Extending-with-Shared-Libraries/" class="article-date">
-  <time datetime="2017-12-13T01:13:10.000Z" itemprop="datePublished">2017-12-13</time>
+    <a href="/2017/12/13/PP4-Demo-dockerfile-declarative/" class="article-date">
+  <time datetime="2017-12-13T05:29:50.000Z" itemprop="datePublished">2017-12-13</time>
 </a>
     
   </div>
@@ -329,7 +160,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/12/13/Pipeline5-Extending-with-Shared-Libraries/">(原创)Pipeline5-Extending-with-Shared-Libraries</a>
+      <a class="article-title" href="/2017/12/13/PP4-Demo-dockerfile-declarative/">PP4-Demo-dockerfile-declarative</a>
     </h1>
   
 
@@ -337,108 +168,17 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p><b>笔者是独立翻译实验，不允许转载<b></b></b></p>
-<h1 id="Extending-with-Shared-Libraries"><a href="#Extending-with-Shared-Libraries" class="headerlink" title="Extending with Shared Libraries"></a>Extending with Shared Libraries</h1><h2 id="Defining-Shared-Libraries"><a href="#Defining-Shared-Libraries" class="headerlink" title="Defining Shared Libraries"></a>Defining Shared Libraries</h2><p>Pipeline被越来越多的组织和项目所使用，一些常用的模式开始出现。通常共享不同项目的Pipeline片段是非常有用的，能减少冗余，保持代码DRY(Don’t_repeat_yourself)。</p>
-<p>Pipeline支持创建共享库，这些库能被外部源代码库定义，并能被装载到现有的Pipeline中。</p>
-<h4 id="Directory-structure"><a href="#Directory-structure" class="headerlink" title="Directory structure"></a>Directory structure</h4><p>共享库被一个名字，一个例如SCM的代码段定义，默认的版本是可选的。名字是一个短标识符，它能被用在脚本中。</p>
-<p>版本可以是SCM能理解的任何东西；例如分支，标记和提交hashes等所有Git的东西你同样可以申明哪些脚本明确要求下面定义的库，或者默认是禁止的。更进一步，如果你在Jenkins配置中说明一个版本，你就能阻止脚本选择一个不同的版本。</p>
-<p>说明SCM最好的方式就是使用SCM插件，插件已经被更新支持新的API，检查任意的命名版本。最新版本的Git和Subversion插件都支持这个模式；其他也应该这么做。</p>
-<p>如果你的SCM插件没有被整合，你可以选择Legacy SCM，并且挑选已经提供的。在本例中，你需要在SCM配置的某个地方包含(include)<font color="red">${library.yourLibName.version}</font>，以便于在迁出代码阶段，插件能读取这个变量选择想要的版本。例如，对于Subversion，你能设置URI为svnserver/project/${library.yourLibName.version}，然后使用例如<font color="red">trunk</font>或者<font color="red">branches/dev</font>或者<font color="red">tags/1.0</font>。</p>
-<h4 id="目录结构-Directory-structure"><a href="#目录结构-Directory-structure" class="headerlink" title="目录结构(Directory structure)"></a>目录结构(Directory structure)</h4><p>共享库的目录结构如下：</p>
-<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp5/1.png"></p>
-<p><font color="red">src</font>目录看起来像是标准的java代码目录。当执行Pipeline的时候，这个目录会被加到classpath。</p>
-<p><font color="red">vars</font>目录保存脚本，脚本定义Pipeline可以存取的全局变量。每一个groovy的基本名应该是一个Groovy标识符，方便起见都是驼峰命名法。</p>
-<p>这些目录中的Groovy原文件都与脚本Pipeline同样的”CPS transformation”。</p>
-<p><font color="red">resources</font>目录允许<font color="red">libraryResource</font>被外部库使用加载非Groovy文件。现在这个特性不支持内部库。</p>
-<h4 id="Global-Shared-Libraries"><a href="#Global-Shared-Libraries" class="headerlink" title="Global Shared Libraries"></a>Global Shared Libraries</h4><p>有好几个可以定义共享库的地方，取决于用户情况。Manage Jenkins » Configure System » Global Pipeline Libraries，在这里许多库都能被定义。</p>
-<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp5/2.png"></p>
-<p>因为这些库是全局使用，系统中的任何Pipeline都可以用这些库中的功能。<br>这些库被认为是”可信任的”，他们能运行Java/Geoovy/Jenkins内部API/Jenkins插件或者第三方库的任何方法。这允许你以一个更高级别封装去包裹独立的不安全的APIs，供其他Pipeline使用。要知道，任何能提交文件到这个SCM库的人都能对Jenkins进行无限的存取。你需要全部/运行权限去配置库(通常权限被授予jenkins管理员)。</p>
-<h4 id="Folder-level-Shared-Libraries"><a href="#Folder-level-Shared-Libraries" class="headerlink" title="Folder-level Shared Libraries"></a>Folder-level Shared Libraries</h4><p>任何创建的目录都可以有和它相关联的共享库。这个机制允许特殊库对目录和子目录中的Pipeline作用范围。<br>目录为基础的库并不被认为是”可信任的”；它们在Groovy sandbox中的运行就像典型的Pipeline一样。</p>
-<h4 id="Automatic-Shared-libraries"><a href="#Automatic-Shared-libraries" class="headerlink" title="Automatic Shared libraries"></a>Automatic Shared libraries</h4><p>其他插件可以增加定义库的方法。例如插件github-branch-source提供一个GitHub组织目录项，这个目录项允许脚本不用任何附加配置就可以使用不受信任的库，例如github.com/someorg/somerepo。本例中，指定的GitHub库将被加载。</p>
-<h2 id="Using-libraries"><a href="#Using-libraries" class="headerlink" title="Using libraries"></a>Using libraries</h2><p>隐式加载的共享库允许Pipeline使用任意这样的库定义的类或者全局变量。存取其他的库，<font color="red">Jenkinsfile</font>需要使用<font color="red">@Library</font>标记，说明库的名字：</p>
-<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp5/3.png"></p>
-<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp5/4.png"></p>
-<p>这些标记可以在Groovy脚本允许的任何地方。当引用类库(<font color="red">src</font>目录)的时候，相应标记需要一个<font color="red">import</font>表达式：</p>
-<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp5/5.png"></p>
-<p>提示：对于只定义了全局变量的共享库，或者只需要一个全局变量的共享库，<code>&lt;a href=&quot;http://groovy-lang.org/objectorientation.html#&lt;em&gt;annotation&quot;&gt;annotation&lt;/a&gt; pattern &lt;code&gt;@Library(&#39;my-shared-library&#39;) _&lt;/code&gt;</code>保持代码精炼是有用的。本质上，替代标记一个不必要的<code>import</code>表达式，符号<code></code>被标记。</p>
-<p>不推荐import一个全局变量/函数，因为这将强迫编译器将字段和方法解释为静态(static)的。此种情况下的Groovy编译器会产生令人迷惑的错误信息。<br>在脚本的编译过程中, 库在开始执行之前被解析和加载。这使得 Groovy 编译器能够理解静态类型检查中使用的符号的含义, 并允许它们在脚本中的类型声明中使用, 例如</p>
-<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp5/6.png"></p>
-<p>但是, 全局变量在运行时解析。</p>
-<h4 id="Loading-libraries-dynamically"><a href="#Loading-libraries-dynamically" class="headerlink" title="Loading libraries dynamically"></a>Loading libraries dynamically</h4><p>从Pipeline2.7 版: 共享的 Groovy 库插件中, 有一个新的选项用于在脚本中加载 (non-implicit) 库: 在生成过程中的任何时候动态加载库的一个<font color="red">library</font>步骤。</p>
-<p>如果你只对使用全局变脸函数感兴趣(从<font color="red">vars</font>目录)，语法是相当的简单：</p>
-<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp5/7.png"></p>
-<p>此后, 脚本将可以访问该库中的任何全局变量。<br>也可以使用<font color="red">src</font>/目录中的类, 但更棘手。虽然 @Library 注释在编译之前已经准备脚本的classpath, 但在遇到<font color="red">library</font> step时, 脚本已经编译完毕。因此, 您无法从库中<font color="red">import</font>或以其他方式，静态引用类型。<br>但是, 您可以动态地使用库类 (没有类型检查), 通过完全访问来自<font color="red">library</font> step的返回值的限定名。可以使用类似于 Java 的语法调用静态<font color="red">static</font>方法:</p>
-<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp5/8.png"></p>
-<p>您还可以访问<font color="red">静态</font>字段, 并调用构造函数, 就好像它们是名为new的<font color="red">静态</font>方法一样：</p>
-<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp5/9.png"></p>
-<h4 id="Library-versions"><a href="#Library-versions" class="headerlink" title="Library versions"></a>Library versions</h4><p>当隐式加载被选中的时候，共享库使用默认版本，否则pipeline只通过名字引用库，例如@Library(‘my-shared-library’)。如果默认版本没有定义，Pipeline必须说明一个版本，例如@Library(‘my-shared-library@master’)。</p>
-<p>如果共享库配置中的”允许默认版本被覆盖”被选中，<font color="red">@Library</font>标记有可能覆盖库的默认版本。如果可能的话，这同样允许隐式加载的库能被加载不同的版本。</p>
-<p>当时使用<font color="red">library</font> step，你可以说明一个版本：</p>
-<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp5/10.png"></p>
-<p>由于这是一个常规步骤(library step), 因此可以计算该版本而不是常量, 就像注释；例如：</p>
-<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp5/11.png"></p>
-<p>将使用与 multibranch Jenkinsfile 相同的 SCM 分支加载库。另外一个例子中，你可以通过参数选择一个库：</p>
-<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp5/12.png"></p>
-<p>注意：<font color="red">Library</font> step可能不可以被用来覆盖一个隐式加载库的版本。它在脚本开始的时候已经加载，并且一个用名字加载的库不能被加载两次。</p>
-<h4 id="Retrieval-Method"><a href="#Retrieval-Method" class="headerlink" title="Retrieval Method"></a>Retrieval Method</h4><p>说明SCM最好的方式是使用SCM插件，插件已经被更新支持新的API去检查版本。在写本文时，Git和Subversion插件已经支持这个模式。</p>
-<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp5/13.png"></p>
-<h4 id="Legacy-SCM"><a href="#Legacy-SCM" class="headerlink" title="Legacy SCM"></a>Legacy SCM</h4><p>SCM插件有可能仍然通过Legacy SCM选项使用，因为插件还没有支持交心的共享库特性。本例中，包含<font color="red">${library.yourlibrarynamehere.version}</font>，在这里分支/tag/ref为了特殊的SCM插件被配置。这确保，在迁出库的源代码时，SCM插件能扩展它的变量去迁出合适的库版本。</p>
-<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp5/14.png"></p>
-<h4 id="Dynamic-retrieval"><a href="#Dynamic-retrieval" class="headerlink" title="Dynamic retrieval"></a>Dynamic retrieval</h4><p>如果你在<font color="red">Library</font> step中仅仅指明一个库名字(可选的，在version后面<font color="red">@</font>) ，Jenkins将寻找那个名字的预先配置的库。(或者加载一个<font color="red">github.com/owner/repo自动库</font>)<br>但您也可以动态地指定检索方法, 在这种情况下, 不需要在Jenkins中预先定义库。例子如下：</p>
-<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp5/15.png"></p>
-<p>最好使用Pipeline Syntax寻找你的SCM的精确的语法。<br>注意：在这些cases中，必须要说明库版本。</p>
-<h2 id="Writing-libraries"><a href="#Writing-libraries" class="headerlink" title="Writing libraries"></a>Writing libraries</h2><p>一般来说，任何合法的Groovy代码都可以使用。不同的数据结构，功能方法等，例如：</p>
-<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp5/16.png"></p>
-<h4 id="Access-steps"><a href="#Access-steps" class="headerlink" title="Access steps"></a>Access steps</h4><p>库的类不能明确的调用steps，例如<font color="red">sh</font>或者<font color="red">git</font>。但是, 它们可以在封闭类的范围之外实现方法, 进而调用Pipeline step，例如：</p>
-<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp5/17.png"></p>
-<p>然后这个方法可以被脚本式Pipeline调用。</p>
-<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp5/18.png"></p>
-<p>这个方法是有限制的，例如，它阻止一个父类的定义。<br>或者，在构造函数中，一套<font color="red">steps</font>集合能用<font color="red">this</font>被明确的传递到一个库类，或者仅仅一个方法：</p>
-<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp5/19.png"></p>
-<p>当保存类的状态的时候，例如上面，类必须实现<font color="red">Serializable</font>接口。</p>
-<p>这确保在Jenkins中，一个使用类的Pipeline，像下面的例子，能挂起(suspend)和回复(resume)。</p>
-<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp5/20.png"></p>
-<p>如果库需要存取全局变量，例如<font color="red">env</font>，那么这些库应该被明确的传递到库类，或者方法中。<br>而不是将大量的变量从脚本式Pipeline传递到库中,</p>
-<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp5/21.png"></p>
-<p>上面的例子展示了参数被传递到一个<font color="red">静态(static)</font>方法，脚本式Pipeline按照如下方式调用：</p>
-<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp5/22.png"></p>
-<h4 id="Defining-global-variables"><a href="#Defining-global-variables" class="headerlink" title="Defining global variables"></a>Defining global variables</h4><p>在内部,<font color="red">vars</font>目录中的脚本按要求实例化为单例。这允许在单个. groovy 文件中定义多个方法以方便使用。<br><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp5/23.png"><br><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp5/24.png"></p>
-<p>声明式Pipeline不允许在脚本指令之外使用全局变量用法 (JENKINS-42360)。</p>
-<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp5/25.png"></p>
-<p>①    <font color="red">script</font>在声明式Pipeline中访问全局变量所需的脚本指令。<br>注意：在Jenkins加载并使用该库作为成功的Pipeline运行的一部分之后, 在共享库中定义的变量将只显示在全局变量引用 (在Pipeline Syntax中)。<br>警告：<br>避免在全局变量中保留状态<br>避免使用交互或保留状态的方法来定义全局变量。改用静态类或实例化类的局部变量。</p>
-<h4 id="Defining-custom-steps"><a href="#Defining-custom-steps" class="headerlink" title="Defining custom steps"></a>Defining custom steps</h4><p>共享库还可以定义与内置步骤 (如 <font color="red">sh</font> 或 <font color="red">git</font>git) 类似的全局变量。在共享库中定义的全局变量必须用所有 lower-case 或法则命名, 以便通过管道正确加载。</p>
-<p>例如, 要定义 sayHello, 应创建文件 vars/sayHello.groovy, 并应实现调用方法。调用方法允许以类似于步骤的方式调用全局变量:</p>
-<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp5/26.png"></p>
-<p>Pipeline能引用和调用这个变量：</p>
-<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp5/27.png"></p>
-<p>如果用块调用, 则<font color="red">调用</font>方法将接收<font color="red">关闭</font>。应显式定义该类型以阐明步骤的意图, 例如:</p>
-<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp5/28.png"></p>
-<p>然后, Pipeline可以像任何接受块的内置步骤一样使用此变量:</p>
-<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp5/29.png"></p>
-<h4 id="Defining-a-more-structured-DSL"><a href="#Defining-a-more-structured-DSL" class="headerlink" title="Defining a more structured DSL"></a>Defining a more structured DSL</h4><p>如果您有很多类似的管道, 则全局变量机制提供了一个方便的工具来构建一个 higher-level 的 DSL 来捕获相似性。例如, 所有的詹金斯插件都是以同样的方式构建和测试的, 所以我们可以写一个名为<font color="red">buildPlugin</font>的step。</p>
-<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp5/30.png"></p>
-<p>假设脚本已作为全局共享库或文件夹级共享库加载, 结果 Jenkinsfile 将大大简化：</p>
-<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp5/31.png"></p>
-<h4 id="Using-third-party-libraries"><a href="#Using-third-party-libraries" class="headerlink" title="Using third-party libraries"></a>Using third-party libraries</h4><p>可以使用 third-party 的 Java 库, 通常是在 Maven 中心, 从受信任的库代码使用<font color="red">@Grab</font>注释。有关细节, 请参阅Grape document, 但简单地把：</p>
-<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp5/32.png"></p>
-<p>默认情况下, 第三方库被缓存在~/. groovy/grapes/Jenkins的master节点上。</p>
-<h4 id="Loading-resources"><a href="#Loading-resources" class="headerlink" title="Loading resources"></a>Loading resources</h4><p>外部库可以使用<font color="red">libraryResource</font> step从<font color="red">resources/</font>目录加载辅助文件。该参数是一个相对路径名, 类似于 Java 资源加载:。</p>
-<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp5/33.png"></p>
-<p>该文件以字符串形式加载, 适合传递给某些 api 或使用 writeFile 保存到工作区。<br>最好使用一个唯一的包结构, 这样您就不会意外地与另一个库发生冲突。</p>
-<h4 id="Pretesting-library-changes"><a href="#Pretesting-library-changes" class="headerlink" title="Pretesting library changes"></a>Pretesting library changes</h4><p>如果您注意到在使用不受信任的库的生成中出现错误, 只需单击重播链接以尝试编辑其一个或多个源文件, 并查看所产生的生成是否按预期的方式工作。一旦你对结果满意，跟随Build状态页上的不同链接，应用不同的库变化，并保存到代码库中。</p>
-<p>(即使为库请求的版本是一个分支, 而不是像标记这样的固定版本, 重播的生成将使用与原始生成完全相同的修订: 将不会再次签出库源。</p>
-<p>受信任的库当前不支持重播。在重播过程中, 当前也不支持修改资源文件。</p>
-<h4 id="Defining-Declarative-Pipeline"><a href="#Defining-Declarative-Pipeline" class="headerlink" title="Defining Declarative Pipeline"></a>Defining Declarative Pipeline</h4><p>从2017年9月下旬发布的声明性1.2 开始, 可以定义声明性管道。也可在共享库中进行。下面是一个示例, 它将执行不同的声明管道, 具体取决于内部版本号是奇数还是偶数:</p>
-<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp5/34.png"></p>
-<p>此时, 只能在共享库中定义整个Pipeline。这只能在”vars/*.groovy”，仅仅只能在一个方法调用中。在单个生成中只能执行一个声明性Pipeline, 如果尝试执行第二个Pipeline, 则生成结果将失败。</p>
+        <p>Jenkins代码详见：<br><a href="https://gitee.com/roclli/pp4-3-dockerfile.git" target="_blank" rel="noopener">https://gitee.com/roclli/pp4-3-dockerfile.git</a></p>
+<p>Jenkinsfile内容为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">pipeline &#123;</span><br><span class="line">//    agent &#123; dockerfile true &#125;</span><br><span class="line">    agent &#123;</span><br><span class="line">    	dockerfile &#123;</span><br><span class="line">    		additionalBuildArgs &apos;-t node-svn:7-alpine&apos;</span><br><span class="line">    	&#125;</span><br><span class="line">    &#125;</span><br><span class="line">    stages &#123;</span><br><span class="line">        stage(&apos;Test&apos;) &#123;</span><br><span class="line">            steps &#123;</span><br><span class="line">                sh &apos;node --version&apos;</span><br><span class="line">                sh &apos;svn --version&apos;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>Dockerfile<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">FROM node:7-alpine</span><br><span class="line">RUN apk add -U subversion</span><br></pre></td></tr></table></figure></p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://roclli.github.io/2017/12/13/Pipeline5-Extending-with-Shared-Libraries/" data-id="cjb4ibanu0008ib7syq67vmz4" class="article-share-link">Teilen</a>
+      <a data-url="https://roclli.github.io/2017/12/13/PP4-Demo-dockerfile-declarative/" data-id="cjb4mesw800141r7su9hysve8" class="article-share-link">Teilen</a>
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Jenkins-Pipeline/">Jenkins; Pipeline</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Pipeline-Jenkins-Docker-Dockerfile/">Pipeline; Jenkins; Docker; Dockerfile</a></li></ul>
 
     </footer>
   </div>
@@ -447,10 +187,10 @@
 
 
   
-    <article id="post-Pipeline4-Using-Docker-with-Pipeline" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-PP4-Demo-multip-container-script" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2017/12/12/Pipeline4-Using-Docker-with-Pipeline/" class="article-date">
-  <time datetime="2017-12-12T09:25:36.000Z" itemprop="datePublished">2017-12-12</time>
+    <a href="/2017/12/13/PP4-Demo-multip-container-script/" class="article-date">
+  <time datetime="2017-12-13T05:28:42.000Z" itemprop="datePublished">2017-12-13</time>
 </a>
     
   </div>
@@ -461,7 +201,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/12/12/Pipeline4-Using-Docker-with-Pipeline/">(原创)Pipeline4-Using-Docker-with-Pipeline</a>
+      <a class="article-title" href="/2017/12/13/PP4-Demo-multip-container-script/">PP4-Demo-multip-container-script</a>
     </h1>
   
 
@@ -469,78 +209,15 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p><b>笔者是独立翻译实验，不允许转载<b></b></b></p>
-<h1 id="Using-Docker-with-Pipeline"><a href="#Using-Docker-with-Pipeline" class="headerlink" title="Using Docker with Pipeline"></a>Using Docker with Pipeline</h1><p>许多组织都是用Docker来统一编译和测试环境，提供一个发布应用的有效机制。从Pipeline 2.5版本或者更高，Pipeline内嵌支持同Jenkinsfile内Docker交互。<br>本章覆盖了使用Jenkinsfile内Docker基本使用，并不包括Docker的使用。关于Docker使用，请参考<a href="https://docs.docker.com/get-started/。" target="_blank" rel="noopener">https://docs.docker.com/get-started/。</a></p>
-<h2 id="Customizing-the-execution-environment"><a href="#Customizing-the-execution-environment" class="headerlink" title="Customizing the execution environment"></a>Customizing the execution environment</h2><p>Pipeline较早被设计使用Docker images作为执行环境，执行一个单独的stage或者整个Pipeline，意味着用户可以定义他们的Pipeline需要使用的工具，不必手动配置代理。实践上，任何工具都能被打包到Docker container中，能被一个Jenkinsfile容易使用。</p>
-<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp4/1.jpg"></p>
-<p>当Pipeline执行的时候，Jenkins自动开启特定的container，执行里面定义的steps。</p>
-<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp4/2.jpg"></p>
-<h4 id="Caching-data-for-containers"><a href="#Caching-data-for-containers" class="headerlink" title="Caching data for containers"></a>Caching data for containers</h4><p>许多编译工具会下载外部依赖，并把它们缓存在本地。因为containers初始化的时候是干净的文件系统，这能导致较小的Pipelines，因此他们并不能充分利用硬盘缓存的优势。<br>Pipeline支持添加定制化参数，参数能被传入到Docker中，允许用户指定特定的Docker Volumes去挂载，Volumes能被用来缓存代理上的数据。下面的例子将在Pipeline运行的时候，缓存~/.m2，可以避免重复下载依赖。</p>
-<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp4/3.jpg"></p>
-<p><b>注意：实测表明<b></b></b></p>
-<p>使用本地机器的maven repo，不用再单独下载的技巧，要点在于</p>
-<p>(1).启动docker的时候就要传入repo</p>
-<p>(2).启动编译命令的时候，要再传一次repo，否则mvn会单独下载依赖的包</p>
-<h4 id="Using-multiple-containers"><a href="#Using-multiple-containers" class="headerlink" title="Using multiple containers"></a>Using multiple containers</h4><p>现在非常普遍，代码依赖多个，不同的技术。例如一个库既有Java-based的后端API实现，也有JavaScript基础的前端实现。组合Docker和Pipeline，允许Jenkinsfile通过agent{}在不同阶段使用多种技术。</p>
-<p>  <img src="http://oow5aq3zy.bkt.clouddn.com/image/pp4/4.jpg"></p>
-<h4 id="Using-a-Dockerfile"><a href="#Using-a-Dockerfile" class="headerlink" title="Using a Dockerfile"></a>Using a Dockerfile</h4><p>对于那些需要特定执行环境的项目，Pipeline同样支持在Dockerfile中创建和运行容器(container)。同前面使用”off-the-shell”容器相反，使用代理{dockerfile true}语法将创建新的image，而不是从Docker Hub拉取。</p>
-<p>重新使用前面的例子，用一个定制化的Dockerfile。</p>
-<p>Dockerfile</p>
-<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp4/5.jpg"></p>
-<p>把这个提交到源代码库的根目录，Jenkinsfile被改变去构建一个基于这个Dockerfile的容器，用这个容器运行定义好的steps。</p>
-<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp4/6.png"></p>
-<p><font color="red">agent { dockerfile true}</font>语法支持许多其他选项，关于这些选项详见<a href="https://jenkins.io/doc/book/pipeline/syntax#agent" target="_blank" rel="noopener">Pipeline Syntax</a>部分。</p>
-<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp4/7.jpg"></p>
-<p>Using a Dockerfile with Jenkins Pipeline</p>
-<p><b>注意：笔者添加。<b></b></b></p>
-<p>其他一些使用说明，请参见：<a href="https://github.com/jenkinsci/pipeline-model-definition-plugin/wiki/Syntax-Reference" target="_blank" rel="noopener">https://github.com/jenkinsci/pipeline-model-definition-plugin/wiki/Syntax-Reference</a><br>其实本例的目的：仅仅只是制作了一个新的docker image，完全可以自己手动做，也可以使用linux shell脚本和docker配合使用做出来，不一定非要通过Jenkins的插件做。此方法的一个不好的地方就是：自己设置生成的image的名字以后，通过参数加进去，最终会出来两个一样的docker image，因为再生成的时候，必须要设置一个名字，哪怕是随机的名字。<br>参数如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">agent &#123; dockerfile true &#125;</span><br><span class="line">agent &#123;</span><br><span class="line">	dockerfile &#123;</span><br><span class="line">		additionalBuildArgs &apos;-t node-svn:7-alpine&apos;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h4 id="Specifying-a-Docker-label"><a href="#Specifying-a-Docker-label" class="headerlink" title="Specifying a Docker label"></a>Specifying a Docker label</h4><p>默认情况下，Pipeline假设任何配置的代理都能运行基于Docker的Pipeline。对于Jenkins环境，有macOS，Windows或者其他不能运行Docker代理，默认设置可能有问题。Pipeline在Manage Jenkins页面(manage Jenkins–&gt;Configuration)上提供一个全局选项。</p>
-<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp4/8.jpg"></p>
-<p><b>注意：测试表明<b></b></b></p>
-<p>此label只是为了区分在哪个node上运行，本例运行的node label为:linux，其实换成master应该也可以，如果不设置，就会寻找一个默认的本地的符合条件的node执行。</p>
-<h2 id="Advanced-Usage-with-Scripted-Pipeline"><a href="#Advanced-Usage-with-Scripted-Pipeline" class="headerlink" title="Advanced Usage with Scripted Pipeline"></a>Advanced Usage with Scripted Pipeline</h2><h4 id="Running-“sidecar”-containers"><a href="#Running-“sidecar”-containers" class="headerlink" title="Running “sidecar” containers"></a>Running “sidecar” containers</h4><p>在Pipeline中使用Docker是运行服务/一套测试的一个有效方式，类似于sidecar模式，Docker Pipeline能在后台运行容器。使用sidecar方法，对于每一次Pipeline运行，Pipeline能有一个干净的容器。</p>
-<p>考虑一个依赖于本地MySQL数据库的集成测试套件。使用插件<a href="https://plugins.jenkins.io/docker-workflow" target="_blank" rel="noopener">docker-workflow</a>插件实现的withRun方法，一个能运行MySQL作为sidecar的Jenkinsfile文件：</p>
-<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp4/9.jpg"></p>
-<p><b>注意：本例笔者运行失败。<b></b></b></p>
-<p>(1).本地必需安装有mysqladmin工具，否则执行失败。<br>(2).docker run -d -e MYSQL_ROOT_PASSWORD=my-secret-pw -p 3306:3306 mysql:5这样启动以后，确实发现container里面的mysql启动成功，但是如果使用docker run -d -e MYSQL_ROOT_PASSWORD=my-secret-pw -p 3306:3306 mysql:5 /bin/sh进去以后，发现mysql没有启动，或者说启动失败。</p>
-<p>示例可以更进一步，同时使用两个容器。一个”sidecar”运行MySQL，另一个用Docker container links提供执行环境。</p>
-<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp4/10.jpg"></p>
-<p>上面的示例使用withRun暴露的对象，withRun有运行的容器ID。用容器ID，Pipeline能创建一个链接，通过传递客制化的Docker参数到inside()方法。</p>
-<p>Id属性对于查看正在运行容器的log同样有用：</p>
-<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp4/011.jpg"></p>
-<p><b>注意：笔者实测，<b></b></b></p>
-<p>执行的sh命令都是在container里面执行的。所以起了两个container。</p>
-<h4 id="Building-containers"><a href="#Building-containers" class="headerlink" title="Building containers"></a>Building containers</h4><p>创建一个Docker image，插件docker-workflow同样提供一个<font color="red">build()</font>方法创建新的image，在Pipeline运行的时候，从代码库中的Dockerfile文件也能创建image。</p>
-<p>使用<font color="red">docker.build(“my-image-name”))</font>语法的一个主要好处：脚本是的Pipeline能使用返回值用于后面的Docker Pipeline调用，例如：</p>
-<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp4/11.jpg"></p>
-<p>返回值能被用来保存Docker image到Docker Hub或者私有的Registry，通过<font color="red">push()</font>方法，例如：</p>
-<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp4/12.jpg"></p>
-<p>Image的tag属性常用方法是<font color="red">latest</font>标记。<font color="red">push()</font>方法接受一个可选的<font color="red">tag</font>参数，允许Pipeline用不同的标记存储<font color="red">customImage</font>，例如：</p>
-<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp4/13.jpg"></p>
-<p><b>笔者注：<b></b></b></p>
-<p>此类制作image，完全可以shell和docker独立做，如有必要，可以来此参照执行。</p>
-<h4 id="Using-a-remote-Docker-server"><a href="#Using-a-remote-Docker-server" class="headerlink" title="Using a remote Docker server"></a>Using a remote Docker server</h4><p>默认情况下，插件docker-workflow会和本地的Docker交互，典型的是通过<font color="red">/var/run/docker.sock</font>。</p>
-<p>选择一个不是非默认Docker server，例如Docker Swarm，<font color="red">withServer()</font>方法可以使用。</p>
-<p>通过传递一个URI，可选的Docker Server Certificate Authentication认证信息，方法如下：</p>
-<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp4/14.jpg"></p>
-<p>注意：<font color="red">inside()</font>和<font color="red">build()</font>将不能同Docker Swarm server正常工作。</p>
-<p>对于函数<font color="red">inside()</font>正常执行，Docker server和Jenkins代理必须使用同样的文件系统，以便工作空间能被挂载。</p>
-<p>现在Jenkins插件和Docker CLI都不能自动检测远端server运行的case；一个典型的现象就是嵌套<font color="red">sh</font>命令出现错误，例如</p>
-<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp4/15.jpg"></p>
-<p>当Jenkins检测到代理运行在Docker容器中的时候，它将自动传递<font color="red">–volumes-from</font>参数到<font color="red">inside</font>容器，确保它能同代理共享工作空间。<br>另外，一些Docker Swarm版本并不支持定制化的Registry。</p>
-<h4 id="Using-a-custom-registry"><a href="#Using-a-custom-registry" class="headerlink" title="Using a custom registry"></a>Using a custom registry</h4><p>默认情况下，docker-workflow插件使用默认的Docker Registry—Docker Hub。<br>为了使用定制化的Docker Registry，脚本是的Pipeline用户可以用withRegistry方法去包含steps，传递定制化的Registry URL，例如：</p>
-<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp4/16.jpg"></p>
-<p>对于需要认证的Docker Registry，从Jenkins主页上添加用户名/密码项，并使用认证ID作为<font color="red">withRegistry()</font>的第二个参数。</p>
-<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp4/17.jpg"></p>
-<p>注意：此类是制作docker image然后保存到私有的registry，可以shell和docker实现，如有必要，来此参照制作。</p>
+        <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">node &#123;</span><br><span class="line">    /* Requires the Docker Pipeline plugin to be installed */</span><br><span class="line">    stage(&apos;Back-end&apos;) &#123;</span><br><span class="line">        docker.image(&apos;maven:3-alpine&apos;).inside &#123;</span><br><span class="line">            sh &apos;mvn --version&apos;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    stage(&apos;Front-end&apos;) &#123;</span><br><span class="line">        docker.image(&apos;node:7-alpine&apos;).inside &#123;</span><br><span class="line">            sh &apos;node --version&apos;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://roclli.github.io/2017/12/12/Pipeline4-Using-Docker-with-Pipeline/" data-id="cjb4ibant0005ib7spwmq3wkf" class="article-share-link">Teilen</a>
+      <a data-url="https://roclli.github.io/2017/12/13/PP4-Demo-multip-container-script/" data-id="cjb4meswa00191r7s2ar8zoer" class="article-share-link">Teilen</a>
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Jenkins-Pipeline/">Jenkins; Pipeline</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Pipeline-Jenkins-Docker-Dockerfile/">Pipeline; Jenkins; Docker; Dockerfile</a></li></ul>
 
     </footer>
   </div>
@@ -549,10 +226,10 @@
 
 
   
-    <article id="post-Pipeline3-Branches-and-Pull-Requests" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-PP4-Demo-multip-container-declarative" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2017/12/12/Pipeline3-Branches-and-Pull-Requests/" class="article-date">
-  <time datetime="2017-12-12T09:14:44.000Z" itemprop="datePublished">2017-12-12</time>
+    <a href="/2017/12/13/PP4-Demo-multip-container-declarative/" class="article-date">
+  <time datetime="2017-12-13T05:27:39.000Z" itemprop="datePublished">2017-12-13</time>
 </a>
     
   </div>
@@ -563,7 +240,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/12/12/Pipeline3-Branches-and-Pull-Requests/">(原创)Pipeline3-Branches-and-Pull-Requests</a>
+      <a class="article-title" href="/2017/12/13/PP4-Demo-multip-container-declarative/">PP4-Demo-multip-container-declarative</a>
     </h1>
   
 
@@ -571,33 +248,16 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p><b>笔者是独立翻译实验，不允许转载<b></b></b></p>
-<h1 id="分支和拉取请求"><a href="#分支和拉取请求" class="headerlink" title="分支和拉取请求"></a>分支和拉取请求</h1><h2 id="Branches-and-Pull-Requests"><a href="#Branches-and-Pull-Requests" class="headerlink" title="Branches and Pull Requests"></a>Branches and Pull Requests</h2><p>在上一节中，实现了Jenkinsfile，这个文件能被迁入到源代码版本控制中。这部分涵盖了 Multibranch Pipeline的概念, 建立在Jenkinsfile基础上, 提供更多的动态和自动功能。</p>
-<h2 id="Creating-a-Multibranch-Pipeline"><a href="#Creating-a-Multibranch-Pipeline" class="headerlink" title="Creating a Multibranch Pipeline"></a>Creating a Multibranch Pipeline</h2><p>Multibranch Pipeline项目使得在同一个项目中不同的分支需要实现不同的Jenkinsfile。在一个Multibranch Pipeline项目中，Jenkins将为不同分支的Pipelines自动发现/管理/执行，不同的分支都包含一个Jenkinsfile文件。</p>
-<p>这将减少人工Pipeline的创建和管理。</p>
-<p>创建一个Multibranch Pipeline：</p>
-<p>•在Jenkins home页上点击”new Item”。</p>
-<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp3/1.jpg"></p>
-<p>•为你的Pipeline输入名字，选择Multibranch Pipeline，然后点击OK。</p>
-<p>注意：Jenkins用Pipeline的名字在磁盘上创建目录。包含空格的Pipeline名字可能有未查到的bug，脚本不期望路径包含空格。</p>
-<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp3/2.jpg"></p>
-<p>•添加一个Branch Source(例如Git)，输入源代码库的地址。</p>
-<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp3/3.jpg"></p>
-<p>•保存多分支Pipeline项目。</p>
-<p>一旦保存，Jenkins将自动扫描代码库，为库中包含Jenkinsfile的每一个分支创建合适的项。</p>
-<p>默认情况下，Jenkins不会自动索引用于分支添加或删除的存储库 (除非使用组织文件夹), 因此将 Multibranch Pipeline配置为定期索引在配置中通常很有用:</p>
-<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp3/4.jpg"></p>
-<h2 id="附加的环境变量-Additional-Environment-Variables"><a href="#附加的环境变量-Additional-Environment-Variables" class="headerlink" title="附加的环境变量(Additional Environment Variables)"></a>附加的环境变量(Additional Environment Variables)</h2><p>Multibranch Pipeline暴露了关于分支的附加信息，分支可以通过全局变量env创建，例如：<br>BRANCH_NAME<br>    这个Pipeline将要被执行的分支，例如master分支。<br>CHANGE_ID<br>    各种改变请求的标识符，例如a pull request号码/数字。</p>
-<h2 id="支持Pull-Requests-Supporting-Pull-Requests"><a href="#支持Pull-Requests-Supporting-Pull-Requests" class="headerlink" title="支持Pull Requests(Supporting Pull Requests)"></a>支持Pull Requests(Supporting Pull Requests)</h2><p>GitHub或者Bitbucket分支源，Multibranch Pipeline能被用来验证pull/change请求。这个功能被插件github-branch-source和插件cloudbees-bitbucket-branch-source提供。请查阅相关文档得到如何使用的进一步信息。</p>
-<h2 id="使用组织目录-Using-Organization-Folders"><a href="#使用组织目录-Using-Organization-Folders" class="headerlink" title="使用组织目录(Using Organization Folders)"></a>使用组织目录(Using Organization Folders)</h2><p>Organization Folder使Jenkins能监控整个GitHub组织或者Bitbucket Team/Project，自动为代码库创建新的Multibranch Pipeline项目，代码库包含分支和包含Jenkinsfile的pull request。<br>现在，这个功能仅仅存在于GitHub和bitbucket，功能分别被插件github-branch-source和插件cloudbees-bitbucket-branch-source提供。</p>
+        <p>Jenkins代码详见：<br><a href="https://gitee.com/roclli/pp4-2-multip-container" target="_blank" rel="noopener">https://gitee.com/roclli/pp4-2-multip-container</a></p>
+<p>Jenkinsfile内容为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">pipeline &#123;</span><br><span class="line">    agent none</span><br><span class="line">    stages &#123;</span><br><span class="line">        stage(&apos;Back-end&apos;) &#123;</span><br><span class="line">            agent &#123;</span><br><span class="line">                docker &#123; image &apos;maven:3-alpine&apos; &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            steps &#123;</span><br><span class="line">                sh &apos;mvn --version&apos;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        stage(&apos;Front-end&apos;) &#123;</span><br><span class="line">            agent &#123;</span><br><span class="line">                docker &#123; image &apos;node:7-alpine&apos; &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            steps &#123;</span><br><span class="line">                sh &apos;node --version&apos;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://roclli.github.io/2017/12/12/Pipeline3-Branches-and-Pull-Requests/" data-id="cjb4ibanq0003ib7srixe9a51" class="article-share-link">Teilen</a>
+      <a data-url="https://roclli.github.io/2017/12/13/PP4-Demo-multip-container-declarative/" data-id="cjb4mesw900171r7sj9fnoagf" class="article-share-link">Teilen</a>
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Jenkins-Pipeline/">Jenkins; Pipeline</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Pipeline-Jenkins-Docker-Dockerfile/">Pipeline; Jenkins; Docker; Dockerfile</a></li></ul>
 
     </footer>
   </div>
@@ -606,10 +266,10 @@
 
 
   
-    <article id="post-Pipeline2-Using-a-Jenkinsfile" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-PP4-Demo-cache-data-script" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2017/12/12/Pipeline2-Using-a-Jenkinsfile/" class="article-date">
-  <time datetime="2017-12-12T07:54:10.000Z" itemprop="datePublished">2017-12-12</time>
+    <a href="/2017/12/13/PP4-Demo-cache-data-script/" class="article-date">
+  <time datetime="2017-12-13T05:26:57.000Z" itemprop="datePublished">2017-12-13</time>
 </a>
     
   </div>
@@ -620,7 +280,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/12/12/Pipeline2-Using-a-Jenkinsfile/">(原创)Pipeline2-Using-a-Jenkinsfile</a>
+      <a class="article-title" href="/2017/12/13/PP4-Demo-cache-data-script/">PP4-Demo-cache-data-script</a>
     </h1>
   
 
@@ -628,124 +288,171 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p><b>笔者是独立翻译实验，不允许转载<b></b></b></p>
-<h2 id="Using-a-Jenkinsfile"><a href="#Using-a-Jenkinsfile" class="headerlink" title="Using a Jenkinsfile"></a>Using a Jenkinsfile</h2><p>这部分基于前面<a href="https://jenkins.io/doc/book/pipeline/getting-started/" target="_blank" rel="noopener">Getting Started</a>所讲过的信息，介绍更有用的步骤(steps)，一般模式，一些非试用的<font color="red">Jenkinsfile</font>例子。</p>
-<p>创建一个<font color="red">Jenkinsfile</font>，然后把这个文件保存到源代码版本控制中(例如svn，git等)，会带来许多好处：</p>
-<ul>
-<li>对Pipeline中进行代码审查和迭代(review/iteration)</li>
-<li>Pipeline的审核和跟踪</li>
-<li>Pipeline唯一的真相来源，可以由项目的多个成员查看和编辑。</li>
-</ul>
-<p>Pipeline支持<a href="https://jenkins.io/doc/book/pipeline/syntax/" target="_blank" rel="noopener">两种语法</a>: 声明式 (在Pipeline2.5 中引入) 和脚本Pipeline。两者都支持构建持续集成的Pipeline。都可以被用来定义一个Pipeline，不管是在web UI上还是在<font color="red">Jenkinsfile</font>文件中，一般认为最好的实践是创建一个<font color="red">Jenkinsfile</font>文件，并放到源代码管理库中。</p>
-<h2 id="Creating-a-Jenkinsfile"><a href="#Creating-a-Jenkinsfile" class="headerlink" title="Creating a Jenkinsfile"></a>Creating a Jenkinsfile</h2><p>像前面<a href="https://jenkins.io/doc/book/pipeline/getting-started/#defining-a-pipeline-in-scm" target="_blank" rel="noopener">Getting Started</a>章节讨论的一样，<font color="red">Jenkinsfile</font>文件是一个文本文件，包含一个Jenkins Pipeline定义。考虑如下部分，实现了一个三阶段的持续集成pipeline。</p>
-<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp2/1.jpg"></p>
-<p>并不是所有的Pipelines都有同样的三个阶段，但是对于大多数项目来说，这是一个很好的开始。下面的部分将说明一个简单的Pipeline的创建和执行。</p>
-<p>注意：假设已经为项目创建好了源代码版本库，并且一个Pipeline已经按照前面Getting Started步骤定义好了。</p>
-<p>用一个支持Groovy语法高亮的文本编辑器，创建一个新的Jenkinsfile文件，放到项目的根目录下。</p>
-<p>上面声明式的Pipeline例子包含实现一个持续集成pipeline最小的必须的结构。Agent指示符是必须的，告诉Jenkins为这个pipeline分配一个执行器和工作空间。没有agent指示符，不仅申明式的Pipeline不是合法的，而且它也不能做任何工作！默认情况下，agent指示符确保源代码库代码被签出，并且是有效的可以被后面阶段的步骤(steps)使用。</p>
-<p>对于一个有效的申明式的Pipeline，stage指示符和steps指示符同样是必须的，因为它们告诉Jenkins执行什么，哪个阶段做什么事情。</p>
-<p>对于脚本式Pipeline的更高级用法，上面例子中的node是至关重要的第一步，因为它为Pipeline申请了执行器和工作空间。确切的说，没有node，一个Pipeline不能做任何工作！在node里面，业务的第一个命令将是迁出源代码。因为Jenkinsfile文件是直接从源代码库中迁出，所以Pipeline提供了一个快速和容易的方式存取正确的源代码版本。</p>
-<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp2/02.jpg"></p>
-<p>①    <font color="red">checkout</font>步骤将从源代码库中迁出代码；scm是一个特殊的变量，它将告诉checkout克隆特定的版本，然后触发Pipeline运行。</p>
-<p><b>注意，笔者实测如下：<b></b></b></p>
-<ul>
-<li><p>在脚本式Pipeline中<br>checkout([$class: ‘GitSCM’, branches: [[name: ‘*/master’]], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: ‘<a href="https://gitee.com/roclli/simple-maven-project-with-tests.git&#39;]]])。" target="_blank" rel="noopener">https://gitee.com/roclli/simple-maven-project-with-tests.git&#39;]]])。</a></p>
-</li>
-<li><p>申明式Pipeline(Jenkinsfile中)，采用checkout scm，会导致checkout两次，根据说明Specify where to obtain a source code repository containing your Groovy script. It will be checked out somewhere on the Jenkins master and used to load your Pipeline script. (If you wish to use other files from the same repository during your Pipeline, you will need to check them out separately on some slave; this checkout cannot be reused.)。</p>
-</li>
-</ul>
-<h2 id="Build"><a href="#Build" class="headerlink" title="Build"></a>Build</h2><p>许多使用Pipeline的项目开始工作第一步都是”编译(Build)”阶段。通常情况下, Pipeline的此阶段将是源代码的组装、编译或打包。Jenkinsfile文件并不是替代现有的编译工具例如GNU/Make，Maven，Gradle等等，但可以看作是一个粘合层, 以粘合绑定(bind)项目开发的多个阶段生命周期 (构建、测试、部署等) 一起。</p>
-<p>Jenkins有许多插件，可以调用几乎所有的构建工具，但是这个例子将简单的使用shell步骤(sh)调用make命令。sh假设系统是Unix/Linux，如果是Windows系统，将会使用bat。</p>
-<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp2/2.jpg"></p>
-<p>①    <font color="red">sh</font>调用<font color="red">make</font>命令，将一直运行，如果命令返回0。任何非0的返回值都将使Pipeline失败。</p>
-<p>②    <font color="red">archiveArtifacts</font>捕获模式匹配(<font color="red">**/target/*.jar</font>)文件，并且把他们保存到Jenkins的master中。</p>
-<p>提示：存档文件不是使用外部文件资料库 (如 Artifactory 或Nexus) 的替代品, 应该只考虑基本的报告和档案存档。</p>
-<h2 id="Test"><a href="#Test" class="headerlink" title="Test"></a>Test</h2><p>运行自动测试是任何成功持续集成的关键组件。因此Jenkins有许多测试记录，报告，可视化插件。一般来说, 当有测试失败, 它是有用的，Jenkins会记录web UI中的报告和可视化失败。下面的示例使用junit步骤, 由<a href="https://plugins.jenkins.io/junit" target="_blank" rel="noopener">junit插件</a>提供。</p>
-<p>下面的例子，如果运行失败，Pipeline被标记不稳定”unstable”，在网页上用一个黄色的球标记。基于记录的测试报告，Jenkins同样提供历史趋势分析和可视化报告。</p>
-<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp2/3.jpg"></p>
-<p>①    使用内置的shell条件(<font color="red">sh ‘make || true’</font>)确保<font color="red">sh</font>总是有一个0的返回值，这样使得<font color="red">junit</font>机会去捕获和处理测试报告。或者使用下面的处理失败[handing-failures]部分。<br>②    Junit捕获并关联Junit XML文件，模式匹配(<font color="red">**/target/*.xml</font>)</p>
-<p><b>注意：此处笔者测试下来是有出入的，区别在于脚本式Pipeline<b></b></b></p>
-<ul>
-<li>示例的stage必须放到stages里面，是和stage(‘Build’)并行的兄弟节点。</li>
-<li>stage里的内容(sh和junit必须放到steps里面)，否则会报错。</li>
-</ul>
-<h2 id="Deploy"><a href="#Deploy" class="headerlink" title="Deploy"></a>Deploy</h2><p>部署可能意味着各种步骤, 具体取决于项目或组织的要求，可能是从将生成的文件发布到 Artifactory 服务器的任何东西, 或者将代码推送到生产系统。</p>
-<p>在示例Pipeline的这个阶段，”Build”和”Test”阶段都已成功执行。因此发布阶段假设前面的阶段已经成功执行，否则Pipeline将退出。</p>
-<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp2/4.jpg"></p>
-<p><font color="red">①</font>    读取currentBuild.result变量允许Pipeline判断是否有失败。这种情况之下，值是UNSTABLE。</p>
-<p>假设示例的Jenkins Pipeline都被成功执行，每一个成功的Pipeline部分都将会关联到存档文件，测试结果报告和控制台输出。</p>
-<p>脚本式的Pipeline能包含条件测试(像上面所示)，循环(loop)，try/catch/finally块，甚至函数。接下来的部分将详细讲解脚本式Pipeline语法的高级用法。</p>
-<p><b>注意：笔者测试下来<b></b></b></p>
-<p>(1).期间发现过无法读取currentBuild.result变量，此时提示” Cannot get property ‘currentBuild’ on null object”，故忽略此处的Deploy。env变量也是如此提示：Cannot get property ‘env’ on null object。最后实测发现：<br>脚本式Pipeline(web UI上面输入)，可以正确输出变量值，如下方式${env.BUILD_NUMBER}<br>申明式Pipeline(Jenkinsfile)，可以正确输出变量值，如下方式${env.BUILD_NUMBER}<br>可以正确用echo输出值，也可以用if判断值。代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">echo &quot;---$&#123;env.BUILD_NUMBER&#125;---&quot;</span><br><span class="line">echo &quot;---$&#123;currentBuild.result&#125;---&quot;</span><br><span class="line">if(currentBuild.result == null || currentBuild.result == &apos;SUCCESS&apos;) &#123;</span><br><span class="line">    echo &quot;---currentBuild.result is:$&#123;currentBuild.result&#125;------&quot;</span><br><span class="line">&#125;</span><br><span class="line">else &#123;</span><br><span class="line">    echo &quot;---currentBuild.result is:$&#123;currentBuild.result&#125;,so, will make publish&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>得到的结果如下几种情况：</p>
-<table><thead><tr><th>Cases结果</th><th>全局变量</th><th>备注</th></tr></thead><tbody><tr><td>1个skip，其他全对</td><td>61/null</td><td></td></tr><tr><td>1个error,其他全对</td><td>60/UNSTABLE</td><td>根据前面说明，只要有失败，就是UNSTABLE</td></tr><tr><td>全部正确</td><td>59/null</td><td></td></tr></tbody></table>
-
-
-<p>(2).申明式Jenkins Pipeline(Jenkinsfile)中，使用steps有报错提示：<br>WorkflowScript: 31: Expected a step @ line 31, column 17.。解决办法：添加script符号<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">stage(&apos;Deploy&apos;)&#123;</span><br><span class="line">    steps &#123;</span><br><span class="line">        script&#123;</span><br><span class="line">            echo &quot;---$&#123;env.BUILD_NUMBER&#125;---&quot;</span><br><span class="line">            echo &quot;---$&#123;currentBuild.result&#125;---&quot;</span><br><span class="line">            if(currentBuild.result == null || currentBuild.result == &quot;SUCCESS&quot;) &#123;</span><br><span class="line">                echo &quot;---currentBuild.result is:$&#123;currentBuild.result&#125;------&quot;</span><br><span class="line">            &#125;</span><br><span class="line">            else &#123;</span><br><span class="line">                echo &quot;---currentBuild.result is:$&#123;currentBuild.result&#125;,so, will make publish&quot;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h2 id="Pipeline高级语法-Advanced-Syntax-for-Pipeline"><a href="#Pipeline高级语法-Advanced-Syntax-for-Pipeline" class="headerlink" title="Pipeline高级语法(Advanced Syntax for Pipeline)"></a>Pipeline高级语法(Advanced Syntax for Pipeline)</h2><h4 id="字符串插值-String-Interpolation"><a href="#字符串插值-String-Interpolation" class="headerlink" title="字符串插值(String Interpolation)"></a>字符串插值(String Interpolation)</h4><p>Jenkins Pipeline使用与 Groovy 相同的规则来进行字符串插值。Groovy的字符串插值规则可能会让这个语言的初学者感到混乱。因为Groovy支持申明一个字符串使用单引号或者双引号，例如：</p>
-<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp2/5.jpg"></p>
-<p>只有后一个字符串将支持基于美元符号 ($) 的字符串插值, 例如:</p>
-<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp2/6.jpg"></p>
-<p>运行结果是：</p>
-<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp2/7.jpg"></p>
-<p><b>笔者加：测试运行结果如下：<b><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Hello Mr. $&#123;username&#125;</span><br><span class="line">I said, Hello Mr. Jenkins</span><br></pre></td></tr></table></figure></b></b></p>
-<p>对于Pipeline的高级特性，理解怎样使用字符串插值是很重要。</p>
-<h2 id="环境变量-Working-with-the-Environment"><a href="#环境变量-Working-with-the-Environment" class="headerlink" title="环境变量(Working with the Environment)"></a>环境变量(Working with the Environment)</h2><p>Jenkins Pipeline通过全局变量env暴露了许多环境变量，env可以在Jenkindfile中任何地方使用。Jenkins中完整的环境变量列表请参见：localhost:8080/pipeline-syntax/globals#env(假设Jenkins运行在本地的8080端口)，环境变量包括：</p>
-<h6 id="BUILD-ID"><a href="#BUILD-ID" class="headerlink" title="BUILD_ID"></a>BUILD_ID</h6><p>当前的build ID，同BUILD_NUMBER一致。</p>
-<h6 id="JOB-NAME"><a href="#JOB-NAME" class="headerlink" title="JOB_NAME"></a>JOB_NAME</h6><p>被执行的项目的名字，例如foo或者foo/bar。</p>
-<h6 id="JENKINS-URL"><a href="#JENKINS-URL" class="headerlink" title="JENKINS_URL"></a>JENKINS_URL</h6><p>Jenkins的全URL，例如example.com:port/Jenkins/（注意：只有”System COnfiguration”中设置Jenkins URL以后才有效）</p>
-<p>引用或使用这些环境变量可以实现, 如访问Groovy 映射, 例如:</p>
-<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp2/8.jpg"></p>
-<h4 id="设置环境变量-Setting-environment-variables"><a href="#设置环境变量-Setting-environment-variables" class="headerlink" title="设置环境变量(Setting environment variables)"></a>设置环境变量(Setting environment variables)</h4><p>在申明式Pipeline或者脚本式Pipeline中设置环境变量是不同的。<br>申明式Pipeline支持环境申明，而脚本式Pipeline必须使用withEnv。</p>
-<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp2/9.jpg"></p>
-<p>①    一个<font color="red">environment</font>申明使用在pipeline块中，将对<font color="red">pipeline</font>中的所有step有效。<br>②    在<font color="red">stage</font>中的<font color="red">environment</font>申明将只对stage内的step有效。</p>
-<h2 id="参数-Parameters"><a href="#参数-Parameters" class="headerlink" title="参数(Parameters)"></a>参数(Parameters)</h2><p>声明式Pipeline支持现成的参数, 允许Pipeline接受用户通过<a href="https://jenkins.io/doc/book/pipeline/syntax/#parameters" target="_blank" rel="noopener">参数指令</a>在运行时指定参数。在脚本式Pipeline中配置参数，可以通过<font color="red">properties</font>实现，关于properties我们可以在Snippet Generator中找到。</p>
-<p>如果想要配置你的Pipeline接受Build With parameters的参数，那些参数是可以通过<font color="red">params</font>变量读取。</p>
-<p>假设一个名叫Greeting的字符串变量被配置在<font color="red">Jenkinsfile</font>中，那么可以通过<font color="red">${params.Greeting}</font>读取。</p>
-<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp2/10.jpg"></p>
-<p><b>注意：笔者测试如下：本例如果是script(web UI上直接输入脚本方式)执行，会出现参数输入<b></b></b></p>
-<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp2/11.jpg"></p>
-<p>如果是Jenkisnfile(声明式执行)，会直接使用默认值Hello。</p>
-<h2 id="处理失败-Handling-Failures"><a href="#处理失败-Handling-Failures" class="headerlink" title="处理失败(Handling Failures)"></a>处理失败(Handling Failures)</h2><p>申明式Pipeline支持健壮的错误处理，默认通过它的post section处理，post section允许申明许多不同的”post conditions”，例如<font color="red">always</font>，<font color="red">unstable</font>，<font color="red">success</font>，<font color="red">failure</font>，和<font color="red">changed</font>。Pipeline<br>语法(<a href="https://jenkins.io/doc/book/pipeline/jenkinsfile/#syntax" target="_blank" rel="noopener">Pipeline Syntax</a>)部分提供更多的细节，怎样使用不同的post情况。</p>
-<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp2/12.jpg"></p>
-<p>脚本式Pipeline依赖于Groovy内嵌的try/catch/finally语法处理Pipeline执行期间出现的错误。</p>
-<p>在上面的测试例子中，sh被修改永远不返回非0值(sh ‘make check || true’)。这个方法意味着接下来的阶段需要检查currentBuild.result去判断是否存在错误发生。</p>
-<p>另一种处理此问题的方法是使用一系列try/finally 块, 它可以保留Pipeline中故障的早期退出行为, 同时仍使 junit 有机会捕获测试报告：</p>
-<p><b>注意：笔者实测，申明式添加了post；其次mail的各参数，必须用单引号括起来。<b></b></b></p>
-<p>申明式(Jenkinsfile)邮件发送失败，以下两种方式都失败(脚本式Pipeline无邮件部分)：</p>
-<ul>
-<li>mail to: ‘a@b.com’, subject: ‘The Pipeline(handing failure) failed :(‘, body: ‘this is body’</li>
-<li>emailext body: ‘this is body’, subject: ‘title’, to: ‘ a@b.com ‘</li>
-</ul>
-<p>如果前面执行成功，那么就不会执行post里面的failure部分。</p>
-<h2 id="使用多个代理-Using-multiple-agents"><a href="#使用多个代理-Using-multiple-agents" class="headerlink" title="使用多个代理(Using multiple agents)"></a>使用多个代理(Using multiple agents)</h2><p>在所有前面的例子中，只使用一个代理。这意味着Jenkins分配的所有执行器，只有一个是有效的，无论它是如何被标记和配置。Pipeline允许在一个Jenkinsfile中使用多个代理，这对于高级的用户案例是很帮助的，例如在多个平台上执行builds/tests。</p>
-<p>在下面的例子中，Build阶段在一个代理上执行，build的结果将被两个子代理重用，在test阶段，标记linux和windows的两个代理是相互独立的。</p>
-<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp2/13.jpg"></p>
-<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp2/14.jpg"></p>
-<p>①    stash允许捕获模式匹配的文件(<em>/target/</em>.jar)，只在同一个Pipeline其他地方重用。一旦Pipeline完成了执行，stash捕获的文件将被Jenkins master删除。</p>
-<p>②    在agent/node中的参数允许任何有效的Jenkins标签表达式。查阅”Pipeline Syntax” 部分可以更详细的信息。</p>
-<p>③    unstash 将从Jenkins主机中检索stash到Pipeline的当前工作区中。</p>
-<p>④    bat脚本允许在windows平台上执行脚本。</p>
-<p><b>注意：笔者实测<b></b></b></p>
-<p>(1).首先需要配置windows slave node，关于windows slave，需要配置master上已有的需要用到的环境变量：</p>
-<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp2/15.jpg"></p>
-<p>(2).首先分别修改两个node的label为linux(master)和windows(slave)。</p>
-<h2 id="可选的step参数-Optional-step-arguments"><a href="#可选的step参数-Optional-step-arguments" class="headerlink" title="可选的step参数(Optional step arguments)"></a>可选的step参数(Optional step arguments)</h2><p>Pipeline遵循Groovy语言约定, 允许在方法参数周围省略括号。</p>
-<p>许多Pipeline steps还使用命名参数语法作为在Groovy中创建映射的简写形式, 它使用语法 [key1: value1、key2: value2]。使语句像以下功能等效：</p>
-<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp2/16.jpg"></p>
-<p>方便起见，当参数只有一个参数的时候，参数名可以省略，例如：</p>
-<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp2/17.jpg"></p>
-<h2 id="高级脚本Pipeline"><a href="#高级脚本Pipeline" class="headerlink" title="高级脚本Pipeline"></a>高级脚本Pipeline</h2><p>脚本Pipeline是一个domain-specific语言，基于Groovy，大多数的Groovy语法都能不用修改被用在脚本Pipeline中。</p>
-<h4 id="并行执行-Executing-in-parallel"><a href="#并行执行-Executing-in-parallel" class="headerlink" title="并行执行(Executing in parallel)"></a>并行执行(Executing in parallel)</h4><p>上面部分中的示例在一个线性序列中跨两个不同的平台运行测试。实践中，如果make check需要花30分钟执行完，”Test”阶段将花费60分钟完成。</p>
-<p>幸运的是，Pipeline具有内置的功能, 用于并行执行Pipeline脚本部分, 并在恰当命名的并行(parallel)步骤中实现。</p>
-<p>重构上面的示例以使用并行(parallel)步骤:</p>
-<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp2/18.jpg"></p>
-<p>不像原先的在linux和windows上线性执行，他们现在可以并行执行。</p>
+        <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">node &#123;</span><br><span class="line">//    echo &quot;---$HOME---&quot;</span><br><span class="line">//    echo &quot;---$HOME/.m2:/root/.m2---&quot;</span><br><span class="line">//    echo &quot;---$M2_HOME/repo---&quot;</span><br><span class="line">//    sh &quot;ls -lrt $M2_HOME/repo&quot;</span><br><span class="line">    /* Requires the Docker Pipeline plugin to be installed</span><br><span class="line">    注意：正常情况下应该使用$HOME/.m2</span><br><span class="line">    我本地用的是用的是特殊的maven</span><br><span class="line">    docker.image(&apos;maven:3-alpine&apos;).inside(&apos;-v $HOME/.m2:/root/.m2&apos;) &#123;</span><br><span class="line">    */</span><br><span class="line">    docker.image(&apos;maven:3-alpine&apos;).inside(&apos;-v $M2_HOME/repo:/root/.m2&apos;) &#123;</span><br><span class="line">//        checkout([$class: &apos;GitSCM&apos;, branches: [[name: &apos;*/master&apos;], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: &apos;https://gitee.com/roclli/pp4-1-cache-data.git&apos;]]])</span><br><span class="line">        git url: &apos;https://gitee.com/roclli/pp4-1-cache-data.git&apos;</span><br><span class="line">        stage(&apos;Build&apos;) &#123;</span><br><span class="line">            //执行编译打包</span><br><span class="line">            sh &apos;mvn -D$HOME/.m2=/root/.m2 -DskipTests clean package&apos;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://roclli.github.io/2017/12/12/Pipeline2-Using-a-Jenkinsfile/" data-id="cjb4ibans0004ib7sdm0pec7g" class="article-share-link">Teilen</a>
+      <a data-url="https://roclli.github.io/2017/12/13/PP4-Demo-cache-data-script/" data-id="cjb4mesw6000x1r7snb6tw82g" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Pipeline-Jenkins-Docker-Dockerfile/">Pipeline; Jenkins; Docker; Dockerfile</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-PP4-Demo-cache-data-declarative" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/12/13/PP4-Demo-cache-data-declarative/" class="article-date">
+  <time datetime="2017-12-13T05:25:44.000Z" itemprop="datePublished">2017-12-13</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/12/13/PP4-Demo-cache-data-declarative/">PP4-Demo-cache-data-declarative</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Jenkins代码详见：<br><a href="https://gitee.com/roclli/pp4-1-cache-data.git" target="_blank" rel="noopener">https://gitee.com/roclli/pp4-1-cache-data.git</a></p>
+<p>Jenkinsfile内容为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">pipeline &#123;</span><br><span class="line">    agent &#123;</span><br><span class="line">        /* Requires the Docker Pipeline plugin to be installed</span><br><span class="line">        注意：正常情况下应该使用$HOME/.m2</span><br><span class="line">        我本地用的是用的是特殊的maven</span><br><span class="line">        docker.image(&apos;maven:3-alpine&apos;).inside(&apos;-v $HOME/.m2:/root/.m2&apos;) &#123;</span><br><span class="line">        */</span><br><span class="line">        docker &#123;</span><br><span class="line">            image &apos;maven:3-alpine&apos;</span><br><span class="line">            args &apos;-v $M2_HOME/repo:/root/.m2&apos;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    stages &#123;</span><br><span class="line">        stage(&apos;Build&apos;) &#123;</span><br><span class="line">            steps &#123;</span><br><span class="line">                sh &apos;mvn -D$HOME/.m2=/root/.m2 -DskipTests clean package&apos;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://roclli.github.io/2017/12/13/PP4-Demo-cache-data-declarative/" data-id="cjb4mesw5000v1r7s97dsuf5j" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Pipeline-Jenkins-Docker-Dockerfile/">Pipeline; Jenkins; Docker; Dockerfile</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-PP4-Demo-custom-exec-env-script" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/12/13/PP4-Demo-custom-exec-env-script/" class="article-date">
+  <time datetime="2017-12-13T05:24:56.000Z" itemprop="datePublished">2017-12-13</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/12/13/PP4-Demo-custom-exec-env-script/">PP4-Demo-custom-exec-env-script</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">node &#123;</span><br><span class="line">    /* Requires the Docker Pipeline plugin to be installed */</span><br><span class="line">    docker.image(&apos;node:7-alpine&apos;).inside &#123;</span><br><span class="line">        stage(&apos;Test&apos;) &#123;</span><br><span class="line">            sh &apos;node --version&apos;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://roclli.github.io/2017/12/13/PP4-Demo-custom-exec-env-script/" data-id="cjb4mesw700121r7s1o98p6gs" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Pipeline-Jenkins-Docker/">Pipeline; Jenkins; Docker</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-PP4-Demo-custom-exec-env-declartive" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/12/13/PP4-Demo-custom-exec-env-declartive/" class="article-date">
+  <time datetime="2017-12-13T05:23:21.000Z" itemprop="datePublished">2017-12-13</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/12/13/PP4-Demo-custom-exec-env-declartive/">PP4-Demo-custom-exec-env-declartive</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Jenkins代码详见：<br><a href="https://gitee.com/roclli/pp4-0-custom-exec-env" target="_blank" rel="noopener">https://gitee.com/roclli/pp4-0-custom-exec-env</a></p>
+<p>Jenkinsfile内容为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bing/env groovy</span><br><span class="line"></span><br><span class="line">pipeline &#123;</span><br><span class="line">    agent &#123;</span><br><span class="line">        docker &#123; image &apos;node:7-alpine&apos; &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    stages &#123;</span><br><span class="line">        stage(&apos;Test&apos;) &#123;</span><br><span class="line">            steps &#123;</span><br><span class="line">                sh &apos;node --version&apos;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://roclli.github.io/2017/12/13/PP4-Demo-custom-exec-env-declartive/" data-id="cjb4mesw700101r7smjj7syjt" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Pipeline-Jenkins-Docker-Dockerfile/">Pipeline; Jenkins; Docker; Dockerfile</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-PP3-Demo-MultiBranch-Pipeline" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/12/13/PP3-Demo-MultiBranch-Pipeline/" class="article-date">
+  <time datetime="2017-12-13T05:21:59.000Z" itemprop="datePublished">2017-12-13</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/12/13/PP3-Demo-MultiBranch-Pipeline/">PP3-Demo-MultiBranch-Pipeline</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Jenkins代码详见：<br><a href="https://gitee.com/roclli/simple-maven-project-with-tests.git" target="_blank" rel="noopener">https://gitee.com/roclli/simple-maven-project-with-tests.git</a></p>
+<p>Jenkinsfile内容为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bing/env groovy</span><br><span class="line"></span><br><span class="line">node(&apos;master&apos;) &#123;</span><br><span class="line">	echo &quot;----------------------start git url----------------------&quot;</span><br><span class="line">    checkout scm</span><br><span class="line">//    git url: &apos;https://gitee.com/roclli/simple-maven-project-with-tests.git&apos;</span><br><span class="line">	echo &quot;----------------------version()----------------------&quot;</span><br><span class="line">    def v = version()</span><br><span class="line">    if (v) &#123;</span><br><span class="line">        echo &quot;---Building version $&#123;v&#125;---&quot;</span><br><span class="line">    &#125;</span><br><span class="line">    def mvnHome = tool &apos;M3&apos;</span><br><span class="line">	echo &quot;----------------------mvn -B -D verify----------------------&quot;</span><br><span class="line">    sh &quot;$&#123;mvnHome&#125;/bin/mvn -B -Dmaven.test.failure.ignore verify&quot;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">def version() &#123;</span><br><span class="line">    def matcher = readFile(&apos;pom.xml&apos;) =~ &apos;&lt;version&gt;(.+)&lt;/version&gt;&apos;</span><br><span class="line">    echo &quot;---$&#123;matcher[0][1]&#125;---&quot;   //---1.0-SNAPSHOT---</span><br><span class="line">    echo &quot;---$&#123;matcher[0][2]&#125;---&quot;   //---null---</span><br><span class="line">    echo &quot;---$&#123;matcher[0][3]&#125;---&quot;   //---null---</span><br><span class="line">    echo &quot;---$&#123;matcher[1][1]&#125;---&quot;   //---2.18.1---</span><br><span class="line">    echo &quot;---$&#123;matcher[1][2]&#125;---&quot;   //---null---</span><br><span class="line">    echo &quot;---$&#123;matcher[1][3]&#125;---&quot;   //---null---</span><br><span class="line">    echo &quot;---$&#123;matcher[2][1]&#125;---&quot;   //---4.11---</span><br><span class="line">    echo &quot;---$&#123;matcher[2][2]&#125;---&quot;   //---null---</span><br><span class="line">    echo &quot;---$&#123;matcher[2][3]&#125;---&quot;   //---null---</span><br><span class="line">    matcher ? matcher[0][1] : null</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://roclli.github.io/2017/12/13/PP3-Demo-MultiBranch-Pipeline/" data-id="cjb4mesw4000t1r7smxqhjsky" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Pipeline-Jenkins/">Pipeline; Jenkins</a></li></ul>
@@ -757,465 +464,12 @@
 
 
   
-    <article id="post-Pipeline1-Getting-Started-With-Pipeline" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/12/12/Pipeline1-Getting-Started-With-Pipeline/" class="article-date">
-  <time datetime="2017-12-12T07:12:55.000Z" itemprop="datePublished">2017-12-12</time>
-</a>
+
+
+  <nav id="page-nav">
     
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/12/12/Pipeline1-Getting-Started-With-Pipeline/">(原创)Pipeline1-Getting-Started-With-Pipeline</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><b>前言(笔者自己添加部分)<b></b></b></p>
-<p>最好的资料莫过于<a href="https://github.com/jenkinsci/pipeline-plugin/blob/master/TUTORIAL.md" target="_blank" rel="noopener">官方文档</a>，<a href="https://jenkins.io/doc/book/pipeline/" target="_blank" rel="noopener">旧文档不再维护</a>。<br>所以本文其实是翻译并实践学习pipeline，对应的pdf文档，<a href="http://download.csdn.net/download/0211997/10138881" target="_blank" rel="noopener">已上传到csdn</a></p>
-<p><b>笔者是独立翻译实验，不允许转载<b></b></b></p>
-<p>本文直接从Pipeline开始，如果对Jenkins不熟悉，请参见Jenkins官方文档或者本系列的第一章Installing Jenkins。</p>
-<h1 id="Pipeline"><a href="#Pipeline" class="headerlink" title="Pipeline"></a>Pipeline</h1><p>本章将会学习Jenkins Pipeline的所有特性，从运行Pipeline到写Pipeline代码，甚至扩展到Pipeline本身。</p>
-<p>本章可以被Jenkins各个水平的用户使用，但是初学者可能要参考下本书”Using Jenkins”的章节去理解本章的一些专有名词。</p>
-<p>如果还没有熟悉最基本的Jenkins技术和特点，请从”Getting Started with Jenkins”开始。</p>
-<h2 id="What-is-Jenkins-Pipeline"><a href="#What-is-Jenkins-Pipeline" class="headerlink" title="What is Jenkins Pipeline?"></a>What is Jenkins Pipeline?</h2><p>Jenkins Pipeline(或者简单用一个大写字母P代替”Pipeline”)是一套插件，这套插件支持实现和整合持续集成pipelines(continuous delivery pipelines)到Jenkins中。</p>
-<p>持续集成Pipeline (continuous delivery pipelines)是一个程序自动进行的过程, 用您的用户和客户的版本控制权获取软件。对软件的每次更改(在源代码管理中提交)经过一个复杂的过程, 用它的方式发布软件(release)。这个过程包括以一个可靠地可重复的方式去构建软件，就像通过测试和发布(deployment)的多个步骤去构建(build)软件过程一样。</p>
-<p>Pipeline提供一套可扩展的工具集，用代码去模型化简单到复杂的(simple-to-complex)发布pipelines，代码使用Pipeline Domain Specific Language(DSL)语法。</p>
-<p>通常, Jenkins Pipeline的定义被写入文本文件 (称为 Jenkinsfile)，文件被放到项目的源代码管理存储库中[3: Source Control Management]。这是Pipeline代码(Pipeline-as-Code)的基础；把持续集成作为应用的一部分用版本控制，并且像其他代码一样可以review。创建Jenkinsfile有很多好处：</p>
-<ul>
-<li>自动为所有的分支和pull requests创建Pipelines</li>
-<li>在Pipeline中进行代码审查和迭代(review/iteration)</li>
-<li>Pipeline的审核和跟踪</li>
-<li>Pipeline唯一的真相源 [4: en.wikipediaorg/wiki/Single_Source_of_Truth]，可以由项目的多个成员查看和编辑。<br>定义Pipeline的语句，要么在web UI中，要么在一个Jenkinsfile文件中，一般认为最好的体验是，定义Pipeline在Jenkinsfile文件中，并且放到源代码版本控制中(例如git，svn等)。<br>这是一个Jenkinsfile文件例子：</li>
-</ul>
-<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp1/pp1-1.jpg"></p>
-<p><font color="red">①</font> agent表明Jenkins要为Pipeline的这部分分配一个执行器和工作空间。</p>
-<p><font color="red">②</font> stage表明是这个Pipeline的一个stage。</p>
-<p><font color="red">③</font> steps这个stage将要运行的一个步骤。</p>
-<p><font color="red">④</font> sh执行给与的shell语句。</p>
-<p><font color="red">⑤</font> junit是一个Pipeline步骤，Junit插件提供用来搜集测试报告。</p>
-<h2 id="Why-Pipeline"><a href="#Why-Pipeline" class="headerlink" title="Why Pipeline?"></a>Why Pipeline?</h2><p>Jenkins基本上是一个自动化引擎, 它支持许多自动化模式。Pipeline添加了一套强有力的自动化工具集到Jenkins，支持从简单持续集成到综合持续集成的用例，到Pipeline。通过将一系列相关任务模型化，用户能充分利用Pipeline许多特性的优势。</p>
-<ul>
-<li>Code：Pipeline是用代码实现，能做版本控制，可以给团队编辑/检查/迭代Pipeline的能力。</li>
-<li>Durable：Pipeline可以在计划的和未计划的Jenkins主机重启中不受影响。</li>
-<li>Pausable：Pipeline在继续运行之前，可以选择停止/等待输入或者批准。</li>
-<li>Versatile：Pipeline能满足现实世界复杂的持续集成需求，包括并行执行fork/join/loop。</li>
-<li>Extensible：Pipeline插件支持定制化的扩展到它自己的DSL[2: Domain-Specific Language]。</li>
-</ul>
-<p>虽然Jenkins一直允许基本形式的链接自由式Jobs[5: Additional plugins have been used to implement complex behaviors utilizing Freestyle Jobs such as the Copy Artifact, Parameterized Trigger, and Promoted Builds plugins]，一起执行顺序任务, Pipeline使这个概念成为Jenkins的一流插件。<br>基于Jenkins可扩展的核心价值，Pipeline同样是可扩展的。<br>下图是一个持续集成的例子，可以很容易被模型化。</p>
-<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp1/pp1-2.jpg"></p>
-<h2 id="Pipeline-关键字"><a href="#Pipeline-关键字" class="headerlink" title="Pipeline 关键字"></a>Pipeline 关键字</h2><p><b>Step<b></b></b></p>
-<p>一个独立的任务；一般来说steps告诉Jenkins做什么。例如执行shell命令，用sh执<br>行make：sh ‘make’。当插件扩展Pipeline DSL，这意味着插件能执行一个新的step。</p>
-<p><b>Node<b></b></b></p>
-<p>Pipeline执行的大多数工作是在一个或多个声明的Node的上下文中完成的。限制Node</p>
-<p>步骤内的工作有两点：</p>
-<p>(1).将块中包含的steps，通过向Jenkins添加项来运行队列.一旦一个执行器在一个节点上是空闲的, 这些steps就会运行。</p>
-<p>(2).创建工作区 (特定于该特定Pipeline的目录)，在工作区里，工作能被完成。</p>
-<p>注意：</p>
-<p>取决于你的Jenkins配置，经过一段时间的不活动时期之后，一些工作区不能被自<br>动清除。可以查看JENKINS-2111得到更多的信息。</p>
-<p><b>Stage<b></b></b></p>
-<p>Stage是定义整个Pipeline概念上子集的一个步骤，例如”Build”，”Test”，和”Deploy”，这被许多插件使用来可视化或者表现pipeline状态/进度。[5: Blue Ocean, Pipeline Stage View plugin]</p>
-<h1 id="开始Pipeline-Getting-Started-with-Pipeline"><a href="#开始Pipeline-Getting-Started-with-Pipeline" class="headerlink" title="开始Pipeline(Getting Started with Pipeline)"></a>开始Pipeline(Getting Started with Pipeline)</h1><p>Jenkins Pipeline是一套支持持续集成的插件。Pipeline提供扩展的工具，通过Pipeline DSL去模型化简单到复杂的代码发布Pipeline。</p>
-<p>本部分介绍一些Jenkins Pipeline的基本概念，例如基本的定义，用Pipeline执行任务。</p>
-<h2 id="前提条件"><a href="#前提条件" class="headerlink" title="前提条件"></a>前提条件</h2><p>使用Jenkins Pipeline，你会需要：</p>
-<ul>
-<li>Jenkins 2.x或者更高版本(更老版本1.642.3可能可以，但是不推荐)</li>
-<li>Pipeline插件[6: Pipeline plugin]</li>
-</ul>
-<p>想知道怎样安装和管理，请参见 Managing Plugins。</p>
-<h2 id="定义Pipeline"><a href="#定义Pipeline" class="headerlink" title="定义Pipeline"></a>定义Pipeline</h2><p>Pipeline脚本是用Groovy语言撰写。于是本文会介绍一些相关的Groovy语法，理解Groovy是有帮助的，但并不是必需的。</p>
-<p>一个基本的Pipeline能按照以下两种方式创建：</p>
-<ul>
-<li>Jenkins web UI上直接输入脚本</li>
-<li>创建一个Jenkinsfile文件，这个能被放到代码版本控制软件中。</li>
-</ul>
-<p>用任意方法定义Pipeline的语法是相同的, 但Jenkins支持将Pipeline直接输入到 web UI 中, 通常认为最好的做法是定义在Jenkinsfile的Pipeline, Jenkins将直接从源代码管理加载。</p>
-<h2 id="在web-UI中定义一个Pipeline"><a href="#在web-UI中定义一个Pipeline" class="headerlink" title="在web UI中定义一个Pipeline"></a>在web UI中定义一个Pipeline</h2><p>在web UI中创建一个基本的Pipeline。跟随以下步骤：</p>
-<ul>
-<li>点击Jenkins首页上的”New Item”。</li>
-</ul>
-<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp1/pp1-3.jpg"></p>
-<ul>
-<li>为Pipeline输入一个名字，选择Pipeline，然后点击OK。</li>
-</ul>
-<p>注意：Jenkins用Pipeline的名字在硬盘上创建目录。包含空格的Pipeline名字可能会有bugs，脚本并不支持包含空格的路径。</p>
-<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp1/pp1-4.jpg"></p>
-<ul>
-<li>在Script区域，输入一个Pipeline，然后点击Save。</li>
-</ul>
-<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp1/pp1-5.jpg"></p>
-<ul>
-<li>点击”Build Now”去运行Pipeline。</li>
-</ul>
-<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp1/pp1-6.jpg"></p>
-<ul>
-<li>点击”build History”下的#1，然后点击Console Output去查看Pipeline完整的输出。</li>
-</ul>
-<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp1/pp1-7.jpg"></p>
-<p>上面的例子展示了一个成功的Pipeline运行情况，用了两步。</p>
-<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp1/pp1-8.jpg"></p>
-<p><font color="red">① node</font>分配一个执行器和工作空间。</p>
-<p><font color="red">② echo</font>在Console Output输出字符串。</p>
-<h2 id="在SCM中定义一个Pipeline"><a href="#在SCM中定义一个Pipeline" class="headerlink" title="在SCM中定义一个Pipeline"></a>在SCM中定义一个Pipeline</h2><p>复杂的Pipeline很难在Pipeline配置区域去写和维护。为了让这个更容易一些，Pipeline同样可以用文本编辑器写并放到版本控制中，通过Pipeline Script from SCM选项，Jenkins可以装载Jenkinsfile文件。</p>
-<p>要做到这一点，当定义一个Pipeline时，选择”Pipeline Script from SCM”选项。</p>
-<p>随着”Pipeline Script from SCM”选项被选择，在Jenkins界面上，你不能直接输入任何Groovy代码；你只能输入一个源代码路径，从这个路径可以找到pipeline文件。当更新代码库的时候，一个新的编译被触发，只要Pipeline被配置使用SCM polling触发。</p>
-<p>提示：</p>
-<p>Jenkinsfile的第一行应该是#!/usr/bing/env groovy，这样文本编辑器，IDEs，GitHub等可以按照Groovy代码来语法高亮Jenkinsfile文件。</p>
-<h2 id="内建文档-Built-in-Documentation"><a href="#内建文档-Built-in-Documentation" class="headerlink" title="内建文档(Built-in Documentation)"></a>内建文档(Built-in Documentation)</h2><p>随着Pipeline一起发布的内建的文档，使得创建复杂的Pipelines更加容易。内建的文档可以根据安装在Jenkins实例中的插件，被自动生成和更新。</p>
-<p>内建的文档可以通过链接被找到: localhost:8080/pipeline-syntax/。假设你已经有了一个正运行在本地8080端口上的实例。同样的文档可以连接到这里，通过任何项目的左边菜单”Pipeline Syntax”。</p>
-<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp1/pp1-9.jpg"></p>
-<h2 id="代码段生成器-Snippet-Generator"><a href="#代码段生成器-Snippet-Generator" class="headerlink" title="代码段生成器(Snippet Generator)"></a>代码段生成器(Snippet Generator)</h2><p>内建的代码段生成器(Snippet Generator)功能对于以下功能很有帮助，创建独立步骤地代码，发现插件提供的新步骤，对于一个特定的步骤实验不同的参数。</p>
-<p>代码段生成器是动态填充的, 其中列出了可供Jenkins使用的步骤。可用的步骤数取决于安装的插件, 它显式地公开了Pipeline可使用的步骤。</p>
-<p>使用代码生成器，生成步骤</p>
-<p>(1).导航到Pipeline Syntax链接。</p>
-<p>(2).在Sample Step下达菜单中，选择需要的步骤。</p>
-<p>(3).使用Sample Step下拉菜单下面的动态区域去配置选定的步骤。</p>
-<p>(4).点击Gemerate Pipeline Script生成一个代码段，拷贝到Pipeline中。</p>
-<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/pp1/pp1-10.jpg"></p>
-<p>存取选定步骤的附加信息，点击Help按钮()上图红色箭头所指部分。</p>
-<h2 id="Global-Variable-Reference"><a href="#Global-Variable-Reference" class="headerlink" title="Global Variable Reference"></a>Global Variable Reference</h2><p>除了代码段生成器(Snippet Generator)只能生成步骤之外，Pipeline同样提供了一个内建的”Global Variable Reference”。像代码段生成器(Snippet Generator)一样，它也是被插件动态生成的。不像代码段生成器(Snippet Generator)的是，Global Variable Reference仅仅包含Pipeline或者插件提供的变量文档，只对Pipeline有效。</p>
-<p>Pipeline默认提供的变量有：</p>
-<p><b>env<b></b></b></p>
-<p>环境变量可以被Pipeline脚本，例如env.PATH或者env.BUILD_ID。可以到Global Variable Reference寻找，到目前为止，完整的，最新的，Pipeline中可以使用的变量列表。</p>
-<p><b>params<b></b></b></p>
-<p>将为Pipeline定义的所有参数公开为只读映射, 例如:params.MY_PARAM_NAME</p>
-<p><b>currentBuild<b></b></b></p>
-<p>可以被用来发现当前正在执行的Pipeline的相关信息，例如currentBuild.result，currentBuild.displayName等等。可以到Global Variable Reference寻找，到目前为止，完整的，最新的，可以用的currentBuild列表。</p>
-<h2 id="Further-Reading"><a href="#Further-Reading" class="headerlink" title="Further Reading"></a>Further Reading</h2><p>本章节仅仅只说出了Jenkins Pipeline能做的一小部分，但已经为你提供了足够多的基础，去开始实验Jenkins实例。</p>
-<p>下一节Jenkinsfile，更多的Pipeline步骤将被讨论。</p>
-<p>Additional Resources</p>
-<ul>
-<li>Pipeline Steps Reference, 包含发布插件提供的所有步骤</li>
-<li>Pipeline Examples，可拷贝社区版的Pipeline例子集合。</li>
-</ul>
-<p>参考资料：</p>
-<ol>
-<li><a href="https://jenkins.io/doc/book/pipeline/" target="_blank" rel="noopener">https://jenkins.io/doc/book/pipeline/</a></li>
-<li><a href="https://en.wikipedia.org/wiki/Domain-specific_language" target="_blank" rel="noopener">https://en.wikipedia.org/wiki/Domain-specific_language</a></li>
-<li><a href="https://en.wikipedia.org/wiki/Version_control" target="_blank" rel="noopener">https://en.wikipedia.org/wiki/Version_control</a></li>
-<li><a href="https://en.wikipedia.org/wiki/Single_source_of_truth" target="_blank" rel="noopener">https://en.wikipedia.org/wiki/Single_source_of_truth</a></li>
-<li><a href="https://wiki.jenkins-ci.org/display/JENKINS/Pipeline+Stage+View+Plugin" target="_blank" rel="noopener">https://wiki.jenkins-ci.org/display/JENKINS/Pipeline+Stage+View+Plugin</a></li>
-<li><a href="https://plugins.jenkins.io/workflow-aggregator" target="_blank" rel="noopener">https://plugins.jenkins.io/workflow-aggregator</a></li>
-<li>../managing/plugins.pdf</li>
-</ol>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://roclli.github.io/2017/12/12/Pipeline1-Getting-Started-With-Pipeline/" data-id="cjb4ibann0001ib7sv8imnci4" class="article-share-link">Teilen</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Pipeline-Jenkins/">Pipeline; Jenkins</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-Java-OOM-ERROR" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/12/11/Java-OOM-ERROR/" class="article-date">
-  <time datetime="2017-12-11T05:44:57.000Z" itemprop="datePublished">2017-12-11</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/12/11/Java-OOM-ERROR/">Java OOM ERROR</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Java内存溢出(OOM异常完全指南),原文见:<a href="http://www.jianshu.com/p/2fdee831ed03" target="_blank" rel="noopener">http://www.jianshu.com/p/2fdee831ed03</a><br>作者CHEN川是从这里翻译来的:<a href="https://plumbr.io/outofmemoryerror" target="_blank" rel="noopener">https://plumbr.io/outofmemoryerror</a><br>笔者是独立翻译实验，不允许转载</p>
-<h1 id="java-lang-OutOfMemoryError-Java-heap-space"><a href="#java-lang-OutOfMemoryError-Java-heap-space" class="headerlink" title="java.lang.OutOfMemoryError:Java heap space"></a>java.lang.OutOfMemoryError:Java heap space</h1><p>Java应用程序被允许使用有限的内存。这个限制在程序开始运行的时候就被说明了。为了便于处理，Java内存被分成两个区域，分别称为：堆内存/堆空间(Heap space)和永久代(Permgen, Permanent Generation)。</p>
-<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/OOM/1.jpg"></p>
-<!-- ![](http://oow5aq3zy.bkt.clouddn.com/image/OOM/1.jpg) -->
-<p>这两个区域的大小可以在JVM(Java虚拟机)启动时通过参数-Xmx和-XX:MaxPermSize设置。如果你不显示指定大小，将使用特定平台的默认值。</p>
-<p>当应用程序<b>试图添加更多的数据到堆空间区域，却没有足够空间</b>，此时java.lang.OutOfMemoryError: Java heap space error将被触发。注：系统可能有许多未使用的物理内存，但是当JVM到达堆空间大小限制的时候，java.lang.OutOfMemoryError: Java heap space error异常仍然会被抛出。<br>注意(编者加)：上面的JVM内存模型是JDK7的模型，在JDK8中已经移除了永久代，取而代之的是MetaSpace(主要存放类的元数据)。</p>
-<h4 id="原因分析-What-is-causing-it-："><a href="#原因分析-What-is-causing-it-：" class="headerlink" title="原因分析(What is causing it)："></a>原因分析(What is causing it)：</h4><p>触发java.lang.OutOfMemoryError: Java heap space error异常的常见原因：应用程序需要XXL号的堆内存，但是却提供了一个s号的堆内存。也就是说：应用程序需要比它所能得到的更大的堆内存。其它引发OutOfMemory的原因更加复杂，也有可能是程序原因。</p>
-<ul>
-<li>使用/数据量峰值：应用程序在设计之初要考虑处理大量的用户和大量的数据。当大量的用户或者数据突然到达峰值，并且超过了预期的阈值，以前在峰值到达之前功能正常的操作将会停止，并且触发java.lang.OutOfMemoryError异常。</li>
-<li>内存泄漏：一种特殊的编程错误将会导致应用程序持续消耗更多的内存。每一次有内存泄漏功能的应用程序使用，都将留下一些对象在java堆空间中，随着时间的推移，泄露的对象消耗越来越多的java堆空间，就触发了我们熟悉的java.lang.OutOfMemoryError异常。</li>
-</ul>
-<h4 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h4><h6 id="简单示例"><a href="#简单示例" class="headerlink" title="简单示例"></a>简单示例</h6><p>第一个应用程序非常简单–下面的java代码试图申请一个2M的数组。当编译并以一个12M(java -Xmx12m OOM)的堆内存运行的时候，将会失败，并且提示：Java.lang.OutOfMemoryError: Java heap space message。如果给与13M的堆内存，程序将运行很好。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">class OOM &#123;</span><br><span class="line">   static final int SIZE=2*1024*1024;</span><br><span class="line">   public static void main(String[] a) &#123;</span><br><span class="line">     int[] i = new int[SIZE];</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>运行结果如下：<br>Exception in thread “main” java.lang.OutOfMemoryError: Java heap space<br>        at OOM_heapspace.main(OOM_heapspace.java:7)</p>
-<h6 id="内存泄漏示例"><a href="#内存泄漏示例" class="headerlink" title="内存泄漏示例"></a>内存泄漏示例</h6><p>在Java中，当开发者创建和使用新的对象，例如new Integer(5)，他们不用自己分配内存–这个工作是Java虚拟机(JVM)来做的。在整个应用程序生命周期中，JVM会定期检查，内存中的哪些对象仍然在使用，哪些对象没有继续使用。不再使用的内存对象会被回收，并被重新分配和再使用。这个过程称之为垃圾回收（Garbage Collection）。JVM执行这个功能的模块被称为Garbage Collector(GC)。</p>
-<p>Java的自动内存管理依赖于GC定期的寻找不再使用的对象并且移除他们。 简单来说，我们可以说：在Java中的内存泄漏是这样一种情况，一些对象不再被应用程序使用，但是GC却没办法识别他们。因此这些不再被使用的对象仍然无限期的保留在Java的堆空间中。这样的堆积最终将触发java.lang.OutOfMemoryError: Java heap space异常。<br>很容易新建一个java程序来满足内存泄露的定义。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">class KeylessEntry &#123;</span><br><span class="line">  static class Key &#123;</span><br><span class="line">    Integer id;</span><br><span class="line">    Key(Integer id) &#123;</span><br><span class="line">      this.id = id;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public int hashCode() &#123;</span><br><span class="line">      return id.hashCode();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  public static void main(String[] args) &#123;</span><br><span class="line">    Map m = new HashMap();</span><br><span class="line">      while (true)</span><br><span class="line">        for (int i = 0; i &lt; 10000; i++)</span><br><span class="line">          if (!m.containsKey(new Key(i)))</span><br><span class="line">            m.put(new Key(i), &quot;Number:&quot; + i);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>当执行上面的代码，我们可能会认为程序会一直跑下去，没有任何问题，认为存储在缓存中的Map将扩展到10000个元素，再往下，所有的Key都已经在HashKey中存在了。然而，实际情况是Key class的元素并不包含equals这个方法的实现。</p>
-<p>因此，随着时间的继续，泄露内存代码的持续运行，会导致消耗大量java堆空间。当持续占满所有可用的堆空间，并且GC不能清除的时候，就会触发java.lang.OutOfMemoryError: Java heap space异常。</p>
-<p>解决方案非常简单–添加equals()方法的实现，这样代码就能很好的运行。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">@Override</span><br><span class="line">public boolean equals(Object o) &#123;</span><br><span class="line">  boolean response = false;</span><br><span class="line">    if (o instanceof Key) &#123;</span><br><span class="line">      response = (((Key)o).id).equals(this.id);</span><br><span class="line">    &#125;</span><br><span class="line">    return response;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h4><p>某些情况，我们分配给JVM堆空间的内存数量不能满足程序运行的需求。此时，我们应该分配更多的堆空间，看本文的结尾如何做。</p>
-<p>然而，在更多情况下，提供更多堆空间并不能解决问题。例如应用程序有内存泄漏，添加更多的堆内存只会推迟java.lang.OutOfMemoryError: Java heap space异常。另外，增加堆空间数量也会增加GC暂停的次数进而影响应用程序的吞吐量或者延迟(latency).</p>
-<p>如果希望解决Java堆空间的潜在问题，而不是掩盖问题，那么我们需要搞清楚代码的哪一部分负责申请内存。换句话说，必须回答以下问题：</p>
-<ul>
-<li>哪些对象占据了堆空间的大部分</li>
-<li>这些对象在源代码的位置</li>
-</ul>
-<p>在这一点上，一定要确信搞清楚。下面是一个大致的大纲，这个大纲将帮助我们回答上面的问题：</p>
-<ul>
-<li>获得安全许可，以便从JVM执行heap dump。”Dumps”基本上来说是对堆内容的快照，这些内容是我们可以分析的。这些快照包含了关键信息，例如密码，信用卡号码等等，由于安全原因，我们甚至不太可能获取这些快照。</li>
-<li>在合适的时刻得到dump文件。错误的时间得到一些dumps文件，堆dump文件包含大量的无用内容。另一方面，每一个堆dump包含了jvm的所有内容，因此不要做太多次的dump操作，否则客户也需要面对性能问题。</li>
-<li>找到一台能够读取dump文件的机器。在开始执行JVM问题调查的时候，例如一个8GB的堆，我们需要一台超过8GB去分析堆内容。至于用来分析dump文件的软件(我们推荐Eclipse MAT，当然也有其它许多优秀的软件，例如JProfiler/YourKit)。注：到现在为止Jprofiler10为最新版，找不到合适的license。因此使用Jprofiler9.2，是好用的。</li>
-<li>检查堆空间最大消费者的GC根目录的路径。我们已经做过这件事情，有一个单独的文章，请参见这里。对于初学者来说有些困难，但是实践将会使我们理解结构和机制。</li>
-<li>接下来，我们需要搞清楚代码中，哪些代码申请了大量内存。如果对自己的应用程序的源代码有很好了解的话，那么几次搜索就能做完这件事情。</li>
-</ul>
-<p>解决方案就是增大堆空间<br><code>-Xmx1024m</code><br><br>再例如所有下面的配置具有同样功能，因为我们可以使用g/G/m/M/k/K。例如所有如下配置都是相同的，最大堆空间是1GB：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">java -Xmx1073741824 com.mycompany.MyClass</span><br><span class="line">java -Xmx1048576k com.mycompany.MyClass</span><br><span class="line">java -Xmx1024m com.mycompany.MyClass</span><br><span class="line">java -Xmx1g com.mycompany.MyClass</span><br></pre></td></tr></table></figure>
-<h1 id="java-lang-OutOfMemoryError-GC-overhead-limit-exceeded"><a href="#java-lang-OutOfMemoryError-GC-overhead-limit-exceeded" class="headerlink" title="java.lang.OutOfMemoryError:GC overhead limit exceeded"></a>java.lang.OutOfMemoryError:GC overhead limit exceeded</h1><p>JRE(Java Runtime Environment)包含了一个自带/内嵌的GC(Garbage Collection)程序。在许多其它编程语言中，开发者需要自己申请和释放内存。</p>
-<p>另一方面，Java程序只需要申请内存即可。当内存中一个空间不再使用的时候，一个独立的称作GC的进程将清除这些不再使用的内存。GC是如何检测内存中特殊区域，详细情况请见：Garbage Collection Handbook，但是我们应该信任GC能做好它的工作(内存回收)。</p>
-<p>java.lang.OutOfMemoryError: GC overhead limit exceeded异常将被触发，当应用程序消耗了所有可用的内存，GC还在不停的清除内存，并且清除内存一直失败。</p>
-<h4 id="原因分析："><a href="#原因分析：" class="headerlink" title="原因分析："></a>原因分析：</h4><p>java.lang.OutOfMemoryError: GC overhead limit exceeded异常，是JVM发出的一个信号，表明：应用程序花费了太多时间在做内存回收的工作，回收结果却不好。默认情况下，JVM将会报错，如果花费超过98%时间在执行GC操作，却仅仅回收了不到2%的内存。</p>
-<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/OOM/2.jpg"><br><!-- ![](http://oow5aq3zy.bkt.clouddn.com/image/OOM/2.jpg) --></p>
-<p>如果GC overhead limit不存在，将会发生什么事情？java.lang.OutOfMemoryError: GC overhead limit exceeded异常只有在这种情况下才会被触发，经过几次GC循环操作之后，只释放了2%的内存。这意味着只有少量的堆空间能被清除，这些空间将会被很快再次用掉，强迫GC再次重新开始清除进程。这就形成了一个恶性循环，CPU100%被用于GC操作，没办法做其他事情了。应用的终端用户感觉非常慢-通常毫秒级别完成的操作，现在却需要数分钟才能完成。</p>
-<p>于是”java.lang.OutOfMemoryError: GC overhead limit exceeded”提示可以看做”fail fast”规则一个非常棒的例子。</p>
-<h4 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h4><p>下面的例子，我们将创建一个GC overhead limit exceeded异常，通过初始化一个MAP，通过无限循环添加key-value对到map中。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">class Wrapper &#123;</span><br><span class="line">  public static void main(String args[]) throws Exception &#123;</span><br><span class="line">    Map map = System.getProperties();</span><br><span class="line">    Random r = new Random();</span><br><span class="line">    while (true) &#123;</span><br><span class="line">      map.put(r.nextInt(), &quot;value&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>你有可能猜到，这段代码可能不能很好的结束。确实，当用下列配置运行这段代码的时候，<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">java -Xmx100m -XX:+UseParallelGC Wrapper</span><br><span class="line">java -Xmx10m -XX:+UseParallelGC Wrapper</span><br><span class="line">java -Xmx20m -XX:+UseParallelGC Wrapper</span><br></pre></td></tr></table></figure></p>
-<p>错误信息如下(使用JDK7)：<br>Exception in thread “main” java.lang.OutOfMemoryError: Java heap space<br>    at java.util.Hashtable.rehash(Hashtable.java:402)<br>    at java.util.Hashtable.addEntry(Hashtable.java:426)<br>    at java.util.Hashtable.put(Hashtable.java:477)<br>    at GC_ole.main(GC_ole.java:11)<br>当使用如下参数java -Xmx2m -XX:+UseParallelGC Wrapper，错误信息如下：<br>Exception in thread “main” java.lang.OutOfMemoryError: GC overhead limit exceeded<br>    at java.util.Hashtable.put(Hashtable.java:541)<br>    at GC_ole.main(GC_ole.java:11)</p>
-<p>不久，我们就将看到java.lang.OutOfMemoryError: GC overhead limit exceeded异常。但是如果我们配置不同的堆空间大小或者不同的GC算法，结果会有不同。例如，用如下方式在ubuntu16.04，用Hotspot1.7.0_80运行：<br>  java -Xmx10m -XX:+UseParallelGC Wrapper<br>我们将看到如下错误：<br>Exception in thread “main” java.lang.OutOfMemoryError: Java heap space<br>    at java.util.Hashtable.rehash(Hashtable.java:471)<br>    at java.util.Hashtable.put(Hashtable.java:532)<br>    at GC_ole.main(GC_ole.java:11)</p>
-<p>使用以下GC算法：-XX:+UseConcMarkSweepGC 或者-XX:+UseG1GC，启动命令如下：<br>    java -Xmx100m -XX:+UseConcMarkSweepGC Wrapper<br>    java -Xmx100m -XX:+UseG1GC Wrapper<br>得到的结果是这样的：<br>Exception: java.lang.OutOfMemoryError thrown from the UncaughtExceptionHandler in thread “main”<br>错误已经被默认的异常处理程序捕获，并且没有任何错误的堆栈信息输出。<br>以上这些变化可以说明，在资源有限的情况下，你根本无法无法预测你的应用是怎样挂掉的，什么时候会挂掉，所以在开发时，你不能仅仅保证自己的应用程序在特定的环境下正常运行。</p>
-<h4 id="解决方案-1"><a href="#解决方案-1" class="headerlink" title="解决方案"></a>解决方案</h4><p>如果我们仅仅想去掉java.lang.OutOfMemoryError: GC overhead limit exceeded这个消息，添加下列到启动脚本里面就可以做到：<br><br><b>-XX:-UseGCOverheadLimit</b><br><br>烈建议不要这样做–应该修复解决这个问题，而不是将这个不可避免的问题推迟或者延后；因为应用程序将会把内存用尽。错误信息也变成了更加熟悉的java.lang.OutOfMemoryError: Java heap space而已。</p>
-<p>某些情况下，GC overhead limit exceeded异常被触发，因为申请的内存不能满足程序运行的需要。此时，应该申请更多的内存–看本文末尾如何做到这一点。例如应用程序存在内存泄漏，将推迟java.lang.OutOfMemoryError: Java heap space异常。另外增加内存将增加GC暂停的时间长度，影响到应用程序的吞吐量和延迟等。</p>
-<p>如果希望解决Java堆空间的潜在问题，而不是掩盖问题，那么我们需要搞清楚代码的那一部分负责申请内存。换句话说，必须回答以下问题：</p>
-<ul>
-<li>哪些对象占据了堆空间的大部分</li>
-<li>这些对象在源代码的位置</li>
-</ul>
-<p>在这一点上，一定要确信搞清楚。下面是一个大致的大纲，这个大纲将帮助我们回答上面的问题：</p>
-<ul>
-<li>通过安全检查，以从JVM执行heap dump。”Dumps”基本上来说是对内容的快照。这些快照包含了关键信息，例如密码，信用卡号码等等，由于安全原因，我们甚至不太可能获取这些快照。</li>
-<li>在合适的时刻得到dump文件。错误的时间得到一些dumps文件，堆dump文件包含大量的无用内容。另一方面，每一个堆dump包含了jvm的所有内容，因此不要做太多次的dump操作，否则客户也需要面对性能问题。</li>
-<li>找到一台能够读取dump文件的机器。在开始执行JVM问题调查的时候，例如一个8GB的堆，我们需要一台超过8GB去分析对内容。至于用来分析dump文件的软件(我们推荐Eclipse MAT，当然也有其它许多优秀的软件，例如JProfiler/YourKit)。注：到现在为止Jprofiler10为最新版，找不到合适的license。因此使用Jprofiler9.2，是好用的。具体请参见百度云盘jprofiler目录。</li>
-<li>检查堆空间最大消费者的GC根目录的路径。我们这个分析，有一个单独的文章，请参见这里。对于初学者来说有些困难，但是实践将会是我们理解结构和机制。</li>
-<li>接下来，我们需要搞清楚代码中，哪些代码申请了大量内存。如果对自己的应用程序的源代码有很好的了解的话，那么几次搜索就能做完这件事情。</li>
-</ul>
-<h1 id="java-lang-OutOfMemoryError-Permgen-space"><a href="#java-lang-OutOfMemoryError-Permgen-space" class="headerlink" title="java.lang.OutOfMemoryError:Permgen space"></a>java.lang.OutOfMemoryError:Permgen space</h1><p>Java应用程序只被允许使用有限的内存。确切使用的内存数量只能在程序开始运行时才能知道。Java内存被分成不同的区域，如下图所示：</p>
-<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/OOM/3.jpg"><br><!-- ![](http://oow5aq3zy.bkt.clouddn.com/image/OOM/3.jpg) --></p>
-<p>注：此为JDK7的jvm内存模型。<br>上图所有的区域包括永久代都是在JVM开始运行的时候被设定。如果不设置，将会使用特定平台的默认值。<br>java.lang.OutOfMemoryError: PermGen space消息表明：内存中的永久代区域已经被用完了。</p>
-<h4 id="原因分析"><a href="#原因分析" class="headerlink" title="原因分析"></a>原因分析</h4><p>要想理解java.lang.OutOfMemoryError: PermGen space的原因，我们需要知道这块内存区域的用途：<br>为了实践目的，永久代包含大多数的类定义，也就是类/方法的名字和字段，全局不可变变量池，对象数组，类相关的对象数组，实时编译优化等。<br>从上面的定义，我们可以看出，永久代的大小取决于类申明的数量和装载的类的数量。因为，我们可以说：java.lang.OutOfMemoryError: PermGen space的主要原因：要么太多的类，要么太大的类被分配到了永久带空间。   </p>
-<h4 id="实例-1"><a href="#实例-1" class="headerlink" title="实例"></a>实例</h4><h6 id="简单实例"><a href="#简单实例" class="headerlink" title="简单实例"></a>简单实例</h6><p>综上所述，永久带空间的使用是和加载到jvm的类的数量强相关的。下面是一个简明的例子：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">import javassist.ClassPool;</span><br><span class="line">public class MicroGenerator &#123;</span><br><span class="line">  public static void main(String[] args) throws Exception &#123;</span><br><span class="line">    for (int i = 0; i &lt; 100_000_000; i++) &#123;</span><br><span class="line">      generate(&quot;com.myown.demo.Generated&quot; + i);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  public static Class generate(String name) throws Exception &#123;</span><br><span class="line">    ClassPool pool = ClassPool.getDefault();</span><br><span class="line">      return pool.makeClass(name).toClass();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>在这个示例中，通过循环逐个生成运行时类。类的生成是javassist库负责。</p>
-<p>运行上面的代码将持续生成新类并把他们的定义装载到永久代空间，直到空间被全部使用，java.lang.OutOfMemoryError: PermGen space异常就会被触发。<br>实际测试发现(Ubuntu16.04 JDK7，设置-XX:MaxPermSize=512m,否则内存空间占据太多),报错如下：<br>Exception in thread “main”<br>Exception: java.lang.OutOfMemoryError thrown from the UncaughtExceptionHandler in thread “main”<br>为什么不是java.lang.OutOfMemoryError: PermGen space异常,从监控看，PermGen空间确实满了，heap有剩余。</p>
-<h6 id="重新部署示例"><a href="#重新部署示例" class="headerlink" title="重新部署示例"></a>重新部署示例</h6><p>再说一个更加复杂和更加实际的例子，在程序重新部署发布的时候，我们经历一次java.lang.OutOfMemoryError: PermGen space异常的发生。当我们重新发布应用程序的时候，我们希望GC能清除以前的旧的已经装载的类，并重新装载新版本的类。</p>
-<p>不幸的是，许多第三方类和资源的处理，例如线程，JDBC驱动或者文件系统处理，不能卸载旧类。这也意味着：每一次重新发布，所有先前版本的类仍然存在于永久代空间，并且每次重新发布都会生成几十M的垃圾数据。</p>
-<p>想象一个例子，应用使用JDBC连接到一个关系型数据库。当应用开始的时候，代码初始化JDBC驱动去连接数据库。根据说明，JDBC驱动会注册他自己为java.sql.DriverManager。注册会存储一个引用，这个引用指向到一个DrvierManager实例的静态字段。</p>
-<p>现在，当从服务器上卸载应用程序的时候，java.sql.DriverManager仍将持有那个驱动程序的引用，进而持有用于加载应用程序的classloader的一个实例的引用，通常会占有数十兆的永久代空间。这个classloader现在仍然引用着应用程序的所有类。这意味着经历过几次重新部署，就会触发java.lang.OutOfMemoryError: PermGen space错误。</p>
-<h4 id="解决方案-2"><a href="#解决方案-2" class="headerlink" title="解决方案"></a>解决方案</h4><ul>
-<li>.解决初始化时的OutOfMemoryError</li>
-</ul>
-<p>当OutOfMemoryError因永久代耗尽被触发的时候(应用程序启动的时候)，解决方案非常简单。应用程序需要更多的空间去家在所有的类到永久代区域。我们增大永久代的大小，提示应用程序增大永久带空间。-XX:MaxPermSize相似的参数：</p>
-<p>java -XX:MaxPermSize=512m com.yourcompany.YourClass</p>
-<p>上面的配置告诉JVM，永久代最大空间可以到512M。</p>
-<ul>
-<li>解决重新发布的OutOfMemoryError</li>
-</ul>
-<p>当重新发布应用的时候，OutOfMemoryError恰好发生了，说明应用程序遭遇了classloader泄露。此时我们应该执行堆dump分析–是用类似如下命令去执行堆dump的工作:</p>
-<p>  jmap -dump:format=b,file=dump.hprof <process-id></process-id></p>
-<p>然后用熟悉的工具去分析dump文件。如果是第三方库的原因，可以去Google/StackOverflow检查下是否是一个已知问题，如是已知问题，可以下载一个补丁或者解决方案。如果是自己代码的问题，需要及时修改。</p>
-<ul>
-<li>解决运行时OutOfMemoryError</li>
-</ul>
-<p>首先你需要检查是否允许GC从PermGen卸载类，JVM的标准配置相当保守，只要类一创建，即使已经没有实例引用它们，其仍将保留在内存中，特别是当应用程序需要动态创建大量的类但其生命周期并不长时，允许JVM卸载类对应用大有助益，你可以通过在启动脚本中添加以下配置参数来实现：</p>
-<p>  -XX:+CMSClassUnloadingEnabled</p>
-<p>默认情况下，这个配置是未启用的，如果你启用它，GC将扫描PermGen区并清理已经不再使用的类。但请注意，这个配置只在UseConcMarkSweepGC的情况下生效，如果你使用其他GC算法，比如：ParallelGC或者Serial GC时，这个配置无效。所以使用以上配置时，请配合：</p>
-<p>  -XX:+UseConcMarkSweepGC</p>
-<p>如果你已经确保JVM可以卸载类，但是仍然出现内存溢出问题，那么你应该继续分析dump文件，使用以下命令生成dump文件：</p>
-<p>  jmap -dump:file=dump.hprof,format=b <process-id></process-id></p>
-<p>当你拿到生成的堆转储文件，并利用像Eclipse Memory Analyzer Toolkit这样的工具来寻找应该卸载却没被卸载的类加载器，然后对该类加载器加载的类进行排查，找到可疑对象，分析使用或者生成这些类的代码，查找产生问题的根源并解决它。</p>
-<h1 id="java-lang-OutOfMemoryError-Metaspace"><a href="#java-lang-OutOfMemoryError-Metaspace" class="headerlink" title="java.lang.OutOfMemoryError:Metaspace"></a>java.lang.OutOfMemoryError:Metaspace</h1><p>Java应用程序只被允许使用有限的内存。确切使用的内存数量只能在程序开始运行时才能知道。Java内存被分成不同的区域，如下图所示：</p>
-<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/OOM/4.jpg"><br><!-- ![](http://oow5aq3zy.bkt.clouddn.com/image/OOM/4.jpg) --></p>
-<p>上面所有的区域，包括元数据区域，都是在JVM启动的时候被设定。如果没有指定，那么特定平台的默认数据将被使用。<br>  java.lang.OutOfMemoryError: Metaspace预示着内存中的元数据空间消耗殆尽。</p>
-<h4 id="原因分析-1"><a href="#原因分析-1" class="headerlink" title="原因分析"></a>原因分析</h4><p>如果不是Java新手，那么你可能熟悉另外一个称作PermGen的Java内存管理的概念。从Java8开始，内存模型有显著的改变。一个新的被称为Metaspace的内存区域被引进，PermGen被移除了。这个改变有多种原因，包括但不限于以下：</p>
-<ul>
-<li>永久代(PermGen)的大小很难预测。这直接导致了要么触发java.lang.OutOfMemoryError: Permgen size异常，要么浪费资源。</li>
-<li>GC效率的提升改进，使得并发类数据重新申请内存不再进行GC暂停(GC pause)和指定元数据遍历。</li>
-<li>支持进一步的优化，例如G1并发类卸载。<br>如果熟悉PermGen，那么也知道它的作用–在java8以前，所有类的名字、字段、方法，字节方法，变量池，JIT优化等都是存储在PermGen中，现在都在Metaspace中。</li>
-</ul>
-<p>正如你所看到的，元空间大小的要求取决于加载的类的数量以及这种类声明的大小。 所以很容易看到java.lang.OutOfMemoryError: Metaspace主要原因：太多的类或太大的类加载到元空间。</p>
-<h4 id="实例-2"><a href="#实例-2" class="headerlink" title="实例"></a>实例</h4><p>正如前面解释的，Metaspace是和加载的类的数量密切相关。下面的代码是一个简单明了的说明：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">public class Metaspace &#123;</span><br><span class="line">  static javassist.ClassPool cp = javassist.ClassPool.getDefault();</span><br><span class="line">    public static void main(String[] args) throws Exception&#123;</span><br><span class="line">      for (int i = 0; ; i++) &#123;</span><br><span class="line">        Class c = cp.makeClass(&quot;com.myown.demo.Generated&quot; + i).toClass();</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>在这个例子中，源代码在运行时遍历循环生成类。所有生成的类定义都位于Metaspace中。类生成的工作交由javassist负责。</p>
-<p>代码持续生成新类，并把它们的定义装载到Metaspace中，直到元数据空间被全部使用，java.lang.OutOfMemoryError: Metaspace异常被触发。当用-XX:MaxMetaspaceSize=64m在Ubuntu16.04.3, java 1.8.0_151，一共加载了66126个类，程序才挂掉。试验得出的完整错误信息如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">Exception in thread &quot;main&quot; javassist.CannotCompileException: by java.lang.OutOfMemoryError: Metaspace</span><br><span class="line">    at javassist.ClassPool.toClass(ClassPool.java:1085)</span><br><span class="line">    at javassist.ClassPool.toClass(ClassPool.java:1028)</span><br><span class="line">    at javassist.ClassPool.toClass(ClassPool.java:986)</span><br><span class="line">    at javassist.CtClass.toClass(CtClass.java:1079)</span><br><span class="line">    at Metaspace.main(Metaspace.java:8)</span><br><span class="line">Caused by: java.lang.OutOfMemoryError: Metaspace</span><br><span class="line">    at java.lang.ClassLoader.defineClass1(Native Method)</span><br><span class="line">    at java.lang.ClassLoader.defineClass(ClassLoader.java:763)</span><br><span class="line">    at java.lang.ClassLoader.defineClass(ClassLoader.java:642)</span><br><span class="line">    at sun.reflect.GeneratedMethodAccessor1.invoke(Unknown Source)</span><br><span class="line">    at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)</span><br><span class="line">    at java.lang.reflect.Method.invoke(Method.java:498)</span><br><span class="line">    at javassist.ClassPool.toClass2(ClassPool.java:1098)</span><br><span class="line">    at javassist.ClassPool.toClass(ClassPool.java:1079)</span><br><span class="line">    ... 4 more</span><br></pre></td></tr></table></figure></p>
-<h4 id="解决方案-3"><a href="#解决方案-3" class="headerlink" title="解决方案"></a>解决方案</h4><p>第一个解决方案，毫无疑问：OutOfMemoryError是因为Metaspace。如果应用程序将metaspace消耗殆尽，我们可以增大Metaspace的空间。更改程序配置，按照如下进行：</p>
-<p>  -XX:maxMetaspaceSize=512m</p>
-<p>上面的配置告诉JVM:Metaspace空间最大允许到512MB。</p>
-<p>另外一个解决方案初一看更加简单。我们可以移除Metaspace的大小限制(删除这个参数即可)。但是这样做，将会导致沉重的交换负担，会导致内存分配失败。</p>
-<p>你可以通过修改各种启动参数来“快速修复”这些内存溢出错误，但你需要正确区分你是否只是推迟或者隐藏了java.lang.OutOfMemoryError的症状。如果你的应用程序确实存在内存泄漏或者本来就加载了一些不合理的类，那么所有这些配置都只是推迟问题出现的时间而已，实际也不会改善任何东西。</p>
-<h1 id="java-lang-OutOfMemoryError-Unable-to-create-new-native-thread"><a href="#java-lang-OutOfMemoryError-Unable-to-create-new-native-thread" class="headerlink" title="java.lang.OutOfMemoryError:Unable to create new native thread"></a>java.lang.OutOfMemoryError:Unable to create new native thread</h1><p>Java应用程序天然支持多线程的。这意味着java实现的程序能一次做几件事情(几乎同时)。甚至只有一个cpu–在从一个窗口拉数据到另外一个窗口的时候，视频同时也在后台不停的播放，因为可以同时执行多个操作。</p>
-<p>一个思考多线程的方式就是把他们认为是我们能提交任务给他们执行的工人。如果只有一个工人，那么他/她一次只能做一件事情。但是如果有很多工人的话，他们就能根据你的命令同时做事。</p>
-<p>就像这些工人都在物理世界，JVM中的线程完成自己的工作也是需要一些空间的，当有足够多的线程却没有那么多的空间时就会像这样：</p>
-<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/OOM/5.jpg"><br><!-- ![](http://oow5aq3zy.bkt.clouddn.com/image/OOM/5.jpg) --></p>
-<p>java.lang.OutOfMemoryError: Unable to create new native thread意味着： Java应用已经到了它所能启动的线程的极限。</p>
-<h4 id="原因分析-2"><a href="#原因分析-2" class="headerlink" title="原因分析"></a>原因分析</h4><p>当JVM请求操作系统去创建一个新的线程，操作系统却不能再申请一个新的线程，此时OutOfMemoryError(java.lang.OutOfMemoryError: Unbale to crate new thread))就被触发。线程数目的确切数字是依赖于平台的。如果想找到线程数目的限制，可以运行下面将要提到的例子。</p>
-<p>一般来说， 引发java.lang.OutOfMemoryError: Unable to create new native thread异常有以下几种情况：</p>
-<ul>
-<li>运行在jvm中的应用程序需要一个新的java线程。</li>
-<li>JVM向OS请求创建一个新的线程。</li>
-<li>OS试图创建一个新的线程，这个线程需要申请内存。</li>
-<li>OS拒绝分配内存给线程，因为32位Java进程已经耗尽内存地址空间(2-4GB内存地址已被命中)或者OS的虚拟内存已经完全耗尽。</li>
-<li>java.lang.OutOfMemoryError: Unable to create new native thread异常被触发。</li>
-</ul>
-<h4 id="实例-3"><a href="#实例-3" class="headerlink" title="实例"></a>实例</h4><p>下面的代码循环创建和开始线程。当运行代码时，很快就到达操作系统的限制，java.lang.OutOfMemoryError: Unable to create new native thread异常被触发。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">while(true)&#123;</span><br><span class="line">  new Thread(new Runnable()&#123;</span><br><span class="line">    public void run() &#123;</span><br><span class="line">      try &#123;</span><br><span class="line">        Thread.sleep(10000000);</span><br><span class="line">      &#125; catch(InterruptedException e) &#123; &#125;        </span><br><span class="line">    &#125;</span><br><span class="line">  &#125;).start();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>确切的线程数目限制是依赖于平台的，例如Windows，Linux和Mac OS X如下：</p>
-<p>64-bit Mac OS X 10.9, Java 1.7.0_45 – JVM dies after #2031 threads have been created<br>64-bit Ubuntu Linux, Java 1.7.0_45 – JVM dies after #31893 threads have been created<br>64-bit Windows 7, Java 1.7.0_45 – due to a different thread model used by the OS,250000,交换文件到10G,程序非常慢<br>通过一个小测试可以知道线程的极限数目。<br>实际Ubuntu16.04.3 x64, Java 1.8.0_151–JVM dies after 11658 threads have been created<br>Exception in thread “main” java.lang.OutOfMemoryError: unable to create new native thread<br>    at java.lang.Thread.start0(Native Method)<br>    at java.lang.Thread.start(Thread.java:717)<br>    at OOM_TestThread.main(OOM_TestThread.java:9)<br>实际的ulimit限制有6w+(63812)，也修改过idea的VM的Xmx,由原先的750m调整到6168，效果也是一样。<br>lj@lj-HP-ProBook-640-G1:~/Downloads/source/java-study/javaUnversailTest$ ulimit -a<br>max user processes              (-u) 63812<br>也使用命令行运行，实际数值差不多，都在116xx左右，差别不大。</p>
-<h4 id="解决方案-4"><a href="#解决方案-4" class="headerlink" title="解决方案"></a>解决方案</h4><p>有时，我们可以通过增加OS级限制，绕过Unable to create new native thread issue错误。例如你限制了JVM可在用户空间创建的线程数，那么你可以检查并增加这个限制：<br>lj@lj-HP-ProBook-640-G1:~/Downloads$ ulimit -a<br>core file size          (blocks, -c) 0<br>……    ……    ……    ……    ……<br>max user processes              (-u) 63812<br>到达线程限制预示着程序错误。当应用产生数以千计的线程，有时会产生异常可怕的错误–并没有太多的应用需要巨量的线程数目。<br>解决这个问题的一个方式：执行线程dump，可以理解当时的状况。</p>
-<h1 id="java-lang-OutOfMemoryError-Out-of-swap-space"><a href="#java-lang-OutOfMemoryError-Out-of-swap-space" class="headerlink" title="java.lang.OutOfMemoryError:Out of swap space"></a>java.lang.OutOfMemoryError:Out of swap space</h1><p>java程序在启动的时候是有内存限制的。这个限制是用参数-Xmx和其他相似的参数说明。有些情况下，JVM要求的内存比可用的物理内存还大，OS(操作系统)开始交换内存的内容到硬盘。</p>
-<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/OOM/6.jpg"><br><!-- ![](http://oow5aq3zy.bkt.clouddn.com/image/OOM/6.jpg) --></p>
-<p>java.lang.OutOfMemoryError: Out of swap space异常表明：交换空间同样耗尽，并且新的内存申请失败，因为缺少物理内存和交换空间。</p>
-<h4 id="原因分析-3"><a href="#原因分析-3" class="headerlink" title="原因分析"></a>原因分析</h4><p>当从堆空间申请字节内存失败，并且堆空间也耗尽的时候，java.lang.OutOfMemoryError: Out of swap space异常将被触发。该错误消息中包含分配失败的大小（以字节为单位）和请求失败的原因。</p>
-<p>这个问题往往发生在Java进程已经开始交换的情况下，现代的GC算法已经做得足够好了，当时当面临由于交换引起的延迟问题时，GC暂停的时间往往会让大多数应用程序不能容忍。</p>
-<p>java.lang.OutOfMemoryError:Out of swap space?往往是由操作系统级别的问题引起的，例如：</p>
-<ul>
-<li>操作系统配置的交换空间不足。</li>
-<li>系统上的另一个进程消耗所有内存资源。</li>
-</ul>
-<p>还有可能是本地内存泄漏导致应用程序失败，比如：应用程序调用了native code连续分配内存，但却没有被释放回操作系统。</p>
-<h4 id="解决方案-5"><a href="#解决方案-5" class="headerlink" title="解决方案"></a>解决方案</h4><p>解决这个问题有几个办法，通常最简单的方法就是增加交换空间，不同平台实现的方式会有所不同，比如在Linux下可以通过如下命令实现：<br>先用free -m查看交换空间定义的是多少<br>swapoff -a –关闭交换区<br>dd if=/dev/zero of=swapfile bs=1024 count=655360–根目录下创建一个名为swapfile,大小640M<br>mkswap swapfile–将swapfile设置为swap区<br>swapon swapfile–启用交换区</p>
-<p>Java GC会扫描内存中的数据，如果是对交换空间运行垃圾回收算法会使GC暂停的时间增加几个数量级，因此你应该慎重考虑使用上文增加交换空间的方法。</p>
-<p>如果你的应用程序部署在JVM需要同其他进程激烈竞争获取资源的物理机上，建议将服务隔离到单独的虚拟机中<br>但在许多情况下，您唯一真正可行的替代方案是：</p>
-<ul>
-<li>升级机器以包含更多内存</li>
-<li>优化应用程序以减少其内存占用</li>
-</ul>
-<p>当您转向优化路径时，使用内存转储分析程序来检测内存中的大分配是一个好的开始。</p>
-<h1 id="java-lang-OutOfMemoryError-Requested-array-size-exceeds-VM-limit"><a href="#java-lang-OutOfMemoryError-Requested-array-size-exceeds-VM-limit" class="headerlink" title="java.lang.OutOfMemoryError:Requested array size exceeds VM limit"></a>java.lang.OutOfMemoryError:Requested array size exceeds VM limit</h1><p>Java对应用程序可以分配的最大数组大小有限制。不同平台限制有所不同，但通常在1到21亿个元素之间。</p>
-<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/OOM/7.jpg"><br><!-- ![](http://oow5aq3zy.bkt.clouddn.com/image/OOM/7.jpg) --></p>
-<p>当你遇到Requested array size exceeds VM limit错误时，意味着你的应用程序试图分配大于Java虚拟机可以支持的数组。</p>
-<h4 id="原因分析-4"><a href="#原因分析-4" class="headerlink" title="原因分析"></a>原因分析</h4><p>该错误由JVM中的native code抛出。 JVM在为数组分配内存之前，会执行特定于平台的检查：分配的数据结构是否在此平台中是可寻址的。</p>
-<p>你很少见到这个错误是因为Java数组的索引是int类型。 Java中的最大正整数为2 ^ 31 - 1 = 2,147,483,647。 并且平台特定的限制可以非常接近这个数字，例如：我的环境上(64位macOS，运行Jdk1.8)可以初始化数组的长度高达2,147,483,645（Integer.MAX_VALUE-2）。如果再将数组的长度增加1到Integer.MAX_VALUE-1会导致熟悉的OutOfMemoryError：<br>Exception in thread “main” java.lang.OutOfMemoryError: Requested array size exceeds VM limit<br>但是，在使用OpenJDK 6的32位Linux上，在分配具有大约11亿个元素的数组时，您将遇到Requested array size exceeded VM limit的错误。 要理解你的特定环境的限制，运行下文中描述的小测试程序。</p>
-<h4 id="示例-1"><a href="#示例-1" class="headerlink" title="示例"></a>示例</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">for (int i = 3; i &gt;= 0; i--) &#123;</span><br><span class="line">    try &#123;</span><br><span class="line">        int[] arr = new int[Integer.MAX_VALUE-i];</span><br><span class="line">        System.out.format(&quot;Successfully initialized an array with %,d elements.\n&quot;, Integer.MAX_VALUE-i);</span><br><span class="line">    &#125; catch (Throwable t) &#123;</span><br><span class="line">        t.printStackTrace();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>该示例重复四次，并在每个回合中初始化一个长原语数组。 该程序尝试初始化的数组的大小在每次迭代时增加1，最终达到Integer.MAX_VALUE。 现在，当使用Hotspot 7在64位Mac OS X上启动代码片段时，应该得到类似于以下内容的输出：<br>java.lang.OutOfMemoryError: Java heap space<br>    at eu.plumbr.demo.ArraySize.main(ArraySize.java:8)<br>java.lang.OutOfMemoryError: Java heap space<br>    at eu.plumbr.demo.ArraySize.main(ArraySize.java:8)<br>java.lang.OutOfMemoryError: Requested array size exceeds VM limit<br>    at eu.plumbr.demo.ArraySize.main(ArraySize.java:8)<br>java.lang.OutOfMemoryError: Requested array size exceeds VM limit<br>    at eu.plumbr.demo.ArraySize.main(ArraySize.java:8)<br>注意，在出现Requested array size exceeded VM limit之前，出现了更熟悉的java.lang.OutOfMemoryError: Java heap space。 这是因为初始化2 ^ 31-1个元素的数组需要腾出8G的内存空间，大于JVM使用的默认值。</p>
-<h4 id="解决方案-6"><a href="#解决方案-6" class="headerlink" title="解决方案"></a>解决方案</h4><p>java.lang.OutOfMemoryError:Requested array size exceeds VM limit可能会在以下任一情况下出现：<br>数组增长太大，最终大小在平台限制和Integer.MAX_INT之间<br>你有意分配大于2 ^ 31-1个元素的数组<br>在第一种情况下，检查你的代码库，看看你是否真的需要这么大的数组。也许你可以减少数组的大小，或者将数组分成更小的数据块，然后分批处理数据。<br>在第二种情况下，记住Java数组是由int索引的。因此，当在平台中使用标准数据结构时，数组不能超过2 ^ 31-1个元素。事实上，在编译时就会出错：error：integer number too large。</p>
-<h1 id="java-lang-OutOfMemoryError-Kill-process-or-sacrifice-child"><a href="#java-lang-OutOfMemoryError-Kill-process-or-sacrifice-child" class="headerlink" title="java.lang.OutOfMemoryError:Kill process or sacrifice child"></a>java.lang.OutOfMemoryError:Kill process or sacrifice child</h1><p>为了理解这个错误，我们需要补充一点操作系统的基础知识。操作系统是建立在进程的概念之上，这些进程在内核中作业，其中有一个非常特殊的进程，名叫“内存杀手（Out of memory killer）”。当内核检测到系统内存不足时，OOM killer被激活，然后选择一个进程杀掉。哪一个进程这么倒霉呢？选择的算法和想法都很朴实：谁占用内存最多，谁就被干掉。如果你对OOM Killer感兴趣的话，建议你阅读参考资料2中的文章。</p>
-<p><img src="http://oow5aq3zy.bkt.clouddn.com/image/OOM/8.jpg"><br><!-- ![](http://oow5aq3zy.bkt.clouddn.com/image/OOM/8.jpg) --></p>
-<p>OOM Killer，<br>当可用虚拟虚拟内存(包括交换空间)消耗到让整个操作系统面临风险时，就会产生Out of memory:Kill process or sacrifice child错误。在这种情况下，OOM Killer会选择“流氓进程”并杀死它。</p>
-<h4 id="原因分析-5"><a href="#原因分析-5" class="headerlink" title="原因分析"></a>原因分析</h4><p>默认情况下，Linux内核允许进程请求比系统中可用内存更多的内存，但大多数进程实际上并没有使用完他们所分配的内存。这就跟现实生活中的宽带运营商类似，他们向所有消费者出售一个100M的带宽，远远超过用户实际使用的带宽，一个10G的链路可以非常轻松的服务100个(10G/100M)用户，但实际上宽带运行商往往会把10G链路用于服务150人或者更多，以便让链路的利用率更高，毕竟空闲在那儿也没什么意义。</p>
-<p>Linux内核采用的机制跟宽带运营商差不多，一般情况下都没有问题，但当大多数应用程序都消耗完自己的内存时，麻烦就来了，因为这些应用程序的内存需求加起来超出了物理内存（包括 swap）的容量，内核（OOM killer）必须杀掉一些进程才能腾出空间保障系统正常运行。就如同上面的例子中，如果150人都占用100M的带宽，那么总的带宽肯定超过了10G这条链路能承受的范围。</p>
-<h4 id="示例-2"><a href="#示例-2" class="headerlink" title="示例"></a>示例</h4><p>当你在Linux上运行如下代码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">public static void main(String[] args)&#123;</span><br><span class="line">    List&lt;int[]&gt; l = new java.util.ArrayList();</span><br><span class="line">    for (int i = 10000; i &lt; 100000; i++) &#123;</span><br><span class="line">        try &#123;</span><br><span class="line">            l.add(new int[100000000]);</span><br><span class="line">        &#125; catch (Throwable t) &#123;</span><br><span class="line">            t.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>在Linux的系统日志中/var/log/kern.log会出现以下日志：<br>Jun  4 07:41:59 plumbr kernel: [70667120.897649] Out of memory: Kill process 29957 (java) score 366 or sacrifice child<br>Jun  4 07:41:59 plumbr kernel: [70667120.897701] Killed process 29957 (java) total-vm:2532680kB, anon-rss:1416508kB, file-rss:0kB<br>注意：你可能需要调整交换文件和堆大小，否则你将很快见到熟悉的Java heap space异常。在作者的测试用例中，使用-Xmx2g指定的2g堆，并具有以下交换配置：</p>
-<h4 id="解决方案-7"><a href="#解决方案-7" class="headerlink" title="解决方案"></a>解决方案</h4><p>解决这个问题最有效也是最直接的方法就是升级内存，其他方法诸如：调整OOM Killer配置、水平扩展应用，将内存的负载分摊到若干小实例上….. 我们不建议的做法是增加交换空间。当您回想起 Java 是一种垃圾收集的语言时, 这个解决方案似乎已经不那么有利可图了。现代 GC 算法在物理内存中运行时效率很高, 但是在处理交换空间分配时, 效率很差。交换可以增加几个数量级的GC暂停的长度, 因此在跳转到此解决方案之前, 您应该三思而后行。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://roclli.github.io/2017/12/11/Java-OOM-ERROR/" data-id="cjb4ibanj0000ib7sv8cltf63" class="article-share-link">Teilen</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java-OOM-Java内存溢出-OutOfMemoryError/">Java; OOM; Java内存溢出; OutOfMemoryError</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-log-check" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/12/11/log-check/" class="article-date">
-  <time datetime="2017-12-11T05:05:21.000Z" itemprop="datePublished">2017-12-11</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/12/11/log-check/">(原创)查询log中每小时或者指定小时，错误类型的数量</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>In a log file with contents as <time> [ERROR_NO] [MESSAGE]- Human readable text display summary/count of specific error numbers that occurred every hour or a specific hour.</time></p>
-<p>假设一个log文件名为application.log，且格式为：(实测中发现有可能因为log文件数据不正常，导致统计结果不一致)<br>    2017-11-22 07:29:45.489 INFO  com.aaa.bbb.ccc.dubboservice.impl.BingGenTfoTaskServiceImpl [DubboServerHandler-1.2.3.4:18080-thread-199] zzzzAaaAaaaaaa:结束生成aaaaaa,zzzzzz是:56661<br>    2017-11-22 07:29:45.489 ERROR  com.aaaaa.aaa.aaa.dubboservice.impl.BingGenTfoTaskServiceImpl [DubboServerHandler-1.2.3.4:18080-thread-199] zzzzAaaAaaaaaa:结束生成bbbbbb,qwerty是:56661<br>    ……</p>
-<p> 执行脚本如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">lj@lj-HP-ProBook-640-G1:~/linux-study$ ./getstatic_byhour.sh application.log  ERROR</span><br><span class="line">没有收到第三个参数，将搜集所有小时的数据</span><br><span class="line">---all ERROR hava times:3113</span><br><span class="line">2017-11-22 07 have ERROR times:30</span><br><span class="line">2017-11-22 08 have ERROR times:60</span><br><span class="line">......   </span><br><span class="line">2017-11-24 15 have ERROR times:10</span><br><span class="line">lj@lj-HP-ProBook-640-G1:~/linux-study$ ./getstatic_byhour.sh application.log  ERROR &apos;2017-11-24 09&apos;</span><br><span class="line">2017-11-24 09 have ERROR times:60</span><br></pre></td></tr></table></figure></p>
-<p>实现脚本如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">lj@lj-HP-ProBook-640-G1:~/Downloads/source/linux-study$ cat getstatic_byhour.sh</span><br><span class="line">#!/bin/bash</span><br><span class="line">log_name=&quot;&quot;</span><br><span class="line">error_style=&quot;&quot;</span><br><span class="line">by_hour=&quot;&quot;</span><br><span class="line">function printhelp()</span><br><span class="line">&#123;</span><br><span class="line">    echo &apos;there is no para.invoke sample is:&apos;</span><br><span class="line">    echo &apos;&apos;$0&apos; log_folder|log_name  error_style [2017-11-24 09]&apos;</span><br><span class="line">    echo &apos;if there is no hour, will display every hour&apos;</span><br><span class="line">&#125;</span><br><span class="line">if [ $# -lt 2 ]; then</span><br><span class="line">    printhelp</span><br><span class="line">    exit</span><br><span class="line">else</span><br><span class="line">    if [ &quot;$1&quot; ]; then</span><br><span class="line">        log_name=&quot;$1&quot;</span><br><span class="line">    fi</span><br><span class="line">    if [ &quot;$2&quot; ]; then</span><br><span class="line">        error_style=&quot;$2&quot;</span><br><span class="line">    fi</span><br><span class="line">    if [ &quot;$3&quot; ]; then</span><br><span class="line">        by_hour=&quot;$3&quot;</span><br><span class="line">        strr=`grep -caP &quot;^$&#123;by_hour&#125;:\d&#123;2&#125;:\d&#123;2&#125;.\d&#123;3&#125; $&#123;error_style&#125;&quot; $&#123;log_name&#125;`</span><br><span class="line">        echo &quot;$&#123;by_hour&#125; have $&#123;error_style&#125; times:&quot;$&#123;strr&#125;</span><br><span class="line">    else</span><br><span class="line">        echo &apos;没有收到第三个参数，将搜集所有小时的数据&apos;</span><br><span class="line">        by_hour=&quot;&quot;</span><br><span class="line">        strr=`grep -caP &quot;^\d&#123;4&#125;-\d&#123;2&#125;-\d&#123;2&#125; \d&#123;2&#125;:\d&#123;2&#125;:\d&#123;2&#125;.\d&#123;3&#125; $&#123;error_style&#125;&quot; $&#123;log_name&#125;`</span><br><span class="line">        echo &quot;---all $&#123;error_style&#125; hava times:&quot;$&#123;strr&#125;</span><br><span class="line">        grep -aP &quot;\d&#123;4&#125;-\d&#123;2&#125;-\d&#123;2&#125; \d&#123;2&#125;:\d&#123;2&#125;:\d&#123;2&#125;.\d&#123;3&#125;&quot; $&#123;log_name&#125; | awk -F&apos;:&apos; &apos;&#123;print $1&#125;&apos; | uniq | sort &gt; tempgrep.txt</span><br><span class="line">        while read line</span><br><span class="line">        do</span><br><span class="line">            strr=`grep -caP &quot;^$&#123;line&#125;:\d&#123;2&#125;:\d&#123;2&#125;.\d&#123;3&#125; $&#123;error_style&#125;&quot; $&#123;log_name&#125;`</span><br><span class="line">            echo &quot;$&#123;line&#125; have $&#123;error_style&#125; times:&quot;$&#123;strr&#125;</span><br><span class="line">        done &lt; tempgrep.txt</span><br><span class="line">        rm -f ./tempgrep.txt</span><br><span class="line">    fi</span><br><span class="line">fi</span><br><span class="line">exit</span><br></pre></td></tr></table></figure></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://roclli.github.io/2017/12/11/log-check/" data-id="cjb4ibanz000gib7s3s72nbyq" class="article-share-link">Teilen</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/grep-linux-shell-log-file-check/">grep; linux shell; log file check</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-hello-world" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/12/11/hello-world/" class="article-date">
-  <time datetime="2017-12-11T03:44:07.555Z" itemprop="datePublished">2017-12-11</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/12/11/hello-world/">Hello World</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://roclli.github.io/2017/12/11/hello-world/" data-id="cjb4ibanx000dib7srylpuwgz" class="article-share-link">Teilen</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/2/">weiter &raquo;</a>
+  </nav>
 
 </section>
         
@@ -1228,7 +482,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-OOM-Java内存溢出-OutOfMemoryError/">Java; OOM; Java内存溢出; OutOfMemoryError</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jenkins-Pipeline/">Jenkins; Pipeline</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jenkins-Pipeline-Docker/">Jenkins; Pipeline; Docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Pipeline-Jenkins/">Pipeline; Jenkins</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grep-linux-shell-log-file-check/">grep; linux shell; log file check</a></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-OOM-Java内存溢出-OutOfMemoryError/">Java; OOM; Java内存溢出; OutOfMemoryError</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jenkins-Pipeline/">Jenkins; Pipeline</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jenkins-Pipeline-Docker/">Jenkins; Pipeline; Docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Pipeline-Jenkins/">Pipeline; Jenkins</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Pipeline-Jenkins-Docker/">Pipeline; Jenkins; Docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Pipeline-Jenkins-Docker-Dockerfile/">Pipeline; Jenkins; Docker; Dockerfile</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grep-linux-shell-log-file-check/">grep; linux shell; log file check</a></li></ul>
     </div>
   </div>
 
@@ -1238,7 +492,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/Java-OOM-Java内存溢出-OutOfMemoryError/" style="font-size: 10px;">Java; OOM; Java内存溢出; OutOfMemoryError</a> <a href="/tags/Jenkins-Pipeline/" style="font-size: 20px;">Jenkins; Pipeline</a> <a href="/tags/Jenkins-Pipeline-Docker/" style="font-size: 10px;">Jenkins; Pipeline; Docker</a> <a href="/tags/Pipeline-Jenkins/" style="font-size: 15px;">Pipeline; Jenkins</a> <a href="/tags/grep-linux-shell-log-file-check/" style="font-size: 10px;">grep; linux shell; log file check</a>
+      <a href="/tags/Java-OOM-Java内存溢出-OutOfMemoryError/" style="font-size: 10px;">Java; OOM; Java内存溢出; OutOfMemoryError</a> <a href="/tags/Jenkins-Pipeline/" style="font-size: 13.33px;">Jenkins; Pipeline</a> <a href="/tags/Jenkins-Pipeline-Docker/" style="font-size: 10px;">Jenkins; Pipeline; Docker</a> <a href="/tags/Pipeline-Jenkins/" style="font-size: 20px;">Pipeline; Jenkins</a> <a href="/tags/Pipeline-Jenkins-Docker/" style="font-size: 10px;">Pipeline; Jenkins; Docker</a> <a href="/tags/Pipeline-Jenkins-Docker-Dockerfile/" style="font-size: 16.67px;">Pipeline; Jenkins; Docker; Dockerfile</a> <a href="/tags/grep-linux-shell-log-file-check/" style="font-size: 10px;">grep; linux shell; log file check</a>
     </div>
   </div>
 
@@ -1260,23 +514,23 @@
       <ul>
         
           <li>
-            <a href="/2017/12/13/Pipeline7-Pipeline-Syntax/">(原创)Pipeline7-Pipeline-Syntax</a>
+            <a href="/2017/12/13/PP4-Demo-sidecar-script-2/">PP4-Demo-sidecar-script-2</a>
           </li>
         
           <li>
-            <a href="/2017/12/13/Pipeline6-Pipeline-Development-Tools/">(原创)Pipeline6-Pipeline-Development-Tools</a>
+            <a href="/2017/12/13/PP4-Demo-sidecar-script-1/">PP4-Demo-sidecar-script-1</a>
           </li>
         
           <li>
-            <a href="/2017/12/13/Pipeline5-Extending-with-Shared-Libraries/">(原创)Pipeline5-Extending-with-Shared-Libraries</a>
+            <a href="/2017/12/13/PP4-Demo-dockerfile-declarative/">PP4-Demo-dockerfile-declarative</a>
           </li>
         
           <li>
-            <a href="/2017/12/12/Pipeline4-Using-Docker-with-Pipeline/">(原创)Pipeline4-Using-Docker-with-Pipeline</a>
+            <a href="/2017/12/13/PP4-Demo-multip-container-script/">PP4-Demo-multip-container-script</a>
           </li>
         
           <li>
-            <a href="/2017/12/12/Pipeline3-Branches-and-Pull-Requests/">(原创)Pipeline3-Branches-and-Pull-Requests</a>
+            <a href="/2017/12/13/PP4-Demo-multip-container-declarative/">PP4-Demo-multip-container-declarative</a>
           </li>
         
       </ul>
